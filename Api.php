@@ -12,13 +12,23 @@ namespace RunetID\Api;
 
 class Api {
 
-  private $key, $secret;
+  private $key;
+  private $secret;
+  private $domain;
+  private $defaultRoleId;
 
-  public function __construct($key, $secret) {
+  public function __construct($key, $secret, $defaultRoleId = 24, $domain = 'http://api.runet-id.com/') {
 
     $this->key = $key;
     $this->secret = $secret;
+    $this->domain = $domain;
+    $this->defaultRoleId = $secret;
 
+  }
+
+  public function getKey()
+  {
+    return $this->key;
   }
 
   /**
@@ -120,13 +130,15 @@ class Api {
         break;
       }
 
-      curl_setopt($curl, CURLOPT_URL, CRunetSettings::GateDomain . $url);
+      curl_setopt($curl, CURLOPT_URL, $this->domain . $url);
       $result = curl_exec($curl);
 
+      /*
       if (self::IsDebug() && self::$DebugHard)
       {
         var_dump($result);
       }
+      */
 
       $result = json_decode($result);
       curl_close($curl);
@@ -152,6 +164,7 @@ class Api {
 
     $this->Log($url, $result, (microtime(true) - $startTime));
 
+    /*
     if (self::IsDebug())
     {
       print 'URL: '.$url.'<br/>';
@@ -159,6 +172,42 @@ class Api {
       print_r($result);
       print '</pre>';
     }
+    */
     return $result;
   }
+
+  /*
+  private static function IsDebug ()
+  {
+    return (self::$Debug && in_array($_SERVER['REMOTE_ADDR'], self::$DebugIp));
+  }
+  */
+
+  /**
+ 	* ЛОГИРОВАНИЕ
+ 	*
+ 	* @param string $url
+ 	* @param mixed $result
+ 	*/
+ 	private function Log ($url, $result, $executionTime)
+ 	{
+ 		$writeToLog = false;
+ 		if ( isset ($result->Error) && $result->Error)
+ 		{
+ 			$writeToLog = true;
+ 		}
+
+ 		if ($writeToLog)
+ 		{
+      $logDir = __DIR__.'/log/';
+ 			$logFilePath = $logDir . date('d-m-Y') .'.txt';
+      mkdir($logDir);
+ 			file_put_contents(
+ 				$logFilePath,
+ 				'----------------------------------------'. PHP_EOL .'DateTime: '. date('d-m-Y H:i:s') . PHP_EOL .'URL: '. $url . PHP_EOL . PHP_EOL . 'ExecutionTime: ' . $executionTime . PHP_EOL . PHP_EOL .'Result: '. PHP_EOL .''. var_export($result, true) . PHP_EOL .'----------------------------------------'. PHP_EOL . PHP_EOL . PHP_EOL,
+ 				FILE_APPEND
+ 			);
+ 		}
+ 	}
+
 }

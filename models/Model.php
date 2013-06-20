@@ -14,16 +14,27 @@ abstract class Model {
 
   protected $api;
 
-  public function __construct($api)
+  public function __construct(Api $api)
   {
     $this->api = $api;
   }
 
-  /*
-  public static function model($api, $className = __CLASS__)
+  private static $models = array();
+
+  public static function model(Api $api)
   {
-    return new $className($api);
+    $className = static::getClassName();
+
+    if (!isset(self::$models[$api->getKey()][$className]))
+    {
+      self::$models[$api->getKey()][$className] = new $className($api);
+    }
+    return self::$models[$api->getKey()][$className];
   }
-  */
+
+  protected static function getClassName()
+  {
+    return __CLASS__;
+  }
 
 }

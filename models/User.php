@@ -12,76 +12,60 @@ namespace RunetID\Api;
 
 class User extends Model
 {
-  private $RunetId, $LastName, $FirstName, $FatherName, $Email;
+  private $RunetId;
+  private $LastName;
+  private $FirstName;
+  private $FatherName;
+  private $Email;
 
   /**
-   * АВТОРИЗАЦИЯ ПОЛЬЗОВАТЕЛЯ
-   *
-   * @param  string $runetIdOrEmailOrToken
-   * @param  string $password
-   * @return boolean
+   * @param Api $api
+   * @return User
    */
-	public function Login($runetIdOrEmailOrToken, $isToken = false)
+  public static function model(Api $api)
   {
-		if ($this->IsAuthorized())
-		{
-			return true;
-		}
-		$user = (!$isToken) ? CRunetGateUser::Get($runetIdOrEmailOrToken) : CRunetGateUser::GetByToken($runetIdOrEmailOrToken);
-    if (!$user)
-    {
-    	return false;
-    }
-    $arBitrixUser = CUser::GetList($_, $_, array('LOGIN_EQUAL' => self::GetLoginField($user->RunetId)))->Fetch();
-
-    if (empty($arBitrixUser))
-    {
-    	$password = md5(microtime());
-
-      $fields = array(
-      	'LOGIN' => self::GetLoginField($user->RunetId),
-        'NAME'  => $user->FirstName,
-        'LAST_NAME' => $user->LastName,
-        'EMAIL' => trim($user->Email),
-        'PASSWORD' => $password,
-        'CONFIRM_PASSWORD' => $password,
-				'UF_RUNET' => $user->RunetId
-      );
-
-      if (isset($user->Work))
-      {
-      	$fields['WORK_COMPANY']  = $user->Work->Company->Name;
-        $fields['WORK_POSITION'] = $user->Work->Position;
-      }
-
-			$arBitrixUser['ID'] = $this->user->Add($fields);
-      if ($arBitrixUser['ID'] === false)
-      {
-      	return false;
-      }
-			else
-			{
-				CEvent::Send('NEW_USER', array('s1'), $fields);
-			}
-    }
-    $authResult = $this->user->Authorize($arBitrixUser['ID'], true);
-/*
-			print 'User:<pre style="font-size: 14px;">';
-			var_dump($user);
-			print '</pre>';
-			print 'BXUser:<pre style="font-size: 14px;">';
-			var_dump($arBitrixUser);
-			print '</pre>';
-			print 'BXAuth:<pre style="font-size: 14px;">';
-			var_dump($authResult);
-			print '</pre>';
-			exit();
-*/
-    if ($authResult)
-    {
-    	$this->runetUser = $user;
-      return true;
-    }
-    return false;
+    return parent::model($api);
   }
+
+  protected static function getClassName()
+  {
+    return __CLASS__;
+  }
+
+  /**
+   * ПОЛУЧЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ ПО RunetID
+   *
+   * @param  int $runetId
+   * @param  int $cache
+   * @return CRunetUserData
+   */
+  public function GetByRunetId($runetId, $cache = 300, $resetCache = false)
+  {
+		$runetId = (int) $runetId;
+		if ($runetId === 0)
+		{
+			return null;
+		}
+		$result = $this->api->Get('user/get', array('RunetId' => $runetId), $cache, $resetCache);
+		return (isset($result->Error) && $result->Error === true) ? null : $result;
+  }
+
+  /**
+   * ПОЛУЧЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ ПО TOKEN
+   *
+   * @param  int $token
+   * @param  int $cache
+   * @return CRunetUserData
+   */
+  public function GetByToken($token, $cache = 300, $resetCache = false)
+  {
+		if ($token == '')
+		{
+			return null;
+		}
+		$result = $this->api->Get('user/auth', array('token' => $token), $cache, $resetCache);
+		return (isset($result->Error) && $result->Error === true) ? null : $result;
+  }
+
+
 }
