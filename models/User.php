@@ -39,14 +39,14 @@ class User extends Model
    * @param  int $cache
    * @return CRunetUserData
    */
-  public function GetByRunetId($runetId, $cache = 300, $resetCache = false)
+  public function getByRunetId($runetId, $cache = 300, $resetCache = false)
   {
 		$runetId = (int) $runetId;
 		if ($runetId === 0)
 		{
 			return null;
 		}
-		$result = $this->api->Get('user/get', array('RunetId' => $runetId), $cache, $resetCache);
+		$result = $this->api->get('user/get', array('RunetId' => $runetId), $cache, $resetCache);
 		return (isset($result->Error) && $result->Error === true) ? null : $result;
   }
 
@@ -57,15 +57,14 @@ class User extends Model
    * @param  int $cache
    * @return CRunetUserData
    */
-  public function GetByToken($token, $cache = 300, $resetCache = false)
+  public function getByToken($token, $cache = 300, $resetCache = false)
   {
 		if ($token == '')
 		{
 			return null;
 		}
-		$result = $this->api->Get('user/auth', array('token' => $token), $cache, $resetCache);
+		$result = $this->api->get('user/auth', array('token' => $token), $cache, $resetCache);
 		return (isset($result->Error) && $result->Error === true) ? null : $result;
   }
-
 
 }

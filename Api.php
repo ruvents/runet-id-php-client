@@ -14,18 +14,26 @@ class Api {
 
   private $key;
   private $secret;
-  private $domain;
-  private $defaultRoleId;
+  private $cache;
 
-  public function __construct($key, $secret, $defaultRoleId = 24, $domain = 'http://api.runet-id.com/') {
+  const DOMAIN = 'http://api.runet-id.com/';
+
+  /**
+   * @param string $key
+   * @param string $secret
+   * @param ICache $cache
+   */
+  public function __construct($key, $secret, $cache = null) {
 
     $this->key = $key;
     $this->secret = $secret;
-    $this->domain = $domain;
-    $this->defaultRoleId = $secret;
+    $this->cache = $cache;
 
   }
 
+  /**
+   * @return string
+   */
   public function getKey()
   {
     return $this->key;
@@ -39,10 +47,9 @@ class Api {
     * @param bool $useAuth
     * @return array
     */
-  //TODO Подумать над реализацией встроенного кеширования
-  public function Get ($url, $vars = array(), $cache = 0, $resetCache = false, $useAuth = true)
+  public function get ($url, $vars = array(), $cache = 0, $resetCache = false, $useAuth = true)
   {
-    return self::Request('GET', $url, $vars, $cache, $resetCache, $useAuth);
+    return self::request('GET', $url, $vars, $cache, $resetCache, $useAuth);
   }
 
   /**
@@ -52,10 +59,9 @@ class Api {
     * @param bool $resetCache
     * @return array
     */
-  //TODO Подумать над реализацией встроенного кеширования
-  public function Post ($url, $vars = array(), $cache = 0, $resetCache = false)
+  public function post ($url, $vars = array(), $cache = 0, $resetCache = false)
   {
-    return self::Request('POST', $url, $vars, $cache, $resetCache);
+    return self::request('POST', $url, $vars, $cache, $resetCache);
   }
 
   /*
@@ -74,23 +80,21 @@ class Api {
     * @param bool $useAuth
     * @return obj
     */
-  protected function Request ($method, $url, $vars = array(), $cache = 0, $resetCache = false, $useAuth = true)
+  protected function request ($method, $url, $vars = array(), $cache = 0, $resetCache = false, $useAuth = true)
   {
     $startTime = microtime(true);
 
-    // TODO: Привести url к единому формату
     if (!$url)
     {
-      throw new CRunetException( GetMessage ('RUNET.EXCEPTION.NOTURL'));
+//      throw new CRunetException();
+    }
+
+    if ($resetCache)
+    {
+      $this->cache->flush();
     }
 
     /*
-    $bxCache = new CPHPCache();
-    if ($resetCache)
-    {
-      $bxCache->Clean($this->GetCacheId($url, $vars), '/runet/');
-    }
-
     if ($cache === 0 || !$bxCache->InitCache($cache, $this->GetCacheId($url, $vars), "/runet/"))
     {
     */
@@ -130,7 +134,7 @@ class Api {
         break;
       }
 
-      curl_setopt($curl, CURLOPT_URL, $this->domain . $url);
+      curl_setopt($curl, CURLOPT_URL, self::DOMAIN . $url);
       $result = curl_exec($curl);
 
       /*
@@ -162,7 +166,7 @@ class Api {
 		}
     */
 
-    $this->Log($url, $result, (microtime(true) - $startTime));
+    $this->log($url, $result, (microtime(true) - $startTime));
 
     /*
     if (self::IsDebug())
@@ -189,7 +193,7 @@ class Api {
  	* @param string $url
  	* @param mixed $result
  	*/
- 	private function Log ($url, $result, $executionTime)
+ 	private function log ($url, $result, $executionTime)
  	{
  		$writeToLog = false;
  		if ( isset ($result->Error) && $result->Error)
