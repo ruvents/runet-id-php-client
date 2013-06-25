@@ -11,12 +11,6 @@ namespace RunetID\Api;
 
 /**
  * ICache is the interface that must be implemented by cache components.
- *
- * This interface must be implemented by classes supporting caching feature.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @package system.caching
- * @since 1.0
  */
 interface ICache
 {

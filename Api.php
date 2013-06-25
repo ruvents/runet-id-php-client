@@ -1,10 +1,7 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
- * User: админ
- * Date: 13.06.13
- * Time: 17:15
- * To change this template use File | Settings | File Templates.
+ * Created by Eroshenko Vitaliy
+ * v.eroshenko@gmail.com
  */
 
 namespace RunetID\Api;
@@ -16,7 +13,10 @@ class Api {
   private $secret;
   private $cache;
 
-  const DOMAIN = 'http://api.runet-id.com/';
+  public static $debug = false;
+  public static $debugIp = array();
+
+  const HOST = 'http://api.runet-id.com/';
 
   /**
    * @param string $key
@@ -40,28 +40,37 @@ class Api {
   }
 
   /**
-    * @param string $url
-    * @param array $vars
-    * @param int $cache
-    * @param bool $resetCache
-    * @param bool $useAuth
-    * @return array
-    */
-  public function get ($url, $vars = array(), $cache = 0, $resetCache = false, $useAuth = true)
+  *
+  * @return boolean
+  */
+  private static function isDebug()
   {
-    return self::request('GET', $url, $vars, $cache, $resetCache, $useAuth);
+    return (self::$debug && in_array($_SERVER['REMOTE_ADDR'], self::$debugIp));
   }
 
   /**
     * @param string $url
     * @param array $vars
-    * @param int $cache
+    * @param int $cacheTime
+    * @param bool $resetCache
+    * @param bool $useAuth
+    * @return array
+    */
+  public function get ($url, $vars = array(), $cacheTime = 0, $resetCache = false, $useAuth = true)
+  {
+    return self::request('GET', $url, $vars, $cacheTime, $resetCache, $useAuth);
+  }
+
+  /**
+    * @param string $url
+    * @param array $vars
+    * @param int $cacheTime
     * @param bool $resetCache
     * @return array
     */
-  public function post ($url, $vars = array(), $cache = 0, $resetCache = false)
+  public function post ($url, $vars = array(), $cacheTime = 0, $resetCache = false)
   {
-    return self::request('POST', $url, $vars, $cache, $resetCache);
+    return self::request('POST', $url, $vars, $cacheTime, $resetCache);
   }
 
   /*
@@ -80,7 +89,7 @@ class Api {
     * @param bool $useAuth
     * @return obj
     */
-  protected function request ($method, $url, $vars = array(), $cache = 0, $resetCache = false, $useAuth = true)
+  protected function request ($method, $url, $vars = array(), $cacheTime = 0, $resetCache = false, $useAuth = true)
   {
     $startTime = microtime(true);
 
@@ -94,10 +103,10 @@ class Api {
       $this->cache->flush();
     }
 
-    /*
-    if ($cache === 0 || !$bxCache->InitCache($cache, $this->GetCacheId($url, $vars), "/runet/"))
+    $cacheId = $url . serialize($vars);
+    $cacheData = (!empty($this->cache)) ? $this->cache->get($cacheId) : false;
+    if (empty($this->cache) || $cacheTime == 0 || $cacheData === false)
     {
-    */
       if ($useAuth)
       {
         $timestamp = time();
@@ -134,58 +143,34 @@ class Api {
         break;
       }
 
-      curl_setopt($curl, CURLOPT_URL, self::DOMAIN . $url);
+      curl_setopt($curl, CURLOPT_URL, self::HOST . $url);
       $result = curl_exec($curl);
 
-      /*
-      if (self::IsDebug() && self::$DebugHard)
+      if (self::isDebug())
       {
-        var_dump($result);
+        print 'Debug log:<pre>';
+        print 'URL: ' .$url .'<br /><br />';
+        print_r(json_decode($result));
+        print '</pre>';
       }
-      */
 
       $result = json_decode($result);
       curl_close($curl);
 
-      /*
-      if ($cache !== 0 && !isset($result->Error))
+      if (!empty($this->cache) && $cacheTime != 0 && !isset($result->Error))
       {
-        $bxCache->StartDataCache();
-        $bxCache->EndDataCache(array(
-          'result' => $result
-        ));
+        $this->cache->set($cacheId, $result);
       }
-      */
-
-    /*
     }
     else
     {
-      $bxCacheVars = $bxCache->GetVars();
-      $result = $bxCacheVars['result'];
+      $result = $cacheData;
 		}
-    */
 
     $this->log($url, $result, (microtime(true) - $startTime));
 
-    /*
-    if (self::IsDebug())
-    {
-      print 'URL: '.$url.'<br/>';
-      print '<pre>';
-      print_r($result);
-      print '</pre>';
-    }
-    */
     return $result;
   }
-
-  /*
-  private static function IsDebug ()
-  {
-    return (self::$Debug && in_array($_SERVER['REMOTE_ADDR'], self::$DebugIp));
-  }
-  */
 
   /**
  	* ЛОГИРОВАНИЕ
