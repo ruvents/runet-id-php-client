@@ -6,7 +6,8 @@ $api = new \RunetID\Api\Api('ny2bp534c3', '62z9526EcX4r35t79m368T44R');
 $api::$debug = true;
 $api::$debugIp = array('82.142.129.35');
 
-$User = \RunetID\Api\User::model($api)->getByRunetId(321);
+//\RunetID\Api\Event::model($api)->getStat();
+\RunetID\Api\Event::model($api)->getUsers();
 
 
 

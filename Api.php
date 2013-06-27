@@ -17,6 +17,7 @@ class Api {
   public static $debugIp = array();
 
   const HOST = 'http://api.runet-id.com/';
+  const VERSION = '0.7';
 
   /**
    * @param string $key
@@ -190,7 +191,7 @@ class Api {
  		{
       $logDir = __DIR__.'/log/';
  			$logFilePath = $logDir . date('d-m-Y') .'.txt';
-      mkdir($logDir);
+      if (!is_dir($logDir)) mkdir($logDir, 0777, true);
  			file_put_contents(
  				$logFilePath,
  				'----------------------------------------'. PHP_EOL .'DateTime: '. date('d-m-Y H:i:s') . PHP_EOL .'URL: '. $url . PHP_EOL . PHP_EOL . 'ExecutionTime: ' . $executionTime . PHP_EOL . PHP_EOL .'Result: '. PHP_EOL .''. var_export($result, true) . PHP_EOL .'----------------------------------------'. PHP_EOL . PHP_EOL . PHP_EOL,
@@ -198,5 +199,10 @@ class Api {
  			);
  		}
  	}
+
+  public static function getVersion()
+  {
+    return 'Runet-ID API v'.self::VERSION;
+  }
 
 }

@@ -1,15 +1,44 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: админ
- * Date: 13.06.13
- * Time: 17:14
- * To change this template use File | Settings | File Templates.
- */
 
 namespace RunetID\Api;
 
 
-class Company {
+class Company extends Model {
+
+  /**
+   * @param Api $api
+   * @return User
+   */
+  public static function model(Api $api)
+  {
+    return parent::model($api);
+  }
+
+  protected static function getClassName()
+  {
+    return __CLASS__;
+  }
+
+  /**
+    * ДАННЫЕ О КОМПАНИИ ПО ID
+    * @param int $companyId
+    * @return array
+    */
+  public function getById($companyID)
+  {
+    $companyID = (int) $companyID;
+    if ($companyID === 0)
+    {
+      return null;
+    }
+    return $this->api->get('company/get', array('CompanyId' => $companyID));
+  }
+
+  public function getTop()
+  {
+    return $this->api->get('/event/companies/', array(), 3600);
+  }
+
+
 
 }
