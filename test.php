@@ -1,5 +1,6 @@
 <?
-require_once(__DIR__.'/inc.php');
+require_once(__DIR__.'/Api.php');
+
 
 $api = new \RunetID\Api\Api('ny2bp534c3', '62z9526EcX4r35t79m368T44R');
 
