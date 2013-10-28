@@ -23,7 +23,7 @@ class Api {
   public static $debugIp = array();
 
   const HOST = 'http://api.runet-id.com/';
-  const VERSION = '0.7';
+  const VERSION = '0.8';
 
   /**
    * @param string $key
