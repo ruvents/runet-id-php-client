@@ -162,12 +162,14 @@ class Api {
       }
 
       $result = json_decode($result);
-      curl_close($curl);
 
-      if (!empty($this->cache) && $cacheTime != 0 && !isset($result->Error))
+      if (curl_errno($curl) == 0 && !empty($this->cache) && $cacheTime != 0 && !isset($result->Error))
       {
         $this->cache->set($cacheId, $result);
       }
+
+      curl_close($curl);
+
     }
     else
     {
