@@ -167,9 +167,7 @@ class Api {
       {
         $this->cache->set($cacheId, $result);
       }
-
       curl_close($curl);
-
     }
     else
     {
