@@ -110,7 +110,7 @@ class Api {
       $this->cache->flush();
     }
 
-    $cacheId = $url . serialize($vars);
+    $cacheId = $url . serialize($vars) . $this->getKey();
     $cacheData = (!empty($this->cache)) ? $this->cache->get($cacheId) : false;
     if (empty($this->cache) || $cacheTime == 0 || $cacheData === false)
     {
