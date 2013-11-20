@@ -88,14 +88,15 @@ class Api {
   */
 
   /**
-    * @param  string $method
-    * @param  string $url
-    * @param  array $vars
-    * @param int $cache
-    * @param bool $resetCache
-    * @param bool $useAuth
-    * @return obj
-    */
+   * @param string $method
+   * @param string $url
+   * @param array $vars
+   * @param int $cacheTime
+   * @param bool $resetCache
+   * @param bool $useAuth
+   *
+   * @return mixed
+   */
   protected function request ($method, $url, $vars = array(), $cacheTime = 0, $resetCache = false, $useAuth = true)
   {
     $startTime = microtime(true);
@@ -105,19 +106,18 @@ class Api {
 //      throw new CRunetException();
     }
 
-    if ($resetCache)
+    $cacheId = $url . serialize($vars) . $this->getKey();
+    if ($resetCache && !empty($this->cache))
     {
-      $this->cache->flush();
+      $this->cache->delete($cacheId);
     }
 
-    $cacheId = $url . serialize($vars) . $this->getKey();
     $cacheData = (!empty($this->cache)) ? $this->cache->get($cacheId) : false;
-    if (empty($this->cache) || $cacheTime == 0 || $cacheData === false)
+    if ($cacheData === false)
     {
       if ($useAuth)
       {
         $timestamp = time();
-
         if (!$this->key || !$this->secret)
         {
           //throw new CRunetException( GetMessage ('RUNET.EXCEPTION.NOTKEY'));
@@ -162,11 +162,11 @@ class Api {
       }
 
       $result = json_decode($result);
-
       if (curl_errno($curl) == 0 && !empty($this->cache) && $cacheTime != 0 && !isset($result->Error))
       {
-        $this->cache->set($cacheId, $result);
+        $this->cache->set($cacheId, $result, $cacheTime);
       }
+
       curl_close($curl);
     }
     else
