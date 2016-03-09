@@ -1,0 +1,11 @@
+{
+    "name": "runet-id/api-client",
+    "license": "MIT",
+    "type": "project",
+    "description": "Official -RUNET--ID- API Client",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
