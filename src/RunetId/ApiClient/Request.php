@@ -236,6 +236,14 @@ class Request
     }
 
     /**
+     * @return string
+     */
+    public function getDataString()
+    {
+        return http_build_query($this->data);
+    }
+
+    /**
      * @param array $headers
      * @return $this
      */
@@ -305,7 +313,25 @@ class Request
      */
     public function getUri($includeQuery = false)
     {
-        return $this->getScheme().'://'.$this->getHost().$this->getPath().($includeQuery ? '?'.$this->getQueryString()
-            : '');
+        $uri = $this->getScheme().'://'
+            .$this->getHost()
+            .$this->getPath()
+            .($includeQuery && !empty($this->query) ? '?'.$this->getQueryString() : '');
+
+        return $uri;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHash()
+    {
+        $array = [
+            $this->getPath(),
+            $this->getData(),
+            $this->getHeaders(),
+        ];
+
+        return md5(json_encode($array));
     }
 }
