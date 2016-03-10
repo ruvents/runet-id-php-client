@@ -14,9 +14,9 @@ use Symfony\Component\Serializer\SerializerInterface;
 class Api
 {
     /**
-     * @var App
+     * @var Client
      */
-    protected $app;
+    protected $client;
 
     /**
      * @var Serializer
@@ -31,13 +31,13 @@ class Api
     ];
 
     /**
-     * @param App                 $app
+     * @param Client              $client
      * @param SerializerInterface $serializer
      * @param array               $classNames
      */
-    public function __construct(App $app, SerializerInterface $serializer, array $classNames = [])
+    public function __construct(Client $client, SerializerInterface $serializer, array $classNames = [])
     {
-        $this->app = $app;
+        $this->client = $client;
         $this->serializer = $serializer;
         $this->classNames = array_merge($this->classNames, $classNames);
     }
@@ -47,23 +47,23 @@ class Api
      */
     public function getEventSectionList()
     {
-        $response = $this->app->get('event/section/list');
+        $response = $this->client->post('event/section/list');
 
-        return $this->deserializeArray($response, 'section');
+        return $this->deserializeArray($response->getBody()->getContents(), 'section');
     }
 
     /**
-     * @param Response $response
-     * @param string   $type
+     * @param string $contents
+     * @param string $type
      * @throws UnexpectedValueException
      * @return array
      */
-    protected function deserializeArray(Response $response, $type)
+    protected function deserializeArray($contents, $type)
     {
         UnexpectedValueException::check($type, array_keys($this->classNames));
 
         $className = $this->classNames[$type];
 
-        return $this->serializer->deserialize($response->getBody(), $className.'[]', 'json');
+        return $this->serializer->deserialize($contents, $className.'[]', 'json');
     }
 }
