@@ -12,18 +12,18 @@
 
 ```php
 <?php
-$config = [
+$client = new RunetId\ApiClient\Client([
     // API key (обязательный параметр)
     'key' => '123',
     // API secret (обязательный параметр)
     'secret' => '456',
-    // использовать https? (по умолчанию false)
+    // использовать https? (по умолчанию: false)
     'secure' => true,
-    // хост (по умолчанию 'api.runet-id.com')
+    // хост (по умолчанию: 'api.runet-id.com')
     'host' => 'api.runet-id.com'
-];
+]);
 
-$client = new RunetId\ApiClient\Client($config);
+// отправка GET-запроса
 $client->get(
     // относительный путь метода API (обязательный параметр)
     $path = 'event/section/list',
@@ -32,6 +32,8 @@ $client->get(
     // заголовки
     $headers = ['name' => 'value']
 );
+
+// отправка POST-запроса
 $client->post(
     // относительный путь метода API (обязательный параметр)
     $path = 'event/section/list',
@@ -43,3 +45,4 @@ $client->post(
     $headers = ['name' => 'value']
 );
 ```
+Методы `Client::get` и `Client::post` возвращают объект класса `GuzzleHttp\Psr7\Response`. Подробнее [в документации Guzzle](http://docs.guzzlephp.org/en/latest/quickstart.html#using-responses).
