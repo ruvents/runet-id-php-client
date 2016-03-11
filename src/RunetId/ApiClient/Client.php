@@ -24,7 +24,7 @@ class Client
     /**
      * @var array
      */
-    private $options = [
+    protected $options = [
         'host' => 'api.runet-id.com',
         'secure' => false,
     ];
@@ -44,10 +44,37 @@ class Client
 
         InvalidArgumentException::check($mergedOptions['host'], '');
         InvalidArgumentException::check($mergedOptions['secure'], true);
-        InvalidArgumentException::check($mergedOptions['key'], '');
-        InvalidArgumentException::check($mergedOptions['secret'], '');
+        $this->setKey($mergedOptions['key']);
+        $this->setSecret($mergedOptions['secret']);
 
         $this->options = $mergedOptions;
+    }
+    /**
+     * @param string $key
+     * @throws InvalidArgumentException
+     * @return $this
+     */
+    public function setKey($key)
+    {
+        InvalidArgumentException::check($key, '');
+
+        $this->options['key'] = $key;
+
+        return $this;
+    }
+
+    /**
+     * @param string $secret
+     * @throws InvalidArgumentException
+     * @return $this
+     */
+    public function setSecret($secret)
+    {
+        InvalidArgumentException::check($secret, '');
+
+        $this->options['secret'] = $secret;
+
+        return $this;
     }
 
     /**

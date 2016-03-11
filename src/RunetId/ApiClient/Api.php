@@ -47,7 +47,7 @@ class Api
      */
     public function getEventSectionList()
     {
-        $response = $this->client->post('event/section/list');
+        $response = $this->client->get('event/section/list');
 
         return $this->deserializeArray($response->getBody()->getContents(), 'section');
     }
