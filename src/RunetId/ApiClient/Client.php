@@ -10,6 +10,10 @@ use GuzzleHttp\RequestOptions;
 use RunetId\ApiClient\Exception\InvalidArgumentException;
 use RunetId\ApiClient\Exception\UnexpectedValueException;
 
+/**
+ * Class Client
+ * @package RunetId\ApiClient
+ */
 class Client
 {
     /**
@@ -133,28 +137,10 @@ class Client
      */
     public function request($method, $path, array $query = [], $data = null, array $headers = [])
     {
-        UnexpectedValueException::check($method, $this->getSupportedMethods());
-        InvalidArgumentException::check($path, '');
-
-        $path = trim($path, '/');
-        $timestamp = time();
-        $hash = $this->generateHash($this->options['key'], $this->options['secret'], $timestamp);
-
-        $query = array_merge([
-            'ApiKey' => $this->options['key'],
-            'Timestamp' => $timestamp,
-            'Hash' => $hash,
-        ], $query);
-
-        $uri = (new Uri())
-            ->withHost($this->options['host'])
-            ->withScheme('http'.($this->options['secure'] ? 's' : ''))
-            ->withPath($path);
-        $request = new Request($method, $uri);
+        $request = $this->createRequestObject($method, $path, $headers);
 
         $options = [
-            RequestOptions::QUERY => $query,
-            RequestOptions::HEADERS => $headers,
+            RequestOptions::QUERY => $this->prepareQuery($query),
         ];
         if (!empty($data)) {
             if (is_array($data)) {
@@ -165,6 +151,45 @@ class Client
         }
 
         return $this->getGuzzleClient()->send($request, $options);
+    }
+
+    /**
+     * @param array $query
+     * @return array
+     */
+    protected function prepareQuery(array $query)
+    {
+        $timestamp = time();
+        $hash = $this->generateHash($this->options['key'], $this->options['secret'], $timestamp);
+
+        $query = array_merge([
+            'ApiKey' => $this->options['key'],
+            'Timestamp' => $timestamp,
+            'Hash' => $hash,
+        ], $query);
+
+        return $query;
+    }
+
+    /**
+     * @param string $method
+     * @param string $path
+     * @param array  $headers
+     * @return Request
+     */
+    protected function createRequestObject($method, $path, array $headers)
+    {
+        UnexpectedValueException::check($method, $this->getSupportedMethods());
+        InvalidArgumentException::check($path, '');
+
+        $path = trim($path, '/');
+
+        $uri = (new Uri())
+            ->withHost($this->options['host'])
+            ->withScheme('http'.($this->options['secure'] ? 's' : ''))
+            ->withPath($path);
+
+        return new Request($method, $uri, $headers);
     }
 
     /**
