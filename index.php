@@ -20,4 +20,4 @@ $serializer = new Serializer(
 );
 $api = new Api($client, $serializer);
 
-var_dump($api->getEventSectionList()[0]);
+var_dump($api->getEventSectionList());

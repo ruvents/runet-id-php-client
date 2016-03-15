@@ -49,7 +49,7 @@ class Api
     {
         $response = $this->client->get('event/section/list');
 
-        return $this->deserializeArray($response->getBody()->getContents(), 'section');
+        return $this->deserializeArray($response->raw_body, 'section');
     }
 
     /**
