@@ -49,6 +49,7 @@ class Client
 
         $this->options = $mergedOptions;
     }
+
     /**
      * @param string $key
      * @throws InvalidArgumentException
@@ -113,11 +114,12 @@ class Client
      * @param array  $query
      * @param array  $data
      * @param array  $headers
+     * @param mixed  $body
      * @return Response
      */
-    public function post($path, array $query = [], array $data = [], array $headers = [])
+    public function post($path, array $query = [], array $data = [], array $headers = [], $body = null)
     {
-        return $this->request(self::METHOD_POST, $path, $query, $data, $headers);
+        return $this->request(self::METHOD_POST, $path, $query, $data, $headers, $body);
     }
 
     /**
@@ -126,13 +128,15 @@ class Client
      * @param array  $query
      * @param array  $data
      * @param array  $headers
+     * @param mixed  $body
      * @throws UnexpectedValueException|InvalidArgumentException
      * @return Response
      */
-    public function request($method, $path, array $query = [], array $data = [], array $headers = [])
+    public function request($method, $path, array $query = [], array $data = [], array $headers = [], $body = null)
     {
         UnexpectedValueException::check($method, $this->getSupportedMethods());
         InvalidArgumentException::check($path, '');
+        # TODO: invalidate $body
 
         $path = trim($path, '/');
         $timestamp = time();
@@ -149,7 +153,7 @@ class Client
             ->withScheme('http'.($this->options['secure'] ? 's' : ''))
             ->withPath($path);
 
-        $request = new Request($method, $uri, $headers);
+        $request = new Request($method, $uri, $headers, $body);
 
         return $this->getGuzzleClient()->send($request, [
             'query' => $query,
