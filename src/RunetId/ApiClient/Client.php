@@ -6,6 +6,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
+use GuzzleHttp\RequestOptions;
 use RunetId\ApiClient\Exception\InvalidArgumentException;
 use RunetId\ApiClient\Exception\UnexpectedValueException;
 
@@ -106,37 +107,34 @@ class Client
      */
     public function get($path, array $query = [], array $headers = [])
     {
-        return $this->request(self::METHOD_GET, $path, $query, [], $headers);
+        return $this->request(self::METHOD_GET, $path, $query, null, $headers);
     }
 
     /**
      * @param string $path
      * @param array  $query
-     * @param array  $data
+     * @param mixed  $data
      * @param array  $headers
-     * @param mixed  $body
      * @return Response
      */
-    public function post($path, array $query = [], array $data = [], array $headers = [], $body = null)
+    public function post($path, array $query = [], $data = null, array $headers = [])
     {
-        return $this->request(self::METHOD_POST, $path, $query, $data, $headers, $body);
+        return $this->request(self::METHOD_POST, $path, $query, $data, $headers);
     }
 
     /**
      * @param string $method
      * @param string $path
      * @param array  $query
-     * @param array  $data
+     * @param mixed  $data
      * @param array  $headers
-     * @param mixed  $body
      * @throws UnexpectedValueException|InvalidArgumentException
      * @return Response
      */
-    public function request($method, $path, array $query = [], array $data = [], array $headers = [], $body = null)
+    public function request($method, $path, array $query = [], $data = null, array $headers = [])
     {
         UnexpectedValueException::check($method, $this->getSupportedMethods());
         InvalidArgumentException::check($path, '');
-        # TODO: invalidate $body
 
         $path = trim($path, '/');
         $timestamp = time();
@@ -152,13 +150,21 @@ class Client
             ->withHost($this->options['host'])
             ->withScheme('http'.($this->options['secure'] ? 's' : ''))
             ->withPath($path);
+        $request = new Request($method, $uri);
 
-        $request = new Request($method, $uri, $headers, $body);
+        $options = [
+            RequestOptions::QUERY => $query,
+            RequestOptions::HEADERS => $headers,
+        ];
+        if (!empty($data)) {
+            if (is_array($data)) {
+                $options[RequestOptions::FORM_PARAMS] = $data;
+            } else {
+                $options[RequestOptions::BODY] = $data;
+            }
+        }
 
-        return $this->getGuzzleClient()->send($request, [
-            'query' => $query,
-            'form_params' => $data,
-        ]);
+        return $this->getGuzzleClient()->send($request, $options);
     }
 
     /**
