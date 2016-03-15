@@ -39,14 +39,10 @@ $client->post(
     $path = 'event/section/list',
     // параметры строки запроса
     $query = ['key' => 'value'],
-    // данные, передаваемые через POST
+    // данные (строка, ресурс, массив данных формы)
     $data = ['key' => 'value'],
     // заголовки
-    $headers = ['key' => 'value'],
-    // тело
-    $body = fopen('/path/to/file', 'r')
+    $headers = ['key' => 'value']
 );
 ```
-Методы `Client::get` и `Client::post` возвращают объект класса `GuzzleHttp\Psr7\Response`. Подробнее [в документации Guzzle](http://docs.guzzlephp.org/en/latest/quickstart.html#using-responses).
-
-В теле POST-запроса можно передавать как строку, так и ресурс или поток. Подробнее [в документации Guzzle](http://docs.guzzlephp.org/en/latest/request-options.html#body).
+Методы `Client::get` и `Client::post` возвращают объект класса `GuzzleHttp\Psr7\Response`. [Подробнее в документации Guzzle](http://docs.guzzlephp.org/en/latest/quickstart.html#using-responses).
