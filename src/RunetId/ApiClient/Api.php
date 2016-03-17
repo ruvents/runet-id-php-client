@@ -2,7 +2,6 @@
 
 namespace RunetId\ApiClient;
 
-use RunetId\ApiClient\Exception\UnexpectedValueException;
 use RunetId\ApiClient\Model\Section;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -49,19 +48,16 @@ class Api
     {
         $response = $this->client->get('event/section/list');
 
-        return $this->deserializeArray($response->raw_body, 'section');
+        return $this->deserializeArray($response->getRawBody(), 'section');
     }
 
     /**
      * @param string $contents
      * @param string $type
-     * @throws UnexpectedValueException
      * @return array
      */
     protected function deserializeArray($contents, $type)
     {
-        UnexpectedValueException::check($type, array_keys($this->classNames));
-
         $className = $this->classNames[$type];
 
         return $this->serializer->deserialize($contents, $className.'[]', 'json');

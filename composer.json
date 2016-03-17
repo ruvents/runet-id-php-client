@@ -10,7 +10,7 @@
         "php": ">=5.5.9",
         "symfony/serializer": "^2.8",
         "symfony/property-access": "^2.8",
-        "mashape/unirest-php": "^3.0"
+        "ruvents/http-client": "^1.0@dev"
     },
     "extra": {
         "branch-alias": {

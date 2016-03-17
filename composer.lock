@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ac844be3edb295b6cc2583a7ecd648ce",
-    "content-hash": "bcee7b93169e46017655d06c3c9f0bde",
+    "hash": "547e2c91d8974f16e75beae346cae2d3",
+    "content-hash": "31d6c01f03090cc04bf3f3b0ec0569a4",
     "packages": [
         {
             "name": "ircmaxell/password-compat",
@@ -50,50 +50,76 @@
             "time": "2014-11-20 16:49:30"
         },
         {
-            "name": "mashape/unirest-php",
-            "version": "v3.0.0",
+            "name": "jakeasmith/http_build_url",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Mashape/unirest-php.git",
-                "reference": "2bedcf05acf56a50d4d96a7fcd0a1856308095cb"
+                "url": "https://github.com/jakeasmith/http_build_url.git",
+                "reference": "15bdd686e5178ddfa3e88de60fa585adffb292bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Mashape/unirest-php/zipball/2bedcf05acf56a50d4d96a7fcd0a1856308095cb",
-                "reference": "2bedcf05acf56a50d4d96a7fcd0a1856308095cb",
+                "url": "https://api.github.com/repos/jakeasmith/http_build_url/zipball/15bdd686e5178ddfa3e88de60fa585adffb292bb",
+                "reference": "15bdd686e5178ddfa3e88de60fa585adffb292bb",
                 "shasum": ""
             },
-            "require": {
-                "ext-curl": "*",
-                "php": ">=5.4.0"
-            },
             "require-dev": {
-                "codeclimate/php-test-reporter": "0.1.*",
-                "phpunit/phpunit": "~4.4"
-            },
-            "suggest": {
-                "ext-json": "Allows using JSON Bodies for sending and parsing requests"
+                "phpunit/phpunit": "~3.7"
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "Unirest": "src"
+                "files": [
+                    "src/http_build_url.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jake A. Smith",
+                    "email": "theman@jakeasmith.com"
+                }
+            ],
+            "description": "Provides functionality for http_build_url() to environments without pecl_http.",
+            "time": "2015-05-06 12:27:20"
+        },
+        {
+            "name": "ruvents/http-client",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://bitbucket.org/ruvents/http-client.git",
+                "reference": "2e6806173b018131bea8028860a8fb88a2d1b89b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://bitbucket.org/ruvents/http-client/get/2e6806173b018131bea8028860a8fb88a2d1b89b.zip",
+                "reference": "2e6806173b018131bea8028860a8fb88a2d1b89b",
+                "shasum": ""
+            },
+            "require": {
+                "jakeasmith/http_build_url": "^1.0",
+                "php": ">=5.4"
+            },
+            "type": "project",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
-            "description": "Unirest PHP",
-            "homepage": "https://github.com/Mashape/unirest-php",
-            "keywords": [
-                "client",
-                "curl",
-                "http",
-                "https",
-                "rest"
-            ],
-            "time": "2016-02-25 04:27:05"
+            "description": "Ruvent Http Client",
+            "time": "2016-03-17 09:46:27"
         },
         {
             "name": "symfony/polyfill-php55",
@@ -279,7 +305,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "ruvents/http-client": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

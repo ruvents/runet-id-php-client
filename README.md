@@ -2,21 +2,21 @@
 
 ## Установка
 
-`$ composer require runet-id/api-client:^2.0@dev`
+`$ composer require runet-id/api-client:^2.0@alpha`
 
 ## Обзор
 
 ### RunetId\ApiClient\Client
 
-Отправляет запрос к серверу и получает ответ. Используется библиотека [Guzzle](http://guzzlephp.org/)
+Отправляет запрос к серверу и получает ответ. Используется библиотека [RUVENTS Http Client](https://bitbucket.org/ruvents/http-client)
 
 ```php
 <?php
 $client = new RunetId\ApiClient\Client([
-    // API key (обязательный параметр)
-    'key' => '123',
+    // API name (обязательный параметр)
+    'name' => 'runetidname',
     // API secret (обязательный параметр)
-    'secret' => '456',
+    'secret' => 'runetidsecret',
     // использовать https? (по умолчанию: false)
     'secure' => true,
     // хост (по умолчанию: 'api.runet-id.com')
@@ -28,9 +28,9 @@ $client->get(
     // относительный путь метода API (обязательный параметр)
     $path = 'event/section/list',
     // параметры строки запроса
-    $query = ['key' => 'value'],
+    $query = ['name' => 'value'],
     // заголовки
-    $headers = ['key' => 'value']
+    $headers = ['name' => 'value']
 );
 
 // отправка POST-запроса
@@ -38,11 +38,13 @@ $client->post(
     // относительный путь метода API (обязательный параметр)
     $path = 'event/section/list',
     // параметры строки запроса
-    $query = ['key' => 'value'],
+    $query = ['name' => 'value'],
     // данные (строка, ресурс, массив данных формы)
-    $data = ['key' => 'value'],
+    $data = ['name' => 'value'],
     // заголовки
-    $headers = ['key' => 'value']
+    $headers = ['name' => 'value'],
+    // файлы
+    $files = ['name' => new Ruvents\HttpClient\Request\File($path)]
 );
 ```
-Методы `Client::get` и `Client::post` возвращают объект класса `GuzzleHttp\Psr7\Response`. [Подробнее в документации Guzzle](http://docs.guzzlephp.org/en/latest/quickstart.html#using-responses).
+Методы `Client::get` и `Client::post` возвращают объект класса `Ruvents\HttpClient\Response\Response`. [Подробнее в документации RUVENTS Http Client](https://bitbucket.org/ruvents/http-client).

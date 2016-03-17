@@ -9,21 +9,28 @@ namespace RunetId\ApiClient\Exception;
 class InvalidArgumentException extends \InvalidArgumentException
 {
     /**
-     * @param mixed $variable
-     * @param mixed $exampleType
-     * @throws self
+     * @param mixed  $var
+     * @param string $expectedTypes
+     * @return string
      */
-    public static function check($variable, $exampleType)
+    public static function typeMsg($var, $expectedTypes)
     {
-        $givenType = gettype($variable);
-        $neededType = gettype($exampleType);
+        return sprintf(
+            'Invalid argument. Must be %s, %s given.',
+            $expectedTypes,
+            gettype($var)
+        );
+    }
 
-        if ($givenType !== $neededType) {
-            throw new self(sprintf(
-                'Invalid argument. Must be of the type "%s", "%s" given',
-                $neededType,
-                $givenType
-            ));
-        }
+    /**
+     * @param array $haystack
+     * @return string
+     */
+    public static function haystackMsg(array $haystack)
+    {
+        return sprintf(
+            'Invalid argument. Must be one of these: "%s".',
+            implode('", "', $haystack)
+        );
     }
 }

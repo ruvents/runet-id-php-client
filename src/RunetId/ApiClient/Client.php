@@ -2,12 +2,10 @@
 
 namespace RunetId\ApiClient;
 
-use RunetId\ApiClient\Exception\InvalidArgumentException;
-use RunetId\ApiClient\Exception\UnexpectedValueException;
-use Unirest\Method;
-use Unirest\Request;
-use Unirest\Request\Body;
-use Unirest\Response;
+use Ruvents\HttpClient\HttpClient;
+use Ruvents\HttpClient\Request\Request;
+use Ruvents\HttpClient\Request\Uri;
+use Ruvents\HttpClient\Response\Response;
 
 /**
  * Class Client
@@ -24,55 +22,36 @@ class Client
     ];
 
     /**
+     * @var HttpClient
+     */
+    private $httpClient;
+
+    /**
      * @param array $options
-     * @throws InvalidArgumentException
      */
-    public function __construct(array $options)
+    public function __construct(array $options = [])
     {
-        $mergedOptions = array_merge($this->options, $options);
-
-        InvalidArgumentException::check($mergedOptions['host'], '');
-        InvalidArgumentException::check($mergedOptions['secure'], true);
-        $this->setKey($mergedOptions['key']);
-        $this->setSecret($mergedOptions['secret']);
-
-        $this->options = $mergedOptions;
+        $this->options = array_merge($this->options, $options);
     }
 
     /**
-     * @param string $key
-     * @throws InvalidArgumentException
-     * @return $this
+     * @param string $method
+     * @param string $path
+     * @param array  $query
+     * @param mixed  $data
+     * @param array  $headers
+     * @param array  $files
+     * @return Response
      */
-    public function setKey($key)
+    public function request($method, $path, array $query = [], $data = null, array $headers = [], array $files = [])
     {
-        InvalidArgumentException::check($key, '');
+        $this->prepareQuery($query);
 
-        $this->options['key'] = $key;
+        $uri = Uri::createHttp($this->options['host'], $path, $query, $this->options['secure']);
 
-        return $this;
-    }
+        $request = new Request($uri, $data, $headers, $files);
 
-    /**
-     * @param string $secret
-     * @throws InvalidArgumentException
-     * @return $this
-     */
-    public function setSecret($secret)
-    {
-        InvalidArgumentException::check($secret, '');
-
-        $this->options['secret'] = $secret;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSupportedMethods()
-    {
-        return [Method::GET, Method::POST];
+        return $this->getHttpClient()->send($request, $method);
     }
 
     /**
@@ -83,7 +62,7 @@ class Client
      */
     public function get($path, array $query = [], array $headers = [])
     {
-        return $this->request(Method::GET, $path, $query, null, $headers);
+        return $this->request(HttpClient::METHOD_GET, $path, $query, null, $headers);
     }
 
     /**
@@ -96,53 +75,55 @@ class Client
      */
     public function post($path, array $query = [], $data = null, array $headers = [], array $files = [])
     {
-        return $this->request(Method::POST, $path, $query, $data, $headers, $files);
+        return $this->request(HttpClient::METHOD_POST, $path, $query, $data, $headers, $files);
     }
 
     /**
-     * @param string $method
-     * @param string $path
-     * @param array  $query
-     * @param mixed  $data
-     * @param array  $headers
-     * @param array  $files
-     * @throws UnexpectedValueException|InvalidArgumentException
-     * @return Response
+     * @return HttpClient
      */
-    public function request($method, $path, array $query = [], $data = null, array $headers = [], array $files = [])
+    public function getHttpClient()
     {
-        UnexpectedValueException::check($method, $this->getSupportedMethods());
+        if (!isset($this->httpClient)) {
+            $this->httpClient = new HttpClient();
+        }
 
-        $url = $this->prepareUrl($path, $query);
-        $body = (new Body())->Multipart($data, empty($files) ?: $files);
-
-        return Request::send($method, $url, $body, $headers);
+        return $this->httpClient;
     }
 
     /**
-     * @param string $path
-     * @param array  $query
-     * @return string
+     * @param string $key
+     * @return $this
      */
-    protected function prepareUrl($path, array $query)
+    public function setKey($key)
     {
-        InvalidArgumentException::check($path, '');
+        $this->options['key'] = $key;
 
-        $query = $this->prepareQuery($query);
+        return $this;
+    }
 
-        $url = 'http'.($this->options['secure'] ? 's' : '').'://'
-            .trim($this->options['host'], '/').'/'
-            .trim($path, '/')
-            .(empty($query) ? '' : '?'.http_build_query($query));
+    /**
+     * @param string $secret
+     * @return $this
+     */
+    public function setSecret($secret)
+    {
+        $this->options['secret'] = $secret;
 
-        return $url;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSupportedMethods()
+    {
+        return [HttpClient::METHOD_GET, HttpClient::METHOD_POST];
     }
 
     /**
      * @param array $query
-     * @return array
      */
-    protected function prepareQuery(array $query)
+    protected function prepareQuery(array &$query)
     {
         $timestamp = time();
         $hash = $this->generateHash($this->options['key'], $this->options['secret'], $timestamp);
@@ -152,8 +133,6 @@ class Client
             'Timestamp' => $timestamp,
             'Hash' => $hash,
         ], $query);
-
-        return $query;
     }
 
     /**
