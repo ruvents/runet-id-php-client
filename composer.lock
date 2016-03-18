@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "547e2c91d8974f16e75beae346cae2d3",
-    "content-hash": "31d6c01f03090cc04bf3f3b0ec0569a4",
+    "hash": "64309707b6369b4a833c7a585b7f66ec",
+    "content-hash": "8d741cf814a3b8fc1c04535914545a7c",
     "packages": [
         {
             "name": "ircmaxell/password-compat",
@@ -87,16 +87,16 @@
         },
         {
             "name": "ruvents/http-client",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://bitbucket.org/ruvents/http-client.git",
-                "reference": "2e6806173b018131bea8028860a8fb88a2d1b89b"
+                "reference": "e77bf2757071f20870d3e9227e39965439298a79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://bitbucket.org/ruvents/http-client/get/2e6806173b018131bea8028860a8fb88a2d1b89b.zip",
-                "reference": "2e6806173b018131bea8028860a8fb88a2d1b89b",
+                "url": "https://bitbucket.org/ruvents/http-client/get/e77bf2757071f20870d3e9227e39965439298a79.zip",
+                "reference": "e77bf2757071f20870d3e9227e39965439298a79",
                 "shasum": ""
             },
             "require": {
@@ -118,8 +118,8 @@
             "license": [
                 "MIT"
             ],
-            "description": "Ruvent Http Client",
-            "time": "2016-03-17 09:46:27"
+            "description": "RUVENTS Http Client",
+            "time": "2016-03-18 13:13:08"
         },
         {
             "name": "symfony/polyfill-php55",
@@ -305,9 +305,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "ruvents/http-client": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
