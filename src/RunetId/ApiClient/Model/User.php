@@ -1,15 +1,15 @@
 <?php
 
-namespace RunetId\ApiClient\Api\Model;
+namespace RunetId\ApiClient\Model;
 
-use RunetId\ApiClient\Api\Model\User\Company;
-use RunetId\ApiClient\Api\Model\User\Photo;
-use RunetId\ApiClient\Api\Model\User\Status;
-use RunetId\ApiClient\Api\Model\User\Work;
+use RunetId\ApiClient\Model\User\Company;
+use RunetId\ApiClient\Model\User\Photo;
+use RunetId\ApiClient\Model\User\Status;
+use RunetId\ApiClient\Model\User\Work;
 
 /**
  * Class User
- * @package RunetId\ApiClient\Api\Model
+ * @package RunetId\ApiClient\Model
  */
 class User
 {

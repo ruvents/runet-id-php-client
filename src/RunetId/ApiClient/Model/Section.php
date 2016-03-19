@@ -1,10 +1,10 @@
 <?php
 
-namespace RunetId\ApiClient\Api\Model;
+namespace RunetId\ApiClient\Model;
 
 /**
  * Class Section
- * @package RunetId\ApiClient\Api\Model
+ * @package RunetId\ApiClient\Model
  */
 class Section
 {

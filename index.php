@@ -3,13 +3,11 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-use RunetId\ApiClient\Api\Api;
-use RunetId\ApiClient\Client;
+use RunetId\ApiClient\ApiClient;
 
 require_once __DIR__.'/vendor/autoload.php';
 $config = require_once __DIR__.'/config.php';
 
-$client = new Client($config);
-$api = new Api($client);
+$apiClient = new ApiClient($config);
 
-var_dump($api->getUser(454));
+var_dump($apiClient->factory()->user(454)->get());

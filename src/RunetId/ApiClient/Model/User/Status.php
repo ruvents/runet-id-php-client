@@ -1,10 +1,10 @@
 <?php
 
-namespace RunetId\ApiClient\Api\Model\User;
+namespace RunetId\ApiClient\Model\User;
 
 /**
  * Class Status
- * @package RunetId\ApiClient\Api\Model\User
+ * @package RunetId\ApiClient\Model\User
  */
 class Status
 {
