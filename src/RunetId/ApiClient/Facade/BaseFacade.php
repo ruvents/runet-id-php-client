@@ -30,7 +30,7 @@ class BaseFacade
      * @param bool            $isArray
      * @return object
      */
-    public function deserialize($response, $modelName, $isArray = false)
+    protected function deserialize($response, $modelName, $isArray = false)
     {
         return $this->apiClient->deserialize($response, $modelName, $isArray);
     }

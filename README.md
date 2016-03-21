@@ -1,10 +1,10 @@
-# Официальный API клиент -RUNET--ID-
+# Официальный API-клиент -RUNET--ID-
 
 ## Установка
 
 `$ composer require runet-id/api-client:^2.0@alpha`
 
-## Обзор
+## Использование
 
 ### RunetId\ApiClient\Client
 
@@ -12,7 +12,7 @@
 
 ```php
 <?php
-$client = new RunetId\ApiClient\Client([
+$client = new RunetId\ApiClient\ApiClient([
     // API name (обязательный параметр)
     'name' => 'runetidname',
     // API secret (обязательный параметр)
@@ -39,7 +39,7 @@ $client->post(
     $path = 'event/section/list',
     // параметры строки запроса
     $query = ['name' => 'value'],
-    // данные (строка, ресурс, массив данных формы)
+    // данные (строка, или массив данных)
     $data = ['name' => 'value'],
     // заголовки
     $headers = ['name' => 'value'],

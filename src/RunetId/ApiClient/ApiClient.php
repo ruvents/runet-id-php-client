@@ -3,6 +3,7 @@
 namespace RunetId\ApiClient;
 
 use RunetId\ApiClient\Exception\InvalidArgumentException;
+use RunetId\ApiClient\Facade\UserFacade;
 use Ruvents\HttpClient\HttpClient;
 use Ruvents\HttpClient\Request\Request;
 use Ruvents\HttpClient\Request\Uri;
@@ -40,11 +41,6 @@ class ApiClient
     private $serializer;
 
     /**
-     * @var FacadeFactory
-     */
-    private $facadeFactory;
-
-    /**
      * @param array $options
      */
     public function __construct(array $options = [])
@@ -55,7 +51,6 @@ class ApiClient
             [new ObjectNormalizer(), new ArrayDenormalizer()],
             [new JsonEncoder()]
         );
-        $this->facadeFactory = new FacadeFactory($this);
     }
 
     /**
@@ -91,27 +86,12 @@ class ApiClient
     }
 
     /**
-     * @return HttpClient
+     * @param int|null $runetId
+     * @return UserFacade
      */
-    public function getHttpClient()
+    public function user($runetId = null)
     {
-        return $this->httpClient;
-    }
-
-    /**
-     * @return Serializer
-     */
-    public function getSerializer()
-    {
-        return $this->serializer;
-    }
-
-    /**
-     * @return FacadeFactory
-     */
-    public function factory()
-    {
-        return $this->facadeFactory;
+        return new UserFacade($this, $runetId);
     }
 
     /**
@@ -126,7 +106,7 @@ class ApiClient
             $response = $response->getRawBody();
         }
 
-        $className = $this->getModelClassName($modelName).($isArray ? '[]' : '');
+        $className = $this->getModelClass($modelName).($isArray ? '[]' : '');
 
         return $this->serializer->deserialize($response, $className, 'json');
     }
@@ -135,7 +115,7 @@ class ApiClient
      * @param string $name
      * @return string
      */
-    public function getModelClassName($name)
+    protected function getModelClass($name)
     {
         if (!isset($this->options['model_classes'][$name])) {
             throw new InvalidArgumentException(

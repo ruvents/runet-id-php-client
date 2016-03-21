@@ -10,4 +10,4 @@ $config = require_once __DIR__.'/config.php';
 
 $apiClient = new ApiClient($config);
 
-var_dump($apiClient->factory()->user(454)->get());
+var_dump($apiClient->user(454)->get());

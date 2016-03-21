@@ -2,6 +2,7 @@
 
 namespace RunetId\ApiClient\Facade;
 
+use RunetId\ApiClient\ApiClient;
 use Ruvents\HttpClient\Response\Response;
 
 /**
@@ -16,14 +17,13 @@ class UserFacade extends BaseFacade
     private $runetId;
 
     /**
-     * @param int|null $runetId
-     * @return $this
+     * @param ApiClient $apiClient
+     * @param int|null  $runetId
      */
-    public function setParams($runetId = null)
+    public function __construct(ApiClient $apiClient, $runetId = null)
     {
+        parent::__construct($apiClient);
         $this->runetId = $runetId;
-
-        return $this;
     }
 
     /**
