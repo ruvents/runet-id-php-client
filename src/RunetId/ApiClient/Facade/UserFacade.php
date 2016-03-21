@@ -3,7 +3,8 @@
 namespace RunetId\ApiClient\Facade;
 
 use RunetId\ApiClient\ApiClient;
-use Ruvents\HttpClient\Response\Response;
+use RunetId\ApiClient\Model\User;
+use Ruvents\HttpClient\Request\File;
 
 /**
  * Class UserFacade
@@ -27,15 +28,23 @@ class UserFacade extends BaseFacade
     }
 
     /**
-     * @param int|null $runetId
-     * @return Response
+     * @return User
      */
-    public function get($runetId = null)
+    public function get()
     {
-        $runetId = intval($runetId ?: $this->runetId);
+        $response = $this->apiClient->get('user/get', ['RunetId' => $this->runetId]);
 
-        $response = $this->apiClient->get('user/get', ['RunetId' => $runetId]);
+        return $this->processResponse($response, 'user');
+    }
 
-        return $this->deserialize($response, 'user');
+    /**
+     * @param string|File|resource $file
+     * @return User
+     */
+    public function setPhoto($file)
+    {
+        return $this->apiClient->post('user/setphoto',
+            ['RunetId' => $this->runetId], null, [], ['Image' => $file]
+        );
     }
 }

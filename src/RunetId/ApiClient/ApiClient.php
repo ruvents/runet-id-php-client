@@ -5,7 +5,6 @@ namespace RunetId\ApiClient;
 use RunetId\ApiClient\Exception\InvalidArgumentException;
 use RunetId\ApiClient\Facade\UserFacade;
 use Ruvents\HttpClient\HttpClient;
-use Ruvents\HttpClient\Request\Request;
 use Ruvents\HttpClient\Request\Uri;
 use Ruvents\HttpClient\Response\Response;
 use Symfony\Component\Serializer\Serializer;
@@ -26,14 +25,10 @@ class ApiClient
         'secure' => false,
         'host' => 'api.runet-id.com',
         'model_classes' => [
+            'error' => 'RunetId\ApiClient\Model\Error',
             'user' => 'RunetId\ApiClient\Model\User',
         ],
     ];
-
-    /**
-     * @var HttpClient
-     */
-    private $httpClient;
 
     /**
      * @var Serializer
@@ -46,7 +41,6 @@ class ApiClient
     public function __construct(array $options = [])
     {
         $this->options = array_merge($this->options, $options);
-        $this->httpClient = new HttpClient();
         $this->serializer = new Serializer(
             [new ObjectNormalizer(), new ArrayDenormalizer()],
             [new JsonEncoder()]
@@ -55,17 +49,16 @@ class ApiClient
 
     /**
      * @param string $path
-     * @param array  $query
+     * @param array  $data
      * @param array  $headers
      * @return Response
      */
-    public function get($path, array $query = [], array $headers = [])
+    public function get($path, array $data = [], array $headers = [])
     {
-        $this->prepareQuery($query);
-        $uri = Uri::createHttp($this->options['host'], $path, $query, $this->options['secure']);
-        $request = new Request($uri, null, $headers);
+        $this->prepareQuery($data);
+        $uri = Uri::createHttp($this->options['host'], $path, [], $this->options['secure']);
 
-        return $this->httpClient->get($request);
+        return HttpClient::get($uri, $data, $headers);
     }
 
     /**
@@ -80,9 +73,8 @@ class ApiClient
     {
         $this->prepareQuery($query);
         $uri = Uri::createHttp($this->options['host'], $path, $query, $this->options['secure']);
-        $request = new Request($uri, $data, $headers, $files);
 
-        return $this->httpClient->post($request);
+        return HttpClient::post($uri, $data, $headers, $files);
     }
 
     /**
@@ -95,20 +87,19 @@ class ApiClient
     }
 
     /**
-     * @param string|Response $response
-     * @param string          $modelName
-     * @param bool            $isArray
+     * @param mixed  $data
+     * @param string $model
      * @return object
      */
-    public function deserialize($response, $modelName, $isArray = false)
+    public function denormalize($data, $model)
     {
-        if ($response instanceof Response) {
-            $response = $response->getRawBody();
+        if ($data instanceof Response) {
+            $data = $data->jsonDecode(true);
         }
 
-        $className = $this->getModelClass($modelName).($isArray ? '[]' : '');
+        $className = $this->getModelClass($model);
 
-        return $this->serializer->deserialize($response, $className, 'json');
+        return $this->serializer->denormalize($data, $className);
     }
 
     /**
@@ -117,6 +108,13 @@ class ApiClient
      */
     protected function getModelClass($name)
     {
+        $isArray = false;
+
+        if (substr($name, -2) === '[]') {
+            $name = substr($name, 0, -2);
+            $isArray = true;
+        }
+
         if (!isset($this->options['model_classes'][$name])) {
             throw new InvalidArgumentException(
                 InvalidArgumentException::haystackMsg(
@@ -125,7 +123,7 @@ class ApiClient
             );
         }
 
-        return $this->options['model_classes'][$name];
+        return $this->options['model_classes'][$name].($isArray ? '[]' : '');
     }
 
     /**

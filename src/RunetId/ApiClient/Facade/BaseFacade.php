@@ -3,6 +3,7 @@
 namespace RunetId\ApiClient\Facade;
 
 use RunetId\ApiClient\ApiClient;
+use RunetId\ApiClient\Exception\ApiException;
 use Ruvents\HttpClient\Response\Response;
 
 /**
@@ -26,12 +27,22 @@ class BaseFacade
 
     /**
      * @param string|Response $response
-     * @param string          $modelName
-     * @param bool            $isArray
-     * @return object
+     * @param null|string     $expectedModel
+     * @throws ApiException
+     * @return Response|object
      */
-    protected function deserialize($response, $modelName, $isArray = false)
+    protected function processResponse($response, $expectedModel = null)
     {
-        return $this->apiClient->deserialize($response, $modelName, $isArray);
+        $data = $response->jsonDecode(true);
+
+        if (isset($data['Error'])) {
+            throw new ApiException($data['Error']['Message'], $data['Error']['Code']);
+        }
+
+        if (isset($expectedModel)) {
+            return $this->apiClient->denormalize($data, $expectedModel);
+        }
+
+        return $response;
     }
 }
