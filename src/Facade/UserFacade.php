@@ -42,7 +42,7 @@ class UserFacade extends BaseFacade
      * @param string $token
      * @return User
      */
-    public function auth($token)
+    public function getByToken($token)
     {
         $response = $this->apiClient->get('user/auth', ['token' => $token]);
 
