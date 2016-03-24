@@ -13,8 +13,8 @@
 ```php
 <?php
 $client = new RunetId\ApiClient\ApiClient([
-    // API name (обязательный параметр)
-    'name' => 'runetidname',
+    // API key (обязательный параметр)
+    'key' => 'runetidkey',
     // API secret (обязательный параметр)
     'secret' => 'runetidsecret',
     // использовать https? (по умолчанию: false)
