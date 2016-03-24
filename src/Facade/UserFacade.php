@@ -39,6 +39,17 @@ class UserFacade extends BaseFacade
     }
 
     /**
+     * @param string $token
+     * @return User
+     */
+    public function auth($token)
+    {
+        $response = $this->apiClient->get('user/auth', ['token' => $token]);
+
+        return $this->processResponse($response, 'user');
+    }
+
+    /**
      * @param string|File|resource $file
      * @return User
      */
