@@ -1,6 +1,6 @@
 {
     "name": "runet-id/api-client",
-    "description": "The official RUNET-ID API client",
+    "description": "The Official RUNET-ID API Client",
     "type": "library",
     "license": "MIT",
     "authors": [

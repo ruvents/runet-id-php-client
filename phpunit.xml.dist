@@ -2,7 +2,7 @@
 
 <phpunit backupGlobals="false" colors="true" bootstrap="vendor/autoload.php">
     <testsuites>
-        <testsuite name="RUNET-ID API client Test Suite">
+        <testsuite name="RUNET-ID API Client Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
