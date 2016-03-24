@@ -2,15 +2,11 @@
 
 namespace RunetId\ApiClient;
 
-use RunetId\ApiClient\Exception\InvalidArgumentException;
+use RunetId\ApiClient\Facade\ProfInterestFacade;
 use RunetId\ApiClient\Facade\UserFacade;
 use Ruvents\HttpClient\HttpClient;
 use Ruvents\HttpClient\Request\Uri;
 use Ruvents\HttpClient\Response\Response;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 /**
  * Class ApiClient
@@ -24,27 +20,21 @@ class ApiClient
     protected $options = [
         'secure' => false,
         'host' => 'api.runet-id.com',
-        'model_classes' => [
-            'error' => 'RunetId\ApiClient\Model\Error',
-            'user' => 'RunetId\ApiClient\Model\User',
-        ],
+        'model_reconstructor' => [],
     ];
 
     /**
-     * @var Serializer
+     * @var ModelReconstructor
      */
-    private $serializer;
+    protected $reconstructor;
 
     /**
      * @param array $options
      */
     public function __construct(array $options = [])
     {
-        $this->options = array_merge($this->options, $options);
-        $this->serializer = new Serializer(
-            [new ObjectNormalizer(), new ArrayDenormalizer()],
-            [new JsonEncoder()]
-        );
+        $this->options = array_merge_recursive($this->options, $options);
+        $this->reconstructor = new ModelReconstructor($this->options['model_reconstructor']);
     }
 
     /**
@@ -87,43 +77,31 @@ class ApiClient
     }
 
     /**
+     * @return ProfInterestFacade
+     */
+    public function profInterest()
+    {
+        return new ProfInterestFacade($this);
+    }
+
+    /**
+     * @deprecated
      * @param mixed  $data
      * @param string $model
      * @return object
      */
     public function denormalize($data, $model)
     {
+        return $this->reconstructModel($data, $model);
+    }
+
+    public function reconstructModel($data, $modelName)
+    {
         if ($data instanceof Response) {
             $data = $data->jsonDecode(true);
         }
 
-        $className = $this->getModelClass($model);
-
-        return $this->serializer->denormalize($data, $className);
-    }
-
-    /**
-     * @param string $name
-     * @return string
-     */
-    protected function getModelClass($name)
-    {
-        $isArray = false;
-
-        if (substr($name, -2) === '[]') {
-            $name = substr($name, 0, -2);
-            $isArray = true;
-        }
-
-        if (!isset($this->options['model_classes'][$name])) {
-            throw new InvalidArgumentException(
-                InvalidArgumentException::haystackMsg(
-                    array_keys($this->options['model_classes'])
-                )
-            );
-        }
-
-        return $this->options['model_classes'][$name].($isArray ? '[]' : '');
+        return $this->reconstructor->reconstruct($data, $modelName);
     }
 
     /**

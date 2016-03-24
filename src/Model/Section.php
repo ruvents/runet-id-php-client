@@ -56,7 +56,7 @@ class Section
     /**
      * @var string[]
      */
-    //public $Halls;
+    public $Halls;
 
     /**
      * @var string[]
@@ -67,37 +67,4 @@ class Section
      * @var string[]
      */
     public $Attributes;
-
-    /**
-     * @param string $Start
-     * @return $this
-     */
-    public function setStart($Start)
-    {
-        $this->Start = new \DateTime($Start);
-
-        return $this;
-    }
-
-    /**
-     * @param string $End
-     * @return $this
-     */
-    public function setEnd($End)
-    {
-        $this->End = new \DateTime($End);
-
-        return $this;
-    }
-
-    /**
-     * @param string $UpdateTime
-     * @return $this
-     */
-    public function setUpdateTime($UpdateTime)
-    {
-        $this->UpdateTime = new \DateTime($UpdateTime);
-
-        return $this;
-    }
 }

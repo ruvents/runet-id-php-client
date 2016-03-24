@@ -6,14 +6,14 @@ ini_set('display_errors', 1);
 use RunetId\ApiClient\ApiClient;
 use RunetId\ApiClient\Exception\ApiException;
 
-require_once __DIR__.'/vendor/autoload.php';
-$config = require_once __DIR__.'/config.php';
+require_once __DIR__.'/../vendor/autoload.php';
+$config = require_once __DIR__.'/Fixtrures/config.php';
 
 $apiClient = new ApiClient($config);
 
 try {
-    $response = $apiClient->user(454)->get();
-    var_dump($response);
+    var_dump($apiClient->profInterest()->getAll());
+    var_dump($apiClient->user(314795)->get());
 } catch (ApiException $error) {
     echo sprintf('Error %s: %s.', $error->getCode(), $error->getMessage());
 }

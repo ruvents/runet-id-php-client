@@ -1,19 +1,28 @@
 {
     "name": "runet-id/api-client",
+    "description": "The official RUNET-ID API client",
+    "type": "library",
     "license": "MIT",
-    "type": "project",
-    "description": "Official -RUNET--ID- API Client",
-    "autoload": {
-        "psr-4": { "": "src/" }
-    },
+    "authors": [
+        {
+            "name": "Valentin Udaltsov",
+            "email": "udaltsov@ruvents.com"
+        }
+    ],
     "require": {
-        "php": ">=5.5.9",
-        "symfony/serializer": "^2.8",
-        "symfony/property-access": "^2.8",
-        "ruvents/http-client": "^1.0"
+        "php": ">=5.4.0",
+        "ruvents/http-client": "^1.0",
+        "ruvents/data-reconstructor": "^1.0"
     },
-    "require-dev": {
-        "phpunit/phpunit": "^5.0"
+    "autoload": {
+        "psr-4": {
+            "RunetId\\ApiClient\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RunetId\\ApiClient\\": "tests/"
+        }
     },
     "extra": {
         "branch-alias": {
