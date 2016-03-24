@@ -33,7 +33,7 @@ class ApiClient
      */
     public function __construct(array $options = [])
     {
-        $this->options = array_merge_recursive($this->options, $options);
+        $this->options = array_replace_recursive($this->options, $options);
         $this->reconstructor = new ModelReconstructor($this->options['model_reconstructor']);
     }
 
