@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "ruvents/http-client": "^1.0",
+        "ruvents/http-client": "^2.0",
         "ruvents/data-reconstructor": "^1.0"
     },
     "autoload": {
