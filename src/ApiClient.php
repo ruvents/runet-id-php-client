@@ -26,7 +26,7 @@ class ApiClient
     /**
      * @var ModelReconstructor
      */
-    protected $reconstructor;
+    protected $modelReconstructor;
 
     /**
      * @param array $options
@@ -34,7 +34,7 @@ class ApiClient
     public function __construct(array $options = [])
     {
         $this->options = array_replace_recursive($this->options, $options);
-        $this->reconstructor = new ModelReconstructor($this->options['model_reconstructor']);
+        $this->modelReconstructor = new ModelReconstructor($this->options['model_reconstructor']);
     }
 
     /**
@@ -73,7 +73,7 @@ class ApiClient
      */
     public function user($runetId = null)
     {
-        return new UserFacade($this, $runetId);
+        return new UserFacade($this, $this->modelReconstructor, $runetId);
     }
 
     /**
@@ -81,27 +81,7 @@ class ApiClient
      */
     public function profInterest()
     {
-        return new ProfInterestFacade($this);
-    }
-
-    /**
-     * @deprecated
-     * @param mixed  $data
-     * @param string $model
-     * @return object
-     */
-    public function denormalize($data, $model)
-    {
-        return $this->reconstructModel($data, $model);
-    }
-
-    public function reconstructModel($data, $modelName)
-    {
-        if ($data instanceof Response) {
-            $data = $data->jsonDecode(true);
-        }
-
-        return $this->reconstructor->reconstruct($data, $modelName);
+        return new ProfInterestFacade($this, $this->modelReconstructor);
     }
 
     /**

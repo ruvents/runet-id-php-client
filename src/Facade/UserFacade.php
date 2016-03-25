@@ -5,6 +5,7 @@ namespace RunetId\ApiClient\Facade;
 use RunetId\ApiClient\ApiClient;
 use RunetId\ApiClient\Model\ProfInterest;
 use RunetId\ApiClient\Model\User;
+use RunetId\ApiClient\ModelReconstructor;
 use Ruvents\HttpClient\Request\File;
 
 /**
@@ -19,13 +20,16 @@ class UserFacade extends BaseFacade
     private $runetId;
 
     /**
-     * @param ApiClient $apiClient
-     * @param int|null  $runetId
+     * @param ApiClient          $apiClient
+     * @param ModelReconstructor $modelReconstructor
+     * @param int|null           $runetId
      */
-    public function __construct(ApiClient $apiClient, $runetId = null)
-    {
-        parent::__construct($apiClient);
-        $this->runetId = (int)$runetId;
+    public function __construct(
+        ApiClient $apiClient, ModelReconstructor $modelReconstructor,
+        $runetId = null
+    ) {
+        parent::__construct($apiClient, $modelReconstructor);
+        $this->runetId = $runetId ? (int)$runetId : null;
     }
 
     /**
@@ -34,6 +38,8 @@ class UserFacade extends BaseFacade
     public function get()
     {
         $response = $this->apiClient->get('user/get', ['RunetId' => $this->runetId]);
+
+        var_dump($response);
 
         return $this->processResponse($response, 'user');
     }

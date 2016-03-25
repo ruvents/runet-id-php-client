@@ -2,7 +2,6 @@
 
 namespace RunetId\ApiClient\Facade;
 
-use RunetId\ApiClient\ApiClient;
 use RunetId\ApiClient\Model\ProfInterest;
 
 /**
@@ -11,14 +10,6 @@ use RunetId\ApiClient\Model\ProfInterest;
  */
 class ProfInterestFacade extends BaseFacade
 {
-    /**
-     * @param ApiClient $apiClient
-     */
-    public function __construct(ApiClient $apiClient)
-    {
-        parent::__construct($apiClient);
-    }
-
     /**
      * @return ProfInterest[]
      */

@@ -4,6 +4,7 @@ namespace RunetId\ApiClient\Facade;
 
 use RunetId\ApiClient\ApiClient;
 use RunetId\ApiClient\Exception\ApiException;
+use RunetId\ApiClient\ModelReconstructor;
 use Ruvents\HttpClient\Response\Response;
 
 /**
@@ -18,20 +19,27 @@ class BaseFacade
     protected $apiClient;
 
     /**
-     * @param ApiClient $apiClient
+     * @var ModelReconstructor
      */
-    public function __construct(ApiClient $apiClient)
+    protected $modelReconstructor;
+
+    /**
+     * @param ApiClient          $apiClient
+     * @param ModelReconstructor $modelReconstructor
+     */
+    public function __construct(ApiClient $apiClient, ModelReconstructor $modelReconstructor)
     {
         $this->apiClient = $apiClient;
+        $this->modelReconstructor = $modelReconstructor;
     }
 
     /**
      * @param string|Response $response
-     * @param null|string     $expectedModel
+     * @param null|string     $modelName
      * @throws ApiException
      * @return Response|object
      */
-    protected function processResponse($response, $expectedModel = null)
+    protected function processResponse($response, $modelName = null)
     {
         $data = $response->jsonDecode(true);
 
@@ -39,8 +47,8 @@ class BaseFacade
             throw new ApiException($data['Error']['Message'], $data['Error']['Code']);
         }
 
-        if (isset($expectedModel)) {
-            return $this->apiClient->denormalize($data, $expectedModel);
+        if (isset($modelName)) {
+            return $this->modelReconstructor->reconstruct($data, $modelName);
         }
 
         return $response;
