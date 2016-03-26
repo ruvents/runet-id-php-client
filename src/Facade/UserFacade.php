@@ -39,8 +39,6 @@ class UserFacade extends BaseFacade
     {
         $response = $this->apiClient->get('user/get', ['RunetId' => $this->runetId]);
 
-        var_dump($response);
-
         return $this->processResponse($response, 'user');
     }
 
