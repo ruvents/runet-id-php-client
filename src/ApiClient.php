@@ -2,6 +2,7 @@
 
 namespace RunetId\ApiClient;
 
+use RunetId\ApiClient\Exception\InvalidArgumentException;
 use RunetId\ApiClient\Facade\ProfInterestFacade;
 use RunetId\ApiClient\Facade\UserFacade;
 use Ruvents\HttpClient\HttpClient;
@@ -34,7 +35,20 @@ class ApiClient
     public function __construct(array $options = [])
     {
         $this->options = array_replace_recursive($this->options, $options);
+
+        if (empty($this->options['key']) || empty($this->options['secret'])) {
+            throw new InvalidArgumentException('Key and secret options must be provided.');
+        }
+
         $this->modelReconstructor = new ModelReconstructor($this->options['model_reconstructor']);
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
     }
 
     /**

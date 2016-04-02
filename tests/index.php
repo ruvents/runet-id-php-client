@@ -12,7 +12,7 @@ $config = require_once __DIR__.'/Fixtrures/config.php';
 $apiClient = new ApiClient($config);
 
 try {
-    var_dump($apiClient->user(314795)->get());
+    var_dump($apiClient->user(456)->get());
     var_dump($apiClient->profInterest()->getAll());
 } catch (ApiException $error) {
     echo sprintf('Error %s: %s.', $error->getCode(), $error->getMessage());
