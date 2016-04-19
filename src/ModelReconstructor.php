@@ -36,6 +36,7 @@ class ModelReconstructor extends DataReconstructor
             'user_status' => 'RunetId\ApiClient\Model\User\Status',
             'user_work' => 'RunetId\ApiClient\Model\User\Work',
             'prof_interest' => 'RunetId\ApiClient\Model\ProfInterest',
+            'event' => 'RunetId\ApiClient\Model\Event',
         ],
     ];
 
