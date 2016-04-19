@@ -3,6 +3,7 @@
 namespace RunetId\ApiClient;
 
 use RunetId\ApiClient\Exception\InvalidArgumentException;
+use RunetId\ApiClient\Facade\EventFacade;
 use RunetId\ApiClient\Facade\ProfInterestFacade;
 use RunetId\ApiClient\Facade\UserFacade;
 use Ruvents\HttpClient\HttpClient;
@@ -88,6 +89,14 @@ class ApiClient
     public function user($runetId = null)
     {
         return new UserFacade($this, $this->modelReconstructor, $runetId);
+    }
+
+    /**
+     * @return EventFacade
+     */
+    public function event()
+    {
+        return new EventFacade($this, $this->modelReconstructor);
     }
 
     /**
