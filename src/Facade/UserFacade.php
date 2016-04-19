@@ -97,4 +97,12 @@ class UserFacade extends BaseFacade
             'ProfessionalInterestId' => $profInterestOrId,
         ]);
     }
+
+    /**
+     * @return bool
+     */
+    public function isParticipant()
+    {
+        return isset($this->get()->Status);
+    }
 }
