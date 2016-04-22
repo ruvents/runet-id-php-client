@@ -6,6 +6,7 @@ use RunetId\ApiClient\Facade\EventFacade;
 use RunetId\ApiClient\Facade\ProfInterestFacade;
 use RunetId\ApiClient\Facade\UserFacade;
 use Ruvents\HttpClient\HttpClient;
+use Ruvents\HttpClient\Request\Request;
 use Ruvents\HttpClient\Request\Uri;
 use Ruvents\HttpClient\Response\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -33,7 +34,7 @@ class ApiClient
     {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
-        
+
         $this->options = $resolver->resolve($options);
         $this->modelReconstructor = new ModelReconstructor($this->options['model_reconstructor']);
     }
@@ -54,7 +55,9 @@ class ApiClient
      */
     public function get($path, array $data = [], array $headers = [])
     {
-        return $this->send('get', $path, [], $data, $headers);
+        $request = $this->createRequest($path, [], $data, $headers);
+
+        return HttpClient::get($request);
     }
 
     /**
@@ -67,7 +70,9 @@ class ApiClient
      */
     public function post($path, array $query = [], $data = null, array $headers = [], array $files = [])
     {
-        return $this->send('post', $path, $query, $data, $headers, $files);
+        $request = $this->createRequest($path, $query, $data, $headers, $files);
+
+        return HttpClient::post($request);
     }
 
     /**
@@ -77,13 +82,13 @@ class ApiClient
     public function user($runetId = null)
     {
         static $userFacades = [];
-        
+
         $offset = $runetId ?: 0;
-        
+
         if (!isset($userFacades[$offset])) {
             $userFacades[$offset] = new UserFacade($this, $this->modelReconstructor, $runetId);
         }
-        
+
         return $userFacades[$offset];
     }
 
@@ -137,7 +142,6 @@ class ApiClient
     }
 
     /**
-     * @param string            $method
      * @param string            $path
      * @param array             $query
      * @param null|string|array $data
@@ -145,12 +149,18 @@ class ApiClient
      * @param array             $files
      * @return Response
      */
-    protected function send($method, $path, array $query = [], $data = null, array $headers = [], array $files = [])
+    protected function createRequest($path, array $query = [], $data = null, array $headers = [], array $files = [])
     {
-        $this->prepareQuery($query);
+        $hash = $this->generateHash($this->options['key'], $this->options['secret']);
+
+        $query = array_merge([
+            'ApiKey' => $this->options['key'],
+            'Hash' => $hash,
+        ], $query);
+
         $uri = Uri::createHttp($this->options['host'], $path, $query, $this->options['secure']);
 
-        return HttpClient::$method($uri, $data, $headers, $files);
+        return new Request($uri, $data, $headers, $files);
     }
 
     /**
