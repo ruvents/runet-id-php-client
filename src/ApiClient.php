@@ -39,27 +39,6 @@ class ApiClient
     }
 
     /**
-     * @param OptionsResolver $resolver
-     */
-    protected function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver
-            ->setDefaults([
-                'host' => 'api.runet-id.com',
-                'secure' => false,
-                'key' => null,
-                'secret' => null,
-                'model_reconstructor' => [],
-            ])
-            ->setRequired(['host', 'key', 'secret'])
-            ->setAllowedTypes('host', 'string')
-            ->setAllowedTypes('secure', 'bool')
-            ->setAllowedTypes('key', 'string')
-            ->setAllowedTypes('secret', 'string')
-            ->setAllowedTypes('model_reconstructor', 'array');
-    }
-
-    /**
      * @param string $path
      * @param array  $data
      * @param array  $headers
@@ -112,6 +91,27 @@ class ApiClient
     public function profInterest()
     {
         return new ProfInterestFacade($this, $this->modelReconstructor);
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    protected function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver
+            ->setDefaults([
+                'host' => 'api.runet-id.com',
+                'secure' => false,
+                'key' => null,
+                'secret' => null,
+                'model_reconstructor' => [],
+            ])
+            ->setRequired(['host', 'key', 'secret'])
+            ->setAllowedTypes('host', 'string')
+            ->setAllowedTypes('secure', 'bool')
+            ->setAllowedTypes('key', 'string')
+            ->setAllowedTypes('secret', 'string')
+            ->setAllowedTypes('model_reconstructor', 'array');
     }
 
     /**
