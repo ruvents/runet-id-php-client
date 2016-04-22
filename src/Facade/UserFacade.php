@@ -3,6 +3,7 @@
 namespace RunetId\ApiClient\Facade;
 
 use RunetId\ApiClient\ApiClient;
+use RunetId\ApiClient\Exception\MissingArgumentException;
 use RunetId\ApiClient\Model\ProfInterest;
 use RunetId\ApiClient\Model\User;
 use RunetId\ApiClient\ModelReconstructor;
@@ -25,7 +26,8 @@ class UserFacade extends BaseFacade
      * @param int|null           $runetId
      */
     public function __construct(
-        ApiClient $apiClient, ModelReconstructor $modelReconstructor,
+        ApiClient $apiClient,
+        ModelReconstructor $modelReconstructor,
         $runetId = null
     ) {
         parent::__construct($apiClient, $modelReconstructor);
@@ -37,7 +39,7 @@ class UserFacade extends BaseFacade
      */
     public function get()
     {
-        $response = $this->apiClient->get('user/get', ['RunetId' => $this->runetId]);
+        $response = $this->apiClient->get('user/get', ['RunetId' => $this->getRunetId()]);
 
         return $this->processResponse($response, 'user');
     }
@@ -60,7 +62,7 @@ class UserFacade extends BaseFacade
     public function setPhoto($file)
     {
         return $this->apiClient->post('user/setphoto',
-            ['RunetId' => $this->runetId], null, [], ['Image' => $file]
+            ['RunetId' => $this->getRunetId()], null, [], ['Image' => $file]
         );
     }
 
@@ -76,7 +78,7 @@ class UserFacade extends BaseFacade
         $profInterestOrId = (int)$profInterestOrId;
 
         $this->apiClient->get('professionalinterest/add', [
-            'RunetId' => $this->runetId,
+            'RunetId' => $this->getRunetId(),
             'ProfessionalInterestId' => $profInterestOrId,
         ]);
     }
@@ -93,7 +95,7 @@ class UserFacade extends BaseFacade
         $profInterestOrId = (int)$profInterestOrId;
 
         $this->apiClient->get('professionalinterest/delete', [
-            'RunetId' => $this->runetId,
+            'RunetId' => $this->getRunetId(),
             'ProfessionalInterestId' => $profInterestOrId,
         ]);
     }
@@ -104,5 +106,18 @@ class UserFacade extends BaseFacade
     public function isParticipant()
     {
         return isset($this->get()->Status);
+    }
+
+    /**
+     * @throws MissingArgumentException
+     * @return int
+     */
+    protected function getRunetId()
+    {
+        if (!isset($this->runetId)) {
+            throw new MissingArgumentException('RunetId is not set');
+        }
+
+        return $this->runetId;
     }
 }

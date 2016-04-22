@@ -3,7 +3,7 @@
 namespace RunetId\ApiClient\Facade;
 
 use RunetId\ApiClient\ApiClient;
-use RunetId\ApiClient\Exception\ApiException;
+use RunetId\ApiClient\Exception\ResponseException;
 use RunetId\ApiClient\ModelReconstructor;
 use Ruvents\HttpClient\Response\Response;
 
@@ -36,7 +36,7 @@ class BaseFacade
     /**
      * @param string|Response $response
      * @param null|string     $modelName
-     * @throws ApiException
+     * @throws ResponseException
      * @return Response|object
      */
     protected function processResponse($response, $modelName = null)
@@ -44,7 +44,7 @@ class BaseFacade
         $data = $response->jsonDecode(true);
 
         if (isset($data['Error'])) {
-            throw new ApiException($data['Error']['Message'], $data['Error']['Code']);
+            throw new ResponseException($data['Error']['Message'], $data['Error']['Code']);
         }
 
         if (isset($modelName)) {

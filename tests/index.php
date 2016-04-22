@@ -12,14 +12,8 @@ $config = require_once __DIR__.'/Fixtrures/config.php';
 $apiClient = new ApiClient($config);
 
 try {
-    //var_dump($apiClient->get('user/get', ['RunetId' => 488031])->jsonDecode());
-    /*var_dump($apiClient->get('competence/tests')->jsonDecode());
-    var_dump($apiClient->get('competence/result', ['RunetId' => 471434, 'TestId' => 48])->jsonDecode());
-    var_dump($apiClient->get('competence/result', ['RunetId' => 471434, 'TestId' => 49])->jsonDecode());*/
-    $call = $apiClient->get('user/get', ['RunetId' => 490724]);
-
-    var_dump($call->jsonDecode(), $call->getRawBody());
-    //var_dump($apiClient->get('event/info')->jsonDecode(true));
+    $user = $apiClient->user(456)->get();
+    var_dump($user);
 } catch (ApiException $error) {
     echo sprintf('Error %s: %s.', $error->getCode(), $error->getMessage());
 }

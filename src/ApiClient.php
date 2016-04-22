@@ -33,9 +33,17 @@ class ApiClient
     {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
+        
         $this->options = $resolver->resolve($options);
-
         $this->modelReconstructor = new ModelReconstructor($this->options['model_reconstructor']);
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
     }
 
     /**
@@ -46,26 +54,20 @@ class ApiClient
      */
     public function get($path, array $data = [], array $headers = [])
     {
-        $this->prepareQuery($data);
-        $uri = Uri::createHttp($this->options['host'], $path, [], $this->options['secure']);
-
-        return HttpClient::get($uri, $data, $headers);
+        return $this->send('get', $path, [], $data, $headers);
     }
 
     /**
-     * @param string $path
-     * @param array  $query
-     * @param mixed  $data
-     * @param array  $headers
-     * @param array  $files
+     * @param string            $path
+     * @param array             $query
+     * @param null|string|array $data
+     * @param array             $headers
+     * @param array             $files
      * @return Response
      */
     public function post($path, array $query = [], $data = null, array $headers = [], array $files = [])
     {
-        $this->prepareQuery($query);
-        $uri = Uri::createHttp($this->options['host'], $path, $query, $this->options['secure']);
-
-        return HttpClient::post($uri, $data, $headers, $files);
+        return $this->send('post', $path, $query, $data, $headers, $files);
     }
 
     /**
@@ -74,7 +76,15 @@ class ApiClient
      */
     public function user($runetId = null)
     {
-        return new UserFacade($this, $this->modelReconstructor, $runetId);
+        static $userFacades = [];
+        
+        $offset = $runetId ?: 0;
+        
+        if (!isset($userFacades[$offset])) {
+            $userFacades[$offset] = new UserFacade($this, $this->modelReconstructor, $runetId);
+        }
+        
+        return $userFacades[$offset];
     }
 
     /**
@@ -82,7 +92,13 @@ class ApiClient
      */
     public function event()
     {
-        return new EventFacade($this, $this->modelReconstructor);
+        static $eventFacade;
+
+        if (!isset($eventFacade)) {
+            $eventFacade = new EventFacade($this, $this->modelReconstructor);
+        }
+
+        return $eventFacade;
     }
 
     /**
@@ -90,7 +106,13 @@ class ApiClient
      */
     public function profInterest()
     {
-        return new ProfInterestFacade($this, $this->modelReconstructor);
+        static $profInterestFacade;
+
+        if (!isset($profInterestFacade)) {
+            $profInterestFacade = new ProfInterestFacade($this, $this->modelReconstructor);
+        }
+
+        return $profInterestFacade;
     }
 
     /**
@@ -115,16 +137,31 @@ class ApiClient
     }
 
     /**
+     * @param string            $method
+     * @param string            $path
+     * @param array             $query
+     * @param null|string|array $data
+     * @param array             $headers
+     * @param array             $files
+     * @return Response
+     */
+    protected function send($method, $path, array $query = [], $data = null, array $headers = [], array $files = [])
+    {
+        $this->prepareQuery($query);
+        $uri = Uri::createHttp($this->options['host'], $path, $query, $this->options['secure']);
+
+        return HttpClient::$method($uri, $data, $headers, $files);
+    }
+
+    /**
      * @param array $query
      */
     protected function prepareQuery(array &$query)
     {
-        $timestamp = time();
-        $hash = $this->generateHash($this->options['key'], $this->options['secret'], $timestamp);
+        $hash = $this->generateHash($this->options['key'], $this->options['secret']);
 
         $query = array_merge([
             'ApiKey' => $this->options['key'],
-            'Timestamp' => $timestamp,
             'Hash' => $hash,
         ], $query);
     }
@@ -132,11 +169,10 @@ class ApiClient
     /**
      * @param string $key
      * @param string $secret
-     * @param int    $timestamp
      * @return string
      */
-    private function generateHash($key, $secret, $timestamp)
+    private function generateHash($key, $secret)
     {
-        return substr(md5($key.$timestamp.$secret), 0, 16);
+        return md5($key.$secret);
     }
 }
