@@ -48,72 +48,48 @@ class Event
      */
     public $UrlRegistration;
 
-
-
     /**
      * @var string
      */
     public $UrlProgram;
-
-
-
 
     /**
      * @var string
      */
     public $StartYear;
 
-
-
-
     /**
      * @var string
      */
     public $StartMonth;
-
-
-
 
     /**
      * @var string
      */
     public $StartDay;
 
-
-
-
     /**
      * @var string
      */
     public $EndYear;
-
-
 
     /**
      * @var string
      */
     public $EndMonth;
 
-
-
     /**
      * @var string
      */
     public $EndDay;
-
-
 
     /**
      * @var string
      */
     public $GeoPoint;
 
-
-
     /**
      * @var string
      */
     public $Address;
-
-
 }

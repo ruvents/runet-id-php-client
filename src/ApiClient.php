@@ -2,13 +2,13 @@
 
 namespace RunetId\ApiClient;
 
-use RunetId\ApiClient\Exception\InvalidArgumentException;
 use RunetId\ApiClient\Facade\EventFacade;
 use RunetId\ApiClient\Facade\ProfInterestFacade;
 use RunetId\ApiClient\Facade\UserFacade;
 use Ruvents\HttpClient\HttpClient;
 use Ruvents\HttpClient\Request\Uri;
 use Ruvents\HttpClient\Response\Response;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class ApiClient
@@ -19,11 +19,7 @@ class ApiClient
     /**
      * @var array
      */
-    protected $options = [
-        'secure' => false,
-        'host' => 'api.runet-id.com',
-        'model_reconstructor' => [],
-    ];
+    protected $options;
 
     /**
      * @var ModelReconstructor
@@ -35,21 +31,32 @@ class ApiClient
      */
     public function __construct(array $options = [])
     {
-        $this->options = array_replace_recursive($this->options, $options);
-
-        if (empty($this->options['key']) || empty($this->options['secret'])) {
-            throw new InvalidArgumentException('Key and secret options must be provided.');
-        }
+        $resolver = new OptionsResolver();
+        $this->configureOptions($resolver);
+        $this->options = $resolver->resolve($options);
 
         $this->modelReconstructor = new ModelReconstructor($this->options['model_reconstructor']);
     }
 
     /**
-     * @return array
+     * @param OptionsResolver $resolver
      */
-    public function getOptions()
+    protected function configureOptions(OptionsResolver $resolver)
     {
-        return $this->options;
+        $resolver
+            ->setDefaults([
+                'host' => 'api.runet-id.com',
+                'secure' => false,
+                'key' => null,
+                'secret' => null,
+                'model_reconstructor' => [],
+            ])
+            ->setRequired(['host', 'key', 'secret'])
+            ->setAllowedTypes('host', 'string')
+            ->setAllowedTypes('secure', 'bool')
+            ->setAllowedTypes('key', 'string')
+            ->setAllowedTypes('secret', 'string')
+            ->setAllowedTypes('model_reconstructor', 'array');
     }
 
     /**
