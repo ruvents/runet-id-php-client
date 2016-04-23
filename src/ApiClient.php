@@ -5,6 +5,7 @@ namespace RunetId\ApiClient;
 use RunetId\ApiClient\Facade\EventFacade;
 use RunetId\ApiClient\Facade\ProfInterestFacade;
 use RunetId\ApiClient\Facade\UserFacade;
+use Ruvents\DataReconstructor\DataReconstructor;
 use Ruvents\HttpClient\HttpClient;
 use Ruvents\HttpClient\Request\Request;
 use Ruvents\HttpClient\Request\Uri;
@@ -28,15 +29,20 @@ class ApiClient
     protected $modelReconstructor;
 
     /**
-     * @param array $options
+     * @param array                  $options
+     * @param DataReconstructor|null $modelReconstructor
      */
-    public function __construct(array $options = [])
+    public function __construct(array $options, DataReconstructor $modelReconstructor = null)
     {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
 
         $this->options = $resolver->resolve($options);
-        $this->modelReconstructor = new ModelReconstructor($this->options['model_reconstructor']);
+
+        if (!$modelReconstructor) {
+            $modelReconstructor = new ModelReconstructor($this->options['model_reconstructor']);
+        }
+        $this->modelReconstructor = $modelReconstructor;
     }
 
     /**
@@ -57,7 +63,7 @@ class ApiClient
     {
         $request = $this->createRequest($path, $data, [], $headers);
 
-        return HttpClient::get($request);
+        return $this->send('GET', $request);
     }
 
     /**
@@ -72,7 +78,7 @@ class ApiClient
     {
         $request = $this->createRequest($path, $query, $data, $headers, $files);
 
-        return HttpClient::post($request);
+        return $this->send('POST', $request);
     }
 
     /**
@@ -161,6 +167,16 @@ class ApiClient
         $uri = Uri::createHttp($this->options['host'], $path, $query, $this->options['secure']);
 
         return new Request($uri, $data, $headers, $files);
+    }
+
+    /**
+     * @param string  $method
+     * @param Request $request
+     * @return Response
+     */
+    protected function send($method, Request $request)
+    {
+        return HttpClient::send($method, $request);
     }
 
     /**
