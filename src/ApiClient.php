@@ -147,7 +147,7 @@ class ApiClient
      * @param null|string|array $data
      * @param array             $headers
      * @param array             $files
-     * @return Response
+     * @return Request
      */
     protected function createRequest($path, array $query = [], $data = null, array $headers = [], array $files = [])
     {
