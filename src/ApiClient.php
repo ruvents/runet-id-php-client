@@ -55,7 +55,7 @@ class ApiClient
      */
     public function get($path, array $data = [], array $headers = [])
     {
-        $request = $this->createRequest($path, [], $data, $headers);
+        $request = $this->createRequest($path, $data, [], $headers);
 
         return HttpClient::get($request);
     }
