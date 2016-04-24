@@ -44,7 +44,8 @@ class ModelReconstructor extends DataReconstructor
                     'prof_interest' => 'RunetId\ApiClient\Model\ProfInterest',
                     'event' => 'RunetId\ApiClient\Model\Event',
                 ],
-            ]);
+            ])
+            ->setAllowedTypes('model_classes', 'array');
     }
 
     /**
