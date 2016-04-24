@@ -11,7 +11,6 @@ use Ruvents\HttpClient\Request\File;
 
 /**
  * Class UserFacade
- * @package RunetId\ApiClient\Facade
  */
 class UserFacade extends BaseFacade
 {
@@ -23,15 +22,15 @@ class UserFacade extends BaseFacade
     /**
      * @param ApiClient          $apiClient
      * @param ModelReconstructor $modelReconstructor
-     * @param int|null           $runetId
+     * @param int|null           $sectionId
      */
     public function __construct(
         ApiClient $apiClient,
         ModelReconstructor $modelReconstructor,
-        $runetId = null
+        $sectionId = null
     ) {
         parent::__construct($apiClient, $modelReconstructor);
-        $this->runetId = $runetId ? (int)$runetId : null;
+        $this->runetId = $sectionId ? (int)$sectionId : null;
     }
 
     /**

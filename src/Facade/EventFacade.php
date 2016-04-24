@@ -4,6 +4,9 @@ namespace RunetId\ApiClient\Facade;
 
 use RunetId\ApiClient\Model\Event;
 
+/**
+ * Class EventFacade
+ */
 class EventFacade extends BaseFacade
 {
     /**

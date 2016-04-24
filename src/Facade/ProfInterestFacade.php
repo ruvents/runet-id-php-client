@@ -6,7 +6,6 @@ use RunetId\ApiClient\Model\ProfInterest;
 
 /**
  * Class ProfInterestFacade
- * @package RunetId\ApiClient\Facade
  */
 class ProfInterestFacade extends BaseFacade
 {

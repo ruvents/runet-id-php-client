@@ -4,7 +4,6 @@ namespace RunetId\ApiClient\Model;
 
 /**
  * Class User
- * @package RunetId\ApiClient\Model
  */
 class Event
 {

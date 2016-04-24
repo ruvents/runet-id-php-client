@@ -8,7 +8,6 @@ use RunetId\ApiClient\Model\User\Work;
 
 /**
  * Class User
- * @package RunetId\ApiClient\Model
  */
 class User
 {

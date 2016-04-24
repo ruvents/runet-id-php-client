@@ -9,7 +9,6 @@ use Ruvents\HttpClient\Response\Response;
 
 /**
  * Class DefaultFacade
- * @package RunetId\ApiClient\Facade
  */
 class BaseFacade
 {
@@ -31,6 +30,15 @@ class BaseFacade
     {
         $this->apiClient = $apiClient;
         $this->modelReconstructor = $modelReconstructor;
+    }
+
+    /**
+     * @param \DateTime $dateTime
+     * @return string
+     */
+    public function formatDateTime(\DateTime $dateTime)
+    {
+        return $dateTime->format('c');
     }
 
     /**

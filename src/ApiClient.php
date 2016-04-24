@@ -4,6 +4,7 @@ namespace RunetId\ApiClient;
 
 use RunetId\ApiClient\Facade\EventFacade;
 use RunetId\ApiClient\Facade\ProfInterestFacade;
+use RunetId\ApiClient\Facade\SectionFacade;
 use RunetId\ApiClient\Facade\UserFacade;
 use Ruvents\DataReconstructor\DataReconstructor;
 use Ruvents\HttpClient\HttpClient;
@@ -14,7 +15,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class ApiClient
- * @package RunetId\ApiClient
  */
 class ApiClient
 {
@@ -110,6 +110,23 @@ class ApiClient
         }
 
         return $eventFacade;
+    }
+
+    /**
+     * @param int|null $sectionId
+     * @return SectionFacade
+     */
+    public function section($sectionId = null)
+    {
+        static $sectionFacades = [];
+
+        $offset = $sectionId ?: 0;
+
+        if (!isset($sectionFacades[$offset])) {
+            $sectionFacades[$offset] = new SectionFacade($this, $this->modelReconstructor, $sectionId);
+        }
+
+        return $sectionFacades[$offset];
     }
 
     /**

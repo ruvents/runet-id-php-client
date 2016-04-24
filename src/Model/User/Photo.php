@@ -4,7 +4,6 @@ namespace RunetId\ApiClient\Model\User;
 
 /**
  * Class Photo
- * @package RunetId\ApiClient\Model\User
  */
 class Photo
 {

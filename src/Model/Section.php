@@ -2,9 +2,10 @@
 
 namespace RunetId\ApiClient\Model;
 
+use RunetId\ApiClient\Model\Section\Hall;
+
 /**
  * Class Section
- * @package RunetId\ApiClient\Model
  */
 class Section
 {
@@ -46,22 +47,12 @@ class Section
     /**
      * @var string
      */
-    public $Type;
-
-    /**
-     * @var string
-     */
     public $TypeCode;
 
     /**
-     * @var string[]
+     * @var Hall[]
      */
     public $Halls;
-
-    /**
-     * @var string[]
-     */
-    public $Places;
 
     /**
      * @var string[]

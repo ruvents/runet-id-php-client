@@ -7,7 +7,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class ModelReconstructor
- * @package RunetId\ApiClient
  */
 class ModelReconstructor extends DataReconstructor
 {
@@ -33,6 +32,16 @@ class ModelReconstructor extends DataReconstructor
                     'user_status' => [
                         'UpdateTime' => 'DateTime',
                     ],
+                    'section' => [
+                        'Start' => 'DateTime',
+                        'End' => 'DateTime',
+                        'UpdateTime' => 'DateTime',
+                        'Halls' => 'section_hall[]',
+                    ],
+                    'section_report' => [
+                        'User' => 'user',
+                        'UpdateTime' => 'DateTime',
+                    ],
                 ],
                 'model_classes' => [
                     'error' => 'RunetId\ApiClient\Model\Error',
@@ -43,6 +52,9 @@ class ModelReconstructor extends DataReconstructor
                     'user_work' => 'RunetId\ApiClient\Model\User\Work',
                     'prof_interest' => 'RunetId\ApiClient\Model\ProfInterest',
                     'event' => 'RunetId\ApiClient\Model\Event',
+                    'section' => 'RunetId\ApiClient\Model\Section',
+                    'section_hall' => 'RunetId\ApiClient\Model\Section\Hall',
+                    'section_report' => 'RunetId\ApiClient\Model\Section\Report',
                 ],
             ])
             ->setAllowedTypes('model_classes', 'array');

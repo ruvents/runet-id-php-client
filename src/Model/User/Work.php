@@ -4,7 +4,6 @@ namespace RunetId\ApiClient\Model\User;
 
 /**
  * Class Work
- * @package RunetId\ApiClient\Model\User
  */
 class Work
 {

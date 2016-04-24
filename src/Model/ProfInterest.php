@@ -4,7 +4,6 @@ namespace RunetId\ApiClient\Model;
 
 /**
  * Class ProfInterest
- * @package RunetId\ApiClient\Model
  */
 class ProfInterest
 {

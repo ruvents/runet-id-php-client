@@ -4,7 +4,6 @@ namespace RunetId\ApiClient\Model\User;
 
 /**
  * Class Status
- * @package RunetId\ApiClient\Model\User
  */
 class Status
 {
