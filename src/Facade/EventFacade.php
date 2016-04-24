@@ -28,16 +28,16 @@ class EventFacade extends BaseFacade
      * @param bool $usePriority использовать системные приоритеты статусов
      * @return bool
      */
-    public function register($runetId, $roleId = null, $usePriority = true)
+    public function register($runetId, $roleId = 1, $usePriority = true)
     {
-        if ($roleId === null) {
-            $roleId = 1;
-        }
-
-        return $this->apiClient->post('event/register', [
+        $response= $this->apiClient->post('event/register', [
             'RunetId' => $runetId,
             'RoleId' => $roleId,
             'UsePriority' => $usePriority,
         ]);
+
+        $this->processResponse($response);
+
+        return true;
     }
 }

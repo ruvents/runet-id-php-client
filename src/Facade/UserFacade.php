@@ -4,6 +4,7 @@ namespace RunetId\ApiClient\Facade;
 
 use RunetId\ApiClient\ApiClient;
 use RunetId\ApiClient\Exception\MissingArgumentException;
+use RunetId\ApiClient\Model\NewUser;
 use RunetId\ApiClient\Model\ProfInterest;
 use RunetId\ApiClient\Model\User;
 use RunetId\ApiClient\ModelReconstructor;
@@ -38,7 +39,9 @@ class UserFacade extends BaseFacade
      */
     public function get()
     {
-        $response = $this->apiClient->get('user/get', ['RunetId' => $this->getRunetId()]);
+        $response = $this->apiClient->get('user/get', [
+            'RunetId' => $this->getRunetId(),
+        ]);
 
         return $this->processResponse($response, 'user');
     }
@@ -97,6 +100,34 @@ class UserFacade extends BaseFacade
             'RunetId' => $this->getRunetId(),
             'ProfessionalInterestId' => $profInterestOrId,
         ]);
+    }
+
+    /**
+     * @param string $query
+     * @param int    $maxResults
+     * @return User[]
+     */
+    public function search($query, $maxResults = null)
+    {
+        $response = $this->apiClient->get('user/search', [
+            'Query' => $query,
+            'MaxResults' => $maxResults,
+        ]);
+
+        $data = $this->processResponse($response);
+
+        return $this->modelReconstructor->reconstruct($data['Users'], 'user[]');
+    }
+
+    /**
+     * @param NewUser $user
+     * @return User
+     */
+    public function create(NewUser $user)
+    {
+        $response = $this->apiClient->post('user/create', [], get_object_vars($user));
+
+        return $this->processResponse($response, 'user');
     }
 
     /**

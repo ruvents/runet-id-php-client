@@ -42,12 +42,12 @@ class BaseFacade
     }
 
     /**
-     * @param string|Response $response
-     * @param null|string     $modelName
+     * @param Response    $response
+     * @param null|string $modelName
      * @throws ResponseException
      * @return Response|object
      */
-    protected function processResponse($response, $modelName = null)
+    protected function processResponse(Response $response, $modelName = null)
     {
         $data = $response->jsonDecode(true);
 
@@ -59,6 +59,6 @@ class BaseFacade
             return $this->modelReconstructor->reconstruct($data, $modelName);
         }
 
-        return $response;
+        return $data;
     }
 }
