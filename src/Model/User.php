@@ -93,4 +93,12 @@ class User
     {
         return trim($this->FirstName.' '.$this->LastName);
     }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return 'http://runet-id.com/'.(int)$this->RunetId;
+    }
 }
