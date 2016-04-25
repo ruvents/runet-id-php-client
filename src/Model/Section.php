@@ -58,4 +58,12 @@ class Section
      * @var string[]
      */
     public $Attributes;
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+       return (string)$this->Title;
+    }
 }

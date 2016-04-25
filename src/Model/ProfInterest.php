@@ -16,4 +16,12 @@ class ProfInterest
      * @var string
      */
     public $Title;
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->Title;
+    }
 }

@@ -16,4 +16,12 @@ class Company
      * @var string
      */
     public $Name;
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->Name;
+    }
 }

@@ -8,14 +8,14 @@ namespace RunetId\ApiClient\Model;
 class Event
 {
     /**
-     * @var string
+     * @var int
      */
-    public $IdName;
+    public $Id;
 
     /**
      * @var string
      */
-    public $Name;
+    public $IdName;
 
     /**
      * @var string
@@ -91,4 +91,12 @@ class Event
      * @var string
      */
     public $Address;
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->Title;
+    }
 }

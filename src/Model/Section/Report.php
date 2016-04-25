@@ -68,4 +68,12 @@ class Report
      * @var bool
      */
     public $Deleted;
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->Title;
+    }
 }

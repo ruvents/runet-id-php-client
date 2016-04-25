@@ -85,4 +85,12 @@ class User
      * @var array
      */
     public $Phones;
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return trim($this->FirstName.' '.$this->LastName);
+    }
 }
