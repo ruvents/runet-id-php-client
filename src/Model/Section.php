@@ -3,6 +3,7 @@
 namespace RunetId\ApiClient\Model;
 
 use RunetId\ApiClient\Model\Section\Hall;
+use RunetId\ApiClient\Model\Section\Report;
 
 /**
  * Class Section
@@ -53,6 +54,11 @@ class Section
      * @var Hall[]
      */
     public $Halls;
+
+    /**
+     * @var Report[]
+     */
+    public $Reports;
 
     /**
      * @var string[]
