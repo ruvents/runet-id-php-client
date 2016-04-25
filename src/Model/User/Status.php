@@ -27,11 +27,6 @@ class Status
     /**
      * @var string
      */
-    public $RoleName;
-
-    /**
-     * @var string
-     */
     public $RoleTitle;
 
     /**
@@ -62,5 +57,13 @@ class Status
             self::ROLE_ORGANIZER,
             self::ROLE_VIDEO,
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->RoleTitle;
     }
 }
