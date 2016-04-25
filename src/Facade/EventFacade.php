@@ -2,7 +2,9 @@
 
 namespace RunetId\ApiClient\Facade;
 
+use RunetId\ApiClient\Exception\InvalidArgumentException;
 use RunetId\ApiClient\Model\Event;
+use RunetId\ApiClient\Model\User;
 
 /**
  * Class EventFacade
@@ -24,13 +26,13 @@ class EventFacade extends BaseFacade
      * Регистрация на мероприятие
      *
      * @param int  $runetId
-     * @param int  $roleId      роль по умолчанию - 1 - участник
+     * @param int  $roleId
      * @param bool $usePriority использовать системные приоритеты статусов
      * @return bool
      */
-    public function register($runetId, $roleId = 1, $usePriority = true)
+    public function register($runetId, $roleId = User\Status::ROLE_PARTICIPANT, $usePriority = true)
     {
-        $response= $this->apiClient->post('event/register', [
+        $response = $this->apiClient->post('event/register', [
             'RunetId' => $runetId,
             'RoleId' => $roleId,
             'UsePriority' => $usePriority,
@@ -39,5 +41,33 @@ class EventFacade extends BaseFacade
         $this->processResponse($response);
 
         return true;
+    }
+
+    /**
+     * @param int   $maxResults
+     * @param array $roles
+     * @return User[]
+     */
+    public function users($maxResults = null, array $roles = [])
+    {
+        if ($roles) {
+            foreach ($roles as $role) {
+                if (!in_array($role, User\Status::getRoles())) {
+                    throw new InvalidArgumentException(sprintf(
+                        'Role "%u" does not exist',
+                        $role
+                    ));
+                }
+            }
+        }
+
+        $response = $this->apiClient->get('event/users', [
+            'MaxResults' => $maxResults,
+            'RoleId' => $roles,
+        ]);
+
+        $data = $this->processResponse($response);
+
+        return $this->modelReconstructor->reconstruct($data['Users'], 'user[]');
     }
 }
