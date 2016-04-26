@@ -11,6 +11,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ModelReconstructor extends DataReconstructor
 {
+    /**
+     * @inheritdoc
+     */
     protected static $defaults = [
         'map' => [
             'user' => [
@@ -58,11 +61,11 @@ class ModelReconstructor extends DataReconstructor
     {
         parent::configureOptions($resolver);
 
+        /** @noinspection PhpUnusedParameterInspection */
         $resolver
-            ->setDefault('model_classes', [])
             ->setAllowedTypes('model_classes', 'array')
             ->setNormalizer('model_classes', function (Options $options, $value) {
-                return array_replace(self::$defaults['model_classes'], $value);
+                return array_replace(static::$defaults['model_classes'], $value);
             });
     }
 
