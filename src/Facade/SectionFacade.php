@@ -34,15 +34,23 @@ class SectionFacade extends BaseFacade
 
     /**
      * Получение информации о конкртеной секции
+     * @param bool $withReports
      * @return Section
      */
-    public function info()
+    public function info($withReports = false)
     {
         $response = $this->apiClient->get('section/info', [
             'SectionId' => $this->getSectionId(),
         ]);
 
-        return $this->processResponse($response, 'section');
+        /** @var Section $section */
+        $section = $this->processResponse($response, 'section');
+
+        if ($withReports) {
+            $section->Reports = $this->reports();
+        }
+
+        return $section;
     }
 
     /**

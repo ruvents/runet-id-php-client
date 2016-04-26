@@ -95,10 +95,14 @@ class User
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getUrl()
     {
-        return 'http://runet-id.com/'.(int)$this->RunetId;
+        if ($this->RunetId) {
+            return 'http://runet-id.com/'.(int)$this->RunetId;
+        }
+
+        return null;
     }
 }
