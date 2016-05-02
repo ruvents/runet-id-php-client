@@ -70,4 +70,21 @@ class EventFacade extends BaseFacade
 
         return $this->modelReconstructor->reconstruct($data['Users'], 'user[]');
     }
+
+
+    /**
+     * Изменение роли на мероприятии
+     *
+     * @param int $RunetId
+     * @param int $RoleId
+     * @return bool
+     */
+    public function changeRole ($RunetId, $RoleId)
+    {
+        $result = $this->apiClient->post('event/changerole', array(
+            'RunetId' => $RunetId,
+            'RoleId' => $RoleId
+        ));
+        return $result->Success;
+    }
 }
