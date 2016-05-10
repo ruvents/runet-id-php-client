@@ -2,7 +2,6 @@
 
 namespace RunetId\ApiClient\Facade;
 
-use RunetId\ApiClient\Exception\InvalidArgumentException;
 use RunetId\ApiClient\Model\Event;
 use RunetId\ApiClient\Model\User;
 
@@ -50,17 +49,6 @@ class EventFacade extends BaseFacade
      */
     public function users($maxResults = null, array $roles = [])
     {
-        if ($roles) {
-            foreach ($roles as $role) {
-                if (!in_array($role, User\Status::getRoles())) {
-                    throw new InvalidArgumentException(sprintf(
-                        'Role "%u" does not exist',
-                        $role
-                    ));
-                }
-            }
-        }
-
         $response = $this->apiClient->get('event/users', [
             'MaxResults' => $maxResults,
             'RoleId' => $roles,
@@ -74,15 +62,15 @@ class EventFacade extends BaseFacade
     /**
      * Изменение роли на мероприятии
      *
-     * @param int $RunetId
-     * @param int $RoleId
+     * @param int $runetId
+     * @param int $roleId
      * @return bool
      */
-    public function changeRole($RunetId, $RoleId)
+    public function changeRole($runetId, $roleId)
     {
         $response = $this->apiClient->post('event/changerole', [
-            'RunetId' => $RunetId,
-            'RoleId' => $RoleId,
+            'RunetId' => $runetId,
+            'RoleId' => $roleId,
         ]);
 
         $data = $this->processResponse($response);

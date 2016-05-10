@@ -87,15 +87,7 @@ class ApiClient
      */
     public function user($runetId = null)
     {
-        static $userFacades = [];
-
-        $offset = $runetId ?: 0;
-
-        if (!isset($userFacades[$offset])) {
-            $userFacades[$offset] = new UserFacade($this, $this->modelReconstructor, $runetId);
-        }
-
-        return $userFacades[$offset];
+        return new UserFacade($this, $this->modelReconstructor, $runetId);
     }
 
     /**
@@ -103,13 +95,7 @@ class ApiClient
      */
     public function event()
     {
-        static $eventFacade;
-
-        if (!isset($eventFacade)) {
-            $eventFacade = new EventFacade($this, $this->modelReconstructor);
-        }
-
-        return $eventFacade;
+        return new EventFacade($this, $this->modelReconstructor);
     }
 
     /**
@@ -118,15 +104,7 @@ class ApiClient
      */
     public function section($sectionId = null)
     {
-        static $sectionFacades = [];
-
-        $offset = $sectionId ?: 0;
-
-        if (!isset($sectionFacades[$offset])) {
-            $sectionFacades[$offset] = new SectionFacade($this, $this->modelReconstructor, $sectionId);
-        }
-
-        return $sectionFacades[$offset];
+        return new SectionFacade($this, $this->modelReconstructor, $sectionId);
     }
 
     /**
@@ -134,13 +112,7 @@ class ApiClient
      */
     public function profInterest()
     {
-        static $profInterestFacade;
-
-        if (!isset($profInterestFacade)) {
-            $profInterestFacade = new ProfInterestFacade($this, $this->modelReconstructor);
-        }
-
-        return $profInterestFacade;
+        return new ProfInterestFacade($this, $this->modelReconstructor);
     }
 
     /**
