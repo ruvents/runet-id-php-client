@@ -8,9 +8,9 @@ use RunetId\ApiClient\ModelReconstructor;
 use Ruvents\HttpClient\Response\Response;
 
 /**
- * Class DefaultFacade
+ * Class BaseFacade
  */
-class BaseFacade
+abstract class BaseFacade
 {
     /**
      * @var ApiClient
