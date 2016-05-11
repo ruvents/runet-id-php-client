@@ -49,14 +49,28 @@ class EventFacade extends BaseFacade
      */
     public function users($maxResults = null, array $roles = [])
     {
-        $response = $this->apiClient->get('event/users', [
-            'MaxResults' => $maxResults,
-            'RoleId' => $roles,
-        ]);
+        $remain = $maxResults;
+        $token = null;
+        $users = [];
 
-        $data = $this->processResponse($response);
+        while ($remain > 0) {
+            $response = $this->apiClient->get('event/users', [
+                'MaxResults' => $remain,
+                'RoleId' => $roles,
+                'PageToken' => $token,
+            ]);
+            $data = $this->processResponse($response);
 
-        return $this->modelReconstructor->reconstruct($data['Users'], 'user[]');
+            if (!isset($data['NextPageToken'])) {
+                break;
+            }
+
+            $token = $data['NextPageToken'];
+            $users = array_merge($users, $data['Users']);
+            $remain = $maxResults - count($users);
+        }
+
+        return $this->modelReconstructor->reconstruct($users, 'user[]');
     }
 
     /**
