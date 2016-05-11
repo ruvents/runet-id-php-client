@@ -2,6 +2,7 @@
 
 namespace RunetId\ApiClient\Model;
 
+use RunetId\ApiClient\Exception\InvalidArgumentException;
 use RunetId\ApiClient\Model\User\Photo;
 use RunetId\ApiClient\Model\User\Status;
 use RunetId\ApiClient\Model\User\Work;
@@ -11,6 +12,10 @@ use RunetId\ApiClient\Model\User\Work;
  */
 class User
 {
+    const GENDER_MALE = 'male';
+
+    const GENDER_FEMALE = 'female';
+
     /**
      * @var int
      */
@@ -87,6 +92,20 @@ class User
     public $Phones;
 
     /**
+     * @param int $runetId
+     * @return string
+     * @throws InvalidArgumentException
+     */
+    public static function getUrlByRunetId($runetId)
+    {
+        if (!is_numeric($runetId)) {
+            throw new InvalidArgumentException('The $runetId argument must be numeric.');
+        }
+
+        return 'http://runet-id.com/'.$runetId;
+    }
+
+    /**
      * @return string
      */
     public function __toString()
@@ -95,14 +114,10 @@ class User
     }
 
     /**
-     * @return null|string
+     * @return string
      */
     public function getUrl()
     {
-        if ($this->RunetId) {
-            return 'http://runet-id.com/'.(int)$this->RunetId;
-        }
-
-        return null;
+        return self::getUrlByRunetId($this->RunetId);
     }
 }
