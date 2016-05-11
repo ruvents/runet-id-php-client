@@ -109,14 +109,21 @@ class UserFacade extends BaseFacade
      */
     public function search($query, $maxResults = null)
     {
-        $response = $this->apiClient->get('user/search', [
-            'Query' => $query,
-            'MaxResults' => $maxResults,
-        ]);
+        $data = $this->collectDataRecursively(
+            $maxResults,
+            function (ApiClient $apiClient, $maxResults, $pageToken) use ($query) {
+                return $apiClient->get('user/search', [
+                    'Query' => $query,
+                    'MaxResults' => $maxResults,
+                    'PageToken' => $pageToken,
+                ]);
+            },
+            function (array $data) {
+                return $data['Users'];
+            }
+        );
 
-        $data = $this->processResponse($response);
-
-        return $this->modelReconstructor->reconstruct($data['Users'], 'user[]');
+        return $this->modelReconstructor->reconstruct($data, 'user[]');
     }
 
     /**

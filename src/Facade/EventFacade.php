@@ -2,6 +2,7 @@
 
 namespace RunetId\ApiClient\Facade;
 
+use RunetId\ApiClient\ApiClient;
 use RunetId\ApiClient\Model\Event;
 use RunetId\ApiClient\Model\User;
 
@@ -44,37 +45,26 @@ class EventFacade extends BaseFacade
 
     /**
      * @param int   $maxResults
-     * @param array $roles
+     * @param array $roleIds
      * @return User[]
      */
-    public function users($maxResults = null, array $roles = [])
+    public function users($maxResults = null, array $roleIds = [])
     {
-        $remain = $maxResults;
-        $token = null;
-        $users = [];
-
-        while (!isset($remain) || $remain > 0) {
-            $response = $this->apiClient->get('event/users', [
-                'MaxResults' => $remain,
-                'RoleId' => $roles,
-                'PageToken' => $token,
-            ]);
-
-            $data = $this->processResponse($response);
-            $users = array_merge($users, $data['Users']);
-
-            if (empty($data['NextPageToken'])) {
-                break;
+        $data = $this->collectDataRecursively(
+            $maxResults,
+            function (ApiClient $apiClient, $maxResults, $pageToken) use ($roleIds) {
+                return $apiClient->get('event/users', [
+                    'RoleId' => $roleIds,
+                    'MaxResults' => $maxResults,
+                    'PageToken' => $pageToken,
+                ]);
+            },
+            function (array $data) {
+                return $data['Users'];
             }
+        );
 
-            $token = $data['NextPageToken'];
-
-            if (isset($remain)) {
-                $remain -= count($users);
-            }
-        }
-
-        return $this->modelReconstructor->reconstruct($users, 'user[]');
+        return $this->modelReconstructor->reconstruct($data, 'user[]');
     }
 
     /**
