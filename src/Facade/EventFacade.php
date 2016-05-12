@@ -12,6 +12,7 @@ class EventFacade extends BaseFacade
 {
     /**
      * Получение информации о мероприятии
+     *
      * @return Event
      */
     public function get()
@@ -47,7 +48,7 @@ class EventFacade extends BaseFacade
      * @param array $roleIds
      * @return User[]
      */
-    public function users($maxResults = null, array $roleIds = [])
+    public function users($maxResults = self::DEFAULT_MAX_RESULTS, array $roleIds = [])
     {
         $data = $this->getPaginatedData('event/users', ['RoleId' => $roleIds], $maxResults, 'Users');
 

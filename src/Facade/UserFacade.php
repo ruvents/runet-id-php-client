@@ -107,7 +107,7 @@ class UserFacade extends BaseFacade
      * @param int    $maxResults
      * @return User[]
      */
-    public function search($query, $maxResults = null)
+    public function search($query, $maxResults = self::DEFAULT_MAX_RESULTS)
     {
         $data = $this->getPaginatedData('user/search', ['Query' => $query], $maxResults, 'Users');
 

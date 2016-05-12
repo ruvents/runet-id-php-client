@@ -8,10 +8,15 @@ use RunetId\ApiClient\ModelReconstructor;
 use Ruvents\HttpClient\Response\Response;
 
 /**
- * Class BaseFacade
+ * Базовый абстрактный фасад
  */
 abstract class BaseFacade
 {
+    /**
+     * Значение $maxResults по умолчанию
+     */
+    const DEFAULT_MAX_RESULTS = 200;
+
     /**
      * @var ApiClient
      */
@@ -33,6 +38,8 @@ abstract class BaseFacade
     }
 
     /**
+     * Форматирует дату для передачи в запросе
+     *
      * @param \DateTime $dateTime
      * @return string
      */
@@ -42,10 +49,14 @@ abstract class BaseFacade
     }
 
     /**
-     * @param Response    $response
-     * @param null|string $modelName
+     * Обрабатывает запрос и денормализует данные.
+     * Если вернулась ошибка, генерирует Exception.
+     *
+     * @param Response    $response  объект ответа
+     * @param null|string $modelName имя модели
+     *                               (если не задано, вернется неденормализованный массив данных)
      * @throws ResponseException
-     * @return Response|object
+     * @return array|object
      */
     protected function processResponse(Response $response, $modelName = null)
     {
@@ -63,10 +74,15 @@ abstract class BaseFacade
     }
 
     /**
-     * @param string $path
-     * @param array  $params
-     * @param int    $maxResults
-     * @param string $usefulDataOffset
+     * Получает методом GET данные, разбитые на страницы с учетом переданного ограничения
+     *
+     * @param string $path             путь для GET запроса
+     * @param array  $params           параметры GET запроса
+     * @param int    $maxResults       максимум результатов, которые требуется получить
+     *                                 (если null, вернутся все имеющиеся)
+     * @param string $usefulDataOffset ключ в возвращаемом массиве с данными,
+     *                                 содержащий реальные данные.
+     *                                 например, 'Users' для метода user.search
      * @return array
      */
     protected function getPaginatedData($path, array $params, $maxResults, $usefulDataOffset)
