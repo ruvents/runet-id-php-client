@@ -42,44 +42,6 @@ abstract class BaseFacade
     }
 
     /**
-     * @param int      $limit
-     * @param \Closure $requestMaker
-     * @param \Closure $dataExtractor
-     * @return array
-     */
-    protected function collectDataRecursively($limit, \Closure $requestMaker, \Closure $dataExtractor)
-    {
-        $pageToken = null;
-        $usefulData = [];
-
-        while (!isset($limit) || $limit > 0) {
-            /** @var Response $response */
-            $response = $requestMaker($this->apiClient, $limit, $pageToken);
-            $responseData = $this->processResponse($response);
-
-            if (empty($responseData)) {
-                break;
-            }
-
-            /** @var array $newUsefulData */
-            $newUsefulData = $dataExtractor($responseData);
-            $usefulData = array_merge($usefulData, $newUsefulData);
-
-            if (empty($responseData['NextPageToken'])) {
-                break;
-            }
-
-            $pageToken = $responseData['NextPageToken'];
-
-            if (isset($limit)) {
-                $limit -= count($usefulData);
-            }
-        }
-
-        return $usefulData;
-    }
-
-    /**
      * @param Response    $response
      * @param null|string $modelName
      * @throws ResponseException
@@ -98,5 +60,44 @@ abstract class BaseFacade
         }
 
         return $data;
+    }
+
+    /**
+     * @param string $path
+     * @param array  $params
+     * @param int    $maxResults
+     * @param string $usefulDataOffset
+     * @return array
+     */
+    protected function getPaginatedData($path, array $params, $maxResults, $usefulDataOffset)
+    {
+        $pageToken = null;
+        $usefulData = [];
+
+        while (!isset($maxResults) || $maxResults > 0) {
+            $params['MaxResults'] = $maxResults;
+            $params['PageToken'] = $pageToken;
+
+            $response = $this->apiClient->get($path, $params);
+            $responseData = $this->processResponse($response);
+
+            if (empty($responseData) || empty($responseData[$usefulDataOffset])) {
+                break;
+            }
+
+            $usefulData = array_merge($usefulData, $responseData[$usefulDataOffset]);
+
+            if (empty($responseData['NextPageToken'])) {
+                break;
+            }
+
+            $pageToken = $responseData['NextPageToken'];
+
+            if (isset($maxResults)) {
+                $maxResults -= count($usefulData);
+            }
+        }
+
+        return $usefulData;
     }
 }

@@ -2,7 +2,6 @@
 
 namespace RunetId\ApiClient\Facade;
 
-use RunetId\ApiClient\ApiClient;
 use RunetId\ApiClient\Model\Event;
 use RunetId\ApiClient\Model\User;
 
@@ -50,19 +49,7 @@ class EventFacade extends BaseFacade
      */
     public function users($maxResults = null, array $roleIds = [])
     {
-        $data = $this->collectDataRecursively(
-            $maxResults,
-            function (ApiClient $apiClient, $maxResults, $pageToken) use ($roleIds) {
-                return $apiClient->get('event/users', [
-                    'RoleId' => $roleIds,
-                    'MaxResults' => $maxResults,
-                    'PageToken' => $pageToken,
-                ]);
-            },
-            function (array $data) {
-                return $data['Users'];
-            }
-        );
+        $data = $this->getPaginatedData('event/users', ['RoleId' => $roleIds], $maxResults, 'Users');
 
         return $this->modelReconstructor->reconstruct($data, 'user[]');
     }
