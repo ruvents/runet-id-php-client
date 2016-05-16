@@ -4,7 +4,6 @@ namespace RunetId\ApiClient\Facade;
 
 use RunetId\ApiClient\ApiClient;
 use RunetId\ApiClient\Exception\MissingArgumentException;
-use RunetId\ApiClient\Model\NewUser;
 use RunetId\ApiClient\Model\ProfInterest;
 use RunetId\ApiClient\Model\User;
 use RunetId\ApiClient\ModelReconstructor;
@@ -50,11 +49,20 @@ class UserFacade extends BaseFacade
      * @param string $token
      * @return User
      */
-    public function getByToken($token)
+    public function auth($token)
     {
         $response = $this->apiClient->get('user/auth', ['token' => $token]);
 
         return $this->processResponse($response, 'user');
+    }
+
+    /**
+     * @param string $token
+     * @return User
+     */
+    public function getByToken($token)
+    {
+        return $this->auth($token);
     }
 
     /**
@@ -115,7 +123,7 @@ class UserFacade extends BaseFacade
     }
 
     /**
-     * @param array|NewUser $data
+     * @param array|object $data
      * @return User
      */
     public function create($data)
