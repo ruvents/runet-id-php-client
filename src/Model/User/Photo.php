@@ -3,7 +3,7 @@
 namespace RunetId\ApiClient\Model\User;
 
 /**
- * Class Photo
+ * User photo
  */
 class Photo
 {

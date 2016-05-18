@@ -3,7 +3,7 @@
 namespace RunetId\ApiClient\Model\Section;
 
 /**
- * Class Hall
+ * Section hall
  */
 class Hall
 {

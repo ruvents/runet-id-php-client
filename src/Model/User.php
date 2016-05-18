@@ -8,7 +8,7 @@ use RunetId\ApiClient\Model\User\Status;
 use RunetId\ApiClient\Model\User\Work;
 
 /**
- * Class User
+ * User
  */
 class User
 {
@@ -119,5 +119,21 @@ class User
     public function getUrl()
     {
         return self::getUrlByRunetId($this->RunetId);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMale()
+    {
+        return strtolower($this->Gender) === self::GENDER_MALE;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFemale()
+    {
+        return !$this->isMale();
     }
 }

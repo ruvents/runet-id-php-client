@@ -3,7 +3,7 @@
 namespace RunetId\ApiClient\Model\User;
 
 /**
- * Class Status
+ * User status
  */
 class Status
 {
@@ -65,5 +65,53 @@ class Status
     public function __toString()
     {
         return (string)$this->RoleTitle;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isParticipant()
+    {
+        return $this->RoleId == self::ROLE_PARTICIPANT;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMassMedia()
+    {
+        return $this->RoleId == self::ROLE_MASS_MEDIA;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReporter()
+    {
+        return $this->RoleId == self::ROLE_REPORTER;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPartner()
+    {
+        return $this->RoleId == self::ROLE_PARTNER;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOrganizer()
+    {
+        return $this->RoleId == self::ROLE_ORGANIZER;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVideo()
+    {
+        return $this->RoleId == self::ROLE_VIDEO;
     }
 }

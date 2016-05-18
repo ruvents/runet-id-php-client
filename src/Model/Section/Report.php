@@ -5,7 +5,7 @@ namespace RunetId\ApiClient\Model\Section;
 use RunetId\ApiClient\Model\User;
 
 /**
- * Class Report
+ * Section report
  */
 class Report
 {

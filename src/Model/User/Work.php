@@ -3,7 +3,7 @@
 namespace RunetId\ApiClient\Model\User;
 
 /**
- * Class Work
+ * User work
  */
 class Work
 {

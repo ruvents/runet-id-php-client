@@ -3,7 +3,7 @@
 namespace RunetId\ApiClient\Model;
 
 /**
- * Class ProfInterest
+ * ProfInterest
  */
 class ProfInterest
 {

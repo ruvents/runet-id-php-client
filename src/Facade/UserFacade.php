@@ -71,8 +71,12 @@ class UserFacade extends BaseFacade
      */
     public function setPhoto($file)
     {
-        return $this->apiClient->post('user/setphoto',
-            ['RunetId' => $this->getRunetId()], null, [], ['Image' => $file]
+        return $this->apiClient->post(
+            'user/setphoto',
+            ['RunetId' => $this->getRunetId()],
+            null,
+            [],
+            ['Image' => $file]
         );
     }
 

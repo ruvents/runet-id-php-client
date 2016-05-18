@@ -33,11 +33,12 @@ class SectionFacade extends BaseFacade
     }
 
     /**
-     * Получение информации о конкртеной секции
+     * Получение информации о секции
+     *
      * @param bool $withReports
      * @return Section
      */
-    public function info($withReports = false)
+    public function get($withReports = false)
     {
         $response = $this->apiClient->get('section/info', [
             'SectionId' => $this->getSectionId(),
@@ -54,7 +55,26 @@ class SectionFacade extends BaseFacade
     }
 
     /**
+     * Получение информации о секции
+     *
+     * @param bool $withReports
+     * @return Section
+     * @deprecated method is deprecated since version 1.2.8 to be removed in 3.0
+     * @see        SectionFacade::get
+     */
+    public function info($withReports = false)
+    {
+        @trigger_error(
+            'The "'.__METHOD__.'" method is deprecated since version 1.2.8 and will be removed in version 3.0. Use the "'.__CLASS__.'::get()" method instead.',
+            E_USER_DEPRECATED
+        );
+
+        return $this->get($withReports);
+    }
+
+    /**
      * Получение всех секций
+     *
      * @param \DateTime $fromUpdateTime
      * @param bool      $withDeleted
      * @return Section[]
@@ -70,6 +90,8 @@ class SectionFacade extends BaseFacade
     }
 
     /**
+     * Получение всех секций, в которых участвует пользователь (независимо от роли)
+     *
      * @param User|int $userOrRunetId
      * @return Section[]
      */
@@ -88,6 +110,7 @@ class SectionFacade extends BaseFacade
 
     /**
      * Получение докладов в секции
+     *
      * @param \DateTime $fromUpdateTime
      * @param bool      $withDeleted
      * @return Section\Report[]
@@ -104,6 +127,8 @@ class SectionFacade extends BaseFacade
     }
 
     /**
+     * Возвращает id секции, присвоенный текущему экземпляру фасада
+     *
      * @throws MissingArgumentException
      * @return int
      */

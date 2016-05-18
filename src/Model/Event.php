@@ -3,7 +3,7 @@
 namespace RunetId\ApiClient\Model;
 
 /**
- * Class User
+ * Event
  */
 class Event
 {

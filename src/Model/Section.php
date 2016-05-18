@@ -6,7 +6,7 @@ use RunetId\ApiClient\Model\Section\Hall;
 use RunetId\ApiClient\Model\Section\Report;
 
 /**
- * Class Section
+ * Section
  */
 class Section
 {
