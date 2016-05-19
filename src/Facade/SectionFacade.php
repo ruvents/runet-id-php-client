@@ -48,7 +48,7 @@ class SectionFacade extends BaseFacade
         $section = $this->processResponse($response, 'section');
 
         if ($withReports) {
-            $section->Reports = $this->reports();
+            $section->Reports = $this->getReports();
         }
 
         return $section;
@@ -59,7 +59,7 @@ class SectionFacade extends BaseFacade
      *
      * @param bool $withReports
      * @return Section
-     * @deprecated method is deprecated since version 1.2.8 to be removed in 3.0
+     * @deprecated method is deprecated since version 1.2.8 and will be removed in 3.0
      * @see        SectionFacade::get
      */
     public function info($withReports = false)
@@ -77,16 +77,26 @@ class SectionFacade extends BaseFacade
      *
      * @param \DateTime $fromUpdateTime
      * @param bool      $withDeleted
+     * @param bool      $withReports
      * @return Section[]
      */
-    public function getAll(\DateTime $fromUpdateTime = null, $withDeleted = false)
+    public function getAll(\DateTime $fromUpdateTime = null, $withDeleted = false, $withReports = false)
     {
         $response = $this->apiClient->get('section/list', [
             'FromUpdateTime' => $fromUpdateTime ? $this->formatDateTime($fromUpdateTime) : null,
             'WithDeleted' => (bool)$withDeleted,
         ]);
 
-        return $this->processResponse($response, 'section[]');
+        /** @var Section[] $sections */
+        $sections = $this->processResponse($response, 'section[]');
+
+        if ($withReports) {
+            foreach ($sections as $section) {
+                $section->Reports = $this->getReportsBySectionId($section->Id, $fromUpdateTime, $withDeleted);
+            }
+        }
+
+        return $sections;
     }
 
     /**
@@ -115,22 +125,35 @@ class SectionFacade extends BaseFacade
      * @param bool      $withDeleted
      * @return Section\Report[]
      */
+    public function getReports(\DateTime $fromUpdateTime = null, $withDeleted = false)
+    {
+        return $this->getReportsBySectionId($this->getSectionId(), $fromUpdateTime, $withDeleted);
+    }
+
+    /**
+     * Получение докладов в секции
+     *
+     * @param \DateTime $fromUpdateTime
+     * @param bool      $withDeleted
+     * @return Section\Report[]
+     * @deprecated method is deprecated since version 1.2.8 and will be removed in 3.0
+     * @see        SectionFacade::getReports
+     */
     public function reports(\DateTime $fromUpdateTime = null, $withDeleted = false)
     {
-        $response = $this->apiClient->get('section/reports', [
-            'SectionId' => $this->getSectionId(),
-            'FromUpdateTime' => $fromUpdateTime ? $this->formatDateTime($fromUpdateTime) : null,
-            'WithDeleted' => (bool)$withDeleted,
-        ]);
+        @trigger_error(
+            'The "'.__METHOD__.'" method is deprecated since version 1.2.8 and will be removed in version 3.0. Use the "'.__CLASS__.'::get()" method instead.',
+            E_USER_DEPRECATED
+        );
 
-        return $this->processResponse($response, 'section_report[]');
+        return $this->getReports($fromUpdateTime, $withDeleted);
     }
 
     /**
      * Возвращает id секции, присвоенный текущему экземпляру фасада
      *
-     * @throws MissingArgumentException
      * @return int
+     * @throws MissingArgumentException
      */
     protected function getSectionId()
     {
@@ -139,5 +162,25 @@ class SectionFacade extends BaseFacade
         }
 
         return $this->sectionId;
+    }
+
+    /**
+     * @param int       $sectionId
+     * @param \DateTime $fromUpdateTime
+     * @param bool      $withDeleted
+     * @return Section\Report[]
+     */
+    protected function getReportsBySectionId(
+        $sectionId,
+        \DateTime $fromUpdateTime = null,
+        $withDeleted = false
+    ) {
+        $response = $this->apiClient->get('section/reports', [
+            'SectionId' => $sectionId,
+            'FromUpdateTime' => $fromUpdateTime ? $this->formatDateTime($fromUpdateTime) : null,
+            'WithDeleted' => (bool)$withDeleted,
+        ]);
+
+        return $this->processResponse($response, 'section_report[]');
     }
 }

@@ -10,6 +10,14 @@ use RunetId\ApiClient\Model\Section\Report;
  */
 class Section
 {
+    const TYPE_SECTION = 'section';
+
+    const TYPE_ROUND_TABLE = 'round';
+
+    const TYPE_PARTNER = 'partner';
+
+    const TYPE_TECHNICAL = 'technical';
+
     /**
      * @var int
      */
@@ -66,11 +74,56 @@ class Section
     public $Attributes = [];
 
     /**
+     * @return string[]
+     */
+    public static function getTypes()
+    {
+        return [
+            self::TYPE_SECTION,
+            self::TYPE_ROUND_TABLE,
+            self::TYPE_PARTNER,
+            self::TYPE_TECHNICAL,
+        ];
+    }
+
+    /**
      * @return string
      */
     public function __toString()
     {
         return (string)$this->Title;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSection()
+    {
+        return $this->TypeCode === self::TYPE_SECTION;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRoundTable()
+    {
+        return $this->TypeCode === self::TYPE_ROUND_TABLE;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPartner()
+    {
+        return $this->TypeCode === self::TYPE_PARTNER;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTechnical()
+    {
+        return $this->TypeCode === self::TYPE_TECHNICAL;
     }
 
     /**
