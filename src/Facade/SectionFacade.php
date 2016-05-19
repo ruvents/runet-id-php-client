@@ -59,13 +59,13 @@ class SectionFacade extends BaseFacade
      *
      * @param bool $withReports
      * @return Section
-     * @deprecated method is deprecated since version 1.2.8 and will be removed in 3.0
+     * @deprecated method is deprecated since version 2.1.9 and will be removed in 3.0
      * @see        SectionFacade::get
      */
     public function info($withReports = false)
     {
         @trigger_error(
-            'The "'.__METHOD__.'" method is deprecated since version 1.2.8 and will be removed in version 3.0. Use the "'.__CLASS__.'::get()" method instead.',
+            'The "'.__METHOD__.'" method is deprecated since version 2.1.9 and will be removed in version 3.0. Use the "'.__CLASS__.'::get()" method instead.',
             E_USER_DEPRECATED
         );
 
@@ -136,13 +136,13 @@ class SectionFacade extends BaseFacade
      * @param \DateTime $fromUpdateTime
      * @param bool      $withDeleted
      * @return Section\Report[]
-     * @deprecated method is deprecated since version 1.2.8 and will be removed in 3.0
+     * @deprecated method is deprecated since version 2.1.9 and will be removed in 3.0
      * @see        SectionFacade::getReports
      */
     public function reports(\DateTime $fromUpdateTime = null, $withDeleted = false)
     {
         @trigger_error(
-            'The "'.__METHOD__.'" method is deprecated since version 1.2.8 and will be removed in version 3.0. Use the "'.__CLASS__.'::get()" method instead.',
+            'The "'.__METHOD__.'" method is deprecated since version 2.1.9 and will be removed in version 3.0. Use the "'.__CLASS__.'::get()" method instead.',
             E_USER_DEPRECATED
         );
 
