@@ -7,6 +7,8 @@ namespace RunetId\ApiClient\Model\User;
  */
 class Photo
 {
+    const NOPHOTO_SMALL_PATH = '/files/photo/nophoto_50.png';
+
     /**
      * @var string
      */
@@ -33,8 +35,8 @@ class Photo
     /**
      * @return bool
      */
-    public function hasPhoto()
+    public function isEmpty()
     {
-        return '/files/photo/nophoto_50.png' !== parse_url($this->Small, PHP_URL_PATH);
+        return self::NOPHOTO_SMALL_PATH === parse_url($this->Small, PHP_URL_PATH);
     }
 }

@@ -136,4 +136,12 @@ class User
     {
         return !$this->isMale();
     }
+
+    /**
+     * @return bool
+     */
+    public function hasPhoto()
+    {
+        return !$this->Photo->isEmpty();
+    }
 }
