@@ -72,40 +72,30 @@ class ModelReconstructor extends DataReconstructor
     /**
      * @inheritdoc
      */
-    protected function reconstructObject($data, $className, array $map)
+    protected function createObject($className, &$data, array $map)
     {
-        $realClassName = $this->replaceModelClass($className);
+        $className = $this->getRealClassName($className);
 
-        switch ($className) {
-            case 'DateTime':
-                $object = new \DateTime($data);
-                break;
-
-            default:
-                $object = parent::reconstructObject($data, $realClassName, $map);
-        }
-
-        return $object;
+        return parent::createObject($className, $data, $map);
     }
 
     /**
-     * @param string $name
+     * @param string $className
      * @return string
      */
-    protected function replaceModelClass($name)
+    protected function getRealClassName($className)
     {
-        $cleanName = $name;
         $isArray = false;
 
-        if (substr($name, -2) === '[]') {
-            $cleanName = substr($name, 0, -2);
+        if (substr($className, -2) === '[]') {
+            $className = substr($className, 0, -2);
             $isArray = true;
         }
 
-        if (isset($this->options['model_classes'][$cleanName])) {
-            return $this->options['model_classes'][$name].($isArray ? '[]' : '');
+        if (isset($this->options['model_classes'][$className])) {
+            $className = $this->options['model_classes'][$className];
         }
 
-        return $name;
+        return $className.($isArray ? '[]' : '');
     }
 }

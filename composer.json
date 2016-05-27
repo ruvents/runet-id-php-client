@@ -12,8 +12,11 @@
     "require": {
         "php": ">=5.4.0",
         "ruvents/http-client": "^2.1",
-        "ruvents/data-reconstructor": "^1.0.6",
+        "ruvents/data-reconstructor": "^2.0.0",
         "symfony/options-resolver": "^2.8||^3.0"
+    },
+    "require-dev": {
+        "ruvents/data-reconstructor": "^2.0@dev"
     },
     "autoload": {
         "psr-4": {
