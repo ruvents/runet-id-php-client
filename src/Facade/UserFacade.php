@@ -81,6 +81,23 @@ class UserFacade extends BaseFacade
     }
 
     /**
+     * Устанавливаем доп атрибуты пользователя
+     * @param array $attributes ['Event' => 111, 'Course' => 222 ]
+     * Доп атрибут сначала необходимо добавить в партнерском интерфейсе, ключ массива - символьный код доп атрибута
+     * @return \Ruvents\HttpClient\Response\Response
+     */
+    public function setData($attributes = [])
+    {
+        return $this->apiClient->post(
+            'user/setdata',
+            [
+                'RunetId' => $this->getRunetId(),
+                'Attributes' => $attributes
+            ]
+        );
+    }
+
+    /**
      * @param int|ProfInterest $profInterestOrId
      */
     public function addProfInterest($profInterestOrId)
