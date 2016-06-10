@@ -2,10 +2,13 @@
 
 namespace RunetId\ApiClient\Model;
 
+use Ruvents\DataReconstructor\DataReconstructor;
+use Ruvents\DataReconstructor\ReconstructableInterface;
+
 /**
  * Event
  */
-class Event
+class Event implements ReconstructableInterface
 {
     /**
      * @var int
@@ -53,32 +56,42 @@ class Event
     public $UrlProgram;
 
     /**
-     * @var string
+     * @var \DateTime
+     */
+    public $Start;
+
+    /**
+     * @var int
      */
     public $StartYear;
 
     /**
-     * @var string
+     * @var int
      */
     public $StartMonth;
 
     /**
-     * @var string
+     * @var int
      */
     public $StartDay;
 
     /**
-     * @var string
+     * @var \DateTime
+     */
+    public $End;
+
+    /**
+     * @var int
      */
     public $EndYear;
 
     /**
-     * @var string
+     * @var int
      */
     public $EndMonth;
 
     /**
-     * @var string
+     * @var int
      */
     public $EndDay;
 
@@ -91,6 +104,25 @@ class Event
      * @var string
      */
     public $Address;
+
+    /**
+     * @inheritdoc
+     */
+    public function __construct(&$data, DataReconstructor $dataReconstructor, array $map)
+    {
+        $this->Start = new \DateTime(sprintf(
+            '%d-%d-%d',
+            $data['StartYear'],
+            $data['StartMonth'],
+            $data['StartDay']
+        ));
+        $this->End = new \DateTime(sprintf(
+            '%d-%d-%d',
+            $data['EndYear'],
+            $data['EndMonth'],
+            $data['EndDay']
+        ));
+    }
 
     /**
      * @return string
