@@ -8,6 +8,7 @@ use RunetId\ApiClient\Model\ProfInterest;
 use RunetId\ApiClient\Model\User;
 use RunetId\ApiClient\ModelReconstructor;
 use Ruvents\HttpClient\Request\File;
+use Ruvents\HttpClient\Response\Response;
 
 /**
  * Class UserFacade
@@ -83,18 +84,16 @@ class UserFacade extends BaseFacade
     /**
      * Устанавливаем доп атрибуты пользователя
      * @param array $attributes ['Event' => 111, 'Course' => 222 ]
-     * Доп атрибут сначала необходимо добавить в партнерском интерфейсе, ключ массива - символьный код доп атрибута
-     * @return \Ruvents\HttpClient\Response\Response
+     *                          Доп атрибут сначала необходимо добавить в партнерском интерфейсе, ключ массива -
+     *                          символьный код доп атрибута
+     * @return Response
      */
     public function setData($attributes = [])
     {
-        return $this->apiClient->post(
-            'user/setdata',
-            [
-                'RunetId' => $this->getRunetId(),
-                'Attributes' => $attributes
-            ]
-        );
+        return $this->apiClient->post('user/setdata', [
+            'RunetId' => $this->getRunetId(),
+            'Attributes' => $attributes,
+        ]);
     }
 
     /**
