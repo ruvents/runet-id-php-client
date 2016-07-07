@@ -39,4 +39,51 @@ class PayFacade extends BaseFacade
 
         return $data;
     }
+
+    /**
+     * @param int   $productId
+     * @param int   $payerRunetId
+     * @param int   $ownerRunetId
+     * @param array $attributes
+     */
+    public function addOrderItem($productId, $payerRunetId, $ownerRunetId, $attributes = [])
+    {
+        $response = $this->apiClient->post('pay/add', [
+            'ProductId' => $productId,
+            'PayerRunetId' => $payerRunetId,
+            'OwnerRunetId' => $ownerRunetId,
+            'Attributes' => $attributes,
+        ]);
+
+        $this->processResponse($response);
+    }
+
+    /**
+     * @param int $orderItemId
+     * @param int $payerRunetId
+     */
+    public function deleteOrderItem($orderItemId, $payerRunetId)
+    {
+        $response = $this->apiClient->post('pay/delete', [
+            'OrderItemId' => $orderItemId,
+            'PayerRunetId' => $payerRunetId,
+        ]);
+
+        $this->processResponse($response);
+    }
+
+    /**
+     * @param int $payerRunetId
+     * @return string
+     */
+    public function getUrl($payerRunetId)
+    {
+        $response = $this->apiClient->get('pay/url', [
+            'PayerRunetId' => $payerRunetId,
+        ]);
+
+        $data = $this->processResponse($response);
+
+        return $data['Url'];
+    }
 }
