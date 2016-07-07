@@ -38,6 +38,13 @@ class ModelReconstructor extends DataReconstructor
                 'User' => 'user',
                 'UpdateTime' => 'DateTime',
             ],
+            'order_item' => [
+                'Product' => 'product',
+                'Payer' => 'user',
+                'Owner' => 'user',
+                'PaidTime' => 'DateTime',
+                'CreationTime' => 'DateTime',
+            ],
         ],
         'model_classes' => [
             'error' => 'RunetId\ApiClient\Model\Error',
@@ -51,6 +58,8 @@ class ModelReconstructor extends DataReconstructor
             'section' => 'RunetId\ApiClient\Model\Section',
             'section_hall' => 'RunetId\ApiClient\Model\Section\Hall',
             'section_report' => 'RunetId\ApiClient\Model\Section\Report',
+            'product' => 'RunetId\ApiClient\Model\Product',
+            'order_item' => 'RunetId\ApiClient\Model\OrderItem',
         ],
     ];
 

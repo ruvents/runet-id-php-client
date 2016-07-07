@@ -3,6 +3,7 @@
 namespace RunetId\ApiClient;
 
 use RunetId\ApiClient\Facade\EventFacade;
+use RunetId\ApiClient\Facade\PayFacade;
 use RunetId\ApiClient\Facade\ProfInterestFacade;
 use RunetId\ApiClient\Facade\SectionFacade;
 use RunetId\ApiClient\Facade\UserFacade;
@@ -74,8 +75,9 @@ class ApiClient
      * @param array             $files
      * @return Response
      */
-    public function post($path, array $query = [], $data = null, array $headers = [], array $files = [])
-    {
+    public function post(
+        $path, array $query = [], $data = null, array $headers = [], array $files = []
+    ) {
         $request = $this->createRequest($path, $query, $data, $headers, $files);
 
         return $this->send('POST', $request);
@@ -116,6 +118,14 @@ class ApiClient
     }
 
     /**
+     * @return PayFacade
+     */
+    public function pay()
+    {
+        return new PayFacade($this, $this->modelReconstructor);
+    }
+
+    /**
      * @param OptionsResolver $resolver
      */
     protected function configureOptions(OptionsResolver $resolver)
@@ -144,8 +154,9 @@ class ApiClient
      * @param array             $files
      * @return Request
      */
-    protected function createRequest($path, array $query = [], $data = null, array $headers = [], array $files = [])
-    {
+    protected function createRequest(
+        $path, array $query = [], $data = null, array $headers = [], array $files = []
+    ) {
         $hash = $this->generateHash($this->options['key'], $this->options['secret']);
 
         $query = array_merge([
