@@ -86,4 +86,20 @@ class PayFacade extends BaseFacade
 
         return $data['Url'];
     }
+
+    /**
+     * @param string $couponCode
+     * @param int    $payerRunetId
+     * @param int    $ownerRunetId
+     */
+    public function activateCoupon($couponCode, $payerRunetId, $ownerRunetId)
+    {
+        $response = $this->apiClient->post('pay/coupon', [
+            'CouponCode' => $couponCode,
+            'PayerRunetId' => $payerRunetId,
+            'OwnerRunetId' => $ownerRunetId,
+        ]);
+
+        $this->processResponse($response);
+    }
 }
