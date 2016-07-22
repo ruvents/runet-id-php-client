@@ -2,6 +2,7 @@
 
 namespace RunetId\ApiClient;
 
+use RunetId\ApiClient\Exception\UnexpectedValueException;
 use RunetId\ApiClient\Facade\EventFacade;
 use RunetId\ApiClient\Facade\PayFacade;
 use RunetId\ApiClient\Facade\ProfInterestFacade;
@@ -55,6 +56,32 @@ class ApiClient
     }
 
     /**
+     * @return string[]
+     */
+    public function getSupportedLocales()
+    {
+        return ['ru', 'en'];
+    }
+
+    /**
+     * @param string $locale
+     * @return $this
+     * @throws UnexpectedValueException
+     */
+    public function setLocale($locale)
+    {
+        if (!in_array($locale, $this->getSupportedLocales(), true)) {
+            throw new UnexpectedValueException(sprintf(
+                'Locale "%s" is not supported', $locale
+            ));
+        }
+
+        $this->options['locale'] = $locale;
+
+        return $this;
+    }
+
+    /**
      * @param string $path
      * @param array  $data
      * @param array  $headers
@@ -75,9 +102,8 @@ class ApiClient
      * @param array             $files
      * @return Response
      */
-    public function post(
-        $path, array $query = [], $data = null, array $headers = [], array $files = []
-    ) {
+    public function post($path, array $query = [], $data = null, array $headers = [], array $files = [])
+    {
         $request = $this->createRequest($path, $query, $data, $headers, $files);
 
         return $this->send('POST', $request);
@@ -137,13 +163,15 @@ class ApiClient
                 'key' => null,
                 'secret' => null,
                 'model_reconstructor' => [],
+                'locale' => 'ru',
             ])
             ->setRequired(['host', 'key', 'secret'])
             ->setAllowedTypes('host', 'string')
             ->setAllowedTypes('secure', 'bool')
             ->setAllowedTypes('key', 'string')
             ->setAllowedTypes('secret', 'string')
-            ->setAllowedTypes('model_reconstructor', 'array');
+            ->setAllowedTypes('model_reconstructor', 'array')
+            ->setAllowedValues('locale', $this->getSupportedLocales());
     }
 
     /**
@@ -154,14 +182,14 @@ class ApiClient
      * @param array             $files
      * @return Request
      */
-    protected function createRequest(
-        $path, array $query = [], $data = null, array $headers = [], array $files = []
-    ) {
+    protected function createRequest($path, array $query = [], $data = null, array $headers = [], array $files = [])
+    {
         $hash = $this->generateHash($this->options['key'], $this->options['secret']);
 
         $query = array_merge([
             'ApiKey' => $this->options['key'],
             'Hash' => $hash,
+            'Locale' => $this->options['locale'],
         ], $query);
 
         $uri = Uri::createHttp($this->options['host'], $path, $query, $this->options['secure']);
@@ -177,19 +205,6 @@ class ApiClient
     protected function send($method, Request $request)
     {
         return HttpClient::send($method, $request);
-    }
-
-    /**
-     * @param array $query
-     */
-    protected function prepareQuery(array &$query)
-    {
-        $hash = $this->generateHash($this->options['key'], $this->options['secret']);
-
-        $query = array_merge([
-            'ApiKey' => $this->options['key'],
-            'Hash' => $hash,
-        ], $query);
     }
 
     /**
