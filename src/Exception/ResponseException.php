@@ -5,6 +5,6 @@ namespace RunetId\ApiClient\Exception;
 /**
  * Class ResponseException
  */
-class ResponseException extends ApiException
+class ResponseException extends ApiException implements ApiExceptionInterface
 {
 }

@@ -5,6 +5,6 @@ namespace RunetId\ApiClient\Exception;
 /**
  * Class MissingArgumentException
  */
-class MissingArgumentException extends ApiException
+class MissingArgumentException extends ApiException implements ApiExceptionInterface
 {
 }
