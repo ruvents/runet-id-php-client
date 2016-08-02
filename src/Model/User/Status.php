@@ -18,8 +18,10 @@ class Status
     const ROLE_ORGANIZER = 6;
 
     const ROLE_VIDEO = 26;
-
-    /**
+	
+	const ROLE_VIRTUAL = 24;
+	
+	/**
      * @var int
      */
     public $RoleId;
@@ -56,6 +58,7 @@ class Status
             self::ROLE_PARTNER,
             self::ROLE_ORGANIZER,
             self::ROLE_VIDEO,
+            self::ROLE_VIRTUAL,
         ];
     }
 
@@ -113,5 +116,13 @@ class Status
     public function isVideo()
     {
         return $this->RoleId == self::ROLE_VIDEO;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVirtual()
+    {
+        return $this->RoleId == self::ROLE_VIRTUAL;
     }
 }
