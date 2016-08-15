@@ -60,7 +60,7 @@ class ApiClient
      */
     public function getSupportedLocales()
     {
-        return ['ru', 'en'];
+        return array('ru', 'en');
     }
 
     /**
@@ -87,9 +87,9 @@ class ApiClient
      * @param array  $headers
      * @return Response
      */
-    public function get($path, array $data = [], array $headers = [])
+    public function get($path, array $data = array(), array $headers = array())
     {
-        $request = $this->createRequest($path, $data, [], $headers);
+        $request = $this->createRequest($path, $data, array(), $headers);
 
         return $this->send('GET', $request);
     }
@@ -102,7 +102,7 @@ class ApiClient
      * @param array             $files
      * @return Response
      */
-    public function post($path, array $query = [], $data = null, array $headers = [], array $files = [])
+    public function post($path, array $query = array(), $data = null, array $headers = array(), array $files = array())
     {
         $request = $this->createRequest($path, $query, $data, $headers, $files);
 
@@ -157,15 +157,15 @@ class ApiClient
     protected function configureOptions(OptionsResolver $resolver)
     {
         $resolver
-            ->setDefaults([
+            ->setDefaults(array(
                 'host' => 'api.runet-id.com',
                 'secure' => false,
                 'key' => null,
                 'secret' => null,
-                'model_reconstructor' => [],
+                'model_reconstructor' => array(),
                 'locale' => 'ru',
-            ])
-            ->setRequired(['host', 'key', 'secret'])
+            ))
+            ->setRequired(array('host', 'key', 'secret'))
             ->setAllowedTypes('host', 'string')
             ->setAllowedTypes('secure', 'bool')
             ->setAllowedTypes('key', 'string')
@@ -182,15 +182,16 @@ class ApiClient
      * @param array             $files
      * @return Request
      */
-    protected function createRequest($path, array $query = [], $data = null, array $headers = [], array $files = [])
-    {
+    protected function createRequest(
+        $path, array $query = array(), $data = null, array $headers = array(), array $files = array()
+    ) {
         $hash = $this->generateHash($this->options['key'], $this->options['secret']);
 
-        $query = array_merge([
+        $query = array_merge(array(
             'ApiKey' => $this->options['key'],
             'Hash' => $hash,
             'Locale' => $this->options['locale'],
-        ], $query);
+        ), $query);
 
         $uri = Uri::createHttp($this->options['host'], $path, $query, $this->options['secure']);
 

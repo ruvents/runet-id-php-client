@@ -40,9 +40,9 @@ class SectionFacade extends BaseFacade
      */
     public function get($withReports = false)
     {
-        $response = $this->apiClient->get('section/info', [
+        $response = $this->apiClient->get('section/info', array(
             'SectionId' => $this->getSectionId(),
-        ]);
+        ));
 
         /** @var Section $section */
         $section = $this->processResponse($response, 'section');
@@ -82,10 +82,10 @@ class SectionFacade extends BaseFacade
      */
     public function getAll(\DateTime $fromUpdateTime = null, $withDeleted = false, $withReports = false)
     {
-        $response = $this->apiClient->get('section/list', [
+        $response = $this->apiClient->get('section/list', array(
             'FromUpdateTime' => $fromUpdateTime ? $this->formatDateTime($fromUpdateTime) : null,
             'WithDeleted' => (bool)$withDeleted,
-        ]);
+        ));
 
         /** @var Section[] $sections */
         $sections = $this->processResponse($response, 'section[]');
@@ -111,9 +111,9 @@ class SectionFacade extends BaseFacade
             $userOrRunetId = $userOrRunetId->RunetId;
         }
 
-        $response = $this->apiClient->get('section/user', [
+        $response = $this->apiClient->get('section/user', array(
             'RunetId' => $userOrRunetId,
-        ]);
+        ));
 
         return $this->processResponse($response, 'section[]');
     }
@@ -175,11 +175,11 @@ class SectionFacade extends BaseFacade
         \DateTime $fromUpdateTime = null,
         $withDeleted = false
     ) {
-        $response = $this->apiClient->get('section/reports', [
+        $response = $this->apiClient->get('section/reports', array(
             'SectionId' => $sectionId,
             'FromUpdateTime' => $fromUpdateTime ? $this->formatDateTime($fromUpdateTime) : null,
             'WithDeleted' => (bool)$withDeleted,
-        ]);
+        ));
 
         return $this->processResponse($response, 'section_report[]');
     }

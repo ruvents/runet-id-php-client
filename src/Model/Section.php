@@ -61,29 +61,29 @@ class Section
     /**
      * @var Hall[]
      */
-    public $Halls = [];
+    public $Halls = array();
 
     /**
      * @var Report[]
      */
-    public $Reports = [];
+    public $Reports = array();
 
     /**
      * @var string[]
      */
-    public $Attributes = [];
+    public $Attributes = array();
 
     /**
      * @return string[]
      */
     public static function getTypes()
     {
-        return [
+        return array(
             self::TYPE_SECTION,
             self::TYPE_ROUND_TABLE,
             self::TYPE_PARTNER,
             self::TYPE_TECHNICAL,
-        ];
+        );
     }
 
     /**
@@ -138,10 +138,10 @@ class Section
     public function getGroupedReports(array $map = null)
     {
         if (!$this->Reports) {
-            return [];
+            return array();
         }
 
-        $reports = [];
+        $reports = array();
 
         foreach ($this->Reports as $report) {
             $reports[$report->SectionRoleId][] = $report;
@@ -151,11 +151,11 @@ class Section
             return $reports;
         }
 
-        $mappedReports = [];
+        $mappedReports = array();
 
         foreach ($map as $name => $roleIds) {
             if (!isset($mappedReports[$name])) {
-                $mappedReports[$name] = [];
+                $mappedReports[$name] = array();
             }
 
             foreach ($roleIds as $roleId) {

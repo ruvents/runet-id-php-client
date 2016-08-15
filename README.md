@@ -15,10 +15,10 @@
 
 use RunetId\ApiClient\ApiClient;
 
-$client = new ApiClient($options = [
+$client = new ApiClient($options = array(
     'key' => 'runetidkey',
     'secret' => 'runetidsecret',
-]);
+));
 ?>
 ```
 
@@ -27,7 +27,7 @@ $client = new ApiClient($options = [
 ```php
 <?php
 
-$options = [
+$options = array(
     // API key (обязательный параметр)
     'key' => 'runetidkey',
     // API secret (обязательный параметр)
@@ -36,7 +36,7 @@ $options = [
     'host' => 'api.runet-id.com',
     // использовать https? (по умолчанию: false)
     'secure' => true,
-];
+);
 ```
 
 ## Примеры построения запроса встроенными методами
@@ -57,7 +57,7 @@ $users = $client->user()->search('Поиск', $maxResults = 10);
 
 $event = $client->event()->get();
 $client->event()->changeRole($runetId = 1, Status::ROLE_ORGANIZER);
-$users = $client->event()->users($maxResults = 10, [Status::ROLE_MASS_MEDIA, Status::ROLE_PARTNER]);
+$users = $client->event()->users($maxResults = 10, array(Status::ROLE_MASS_MEDIA, Status::ROLE_PARTNER));
 
 $section = $client->section($sectionId = 1)->get($withReports = true);
 $sections = $client->section()->getAll($fromUpdateTime = new \DateTime(), $withDeleted = false, $withReports = true);
@@ -79,9 +79,9 @@ $client->get(
     // относительный путь метода API (обязательный параметр)
     $path = 'event/section/list',
     // параметры строки запроса
-    $query = ['name' => 'value'],
+    $query = array('name' => 'value'),
     // заголовки
-    $headers = ['name' => 'value']
+    $headers = array('name' => 'value')
 );
 
 // отправка POST-запроса
@@ -89,13 +89,13 @@ $client->post(
     // относительный путь метода API (обязательный параметр)
     $path = 'event/section/list',
     // параметры строки запроса
-    $query = ['name' => 'value'],
+    $query = array('name' => 'value'),
     // данные (строка, или массив данных)
-    $data = ['name' => 'value'],
+    $data = array('name' => 'value'),
     // заголовки
-    $headers = ['name' => 'value'],
+    $headers = array('name' => 'value'),
     // файлы
-    $files = ['name' => new File('path/to/file')]
+    $files = array('name' => new File('path/to/file'))
 );
 ```
 

@@ -16,7 +16,7 @@ class PayFacade extends BaseFacade
      */
     public function getProducts($onlyPublic = false)
     {
-        $response = $this->apiClient->get('pay/products', ['OnlyPublic' => $onlyPublic]);
+        $response = $this->apiClient->get('pay/products', array('OnlyPublic' => $onlyPublic));
 
         return $this->processResponse($response, 'product[]');
     }
@@ -31,7 +31,7 @@ class PayFacade extends BaseFacade
             $payerRunetId = $payerRunetId->RunetId;
         }
 
-        $response = $this->apiClient->get('pay/list', ['PayerRunetId' => $payerRunetId]);
+        $response = $this->apiClient->get('pay/list', array('PayerRunetId' => $payerRunetId));
 
         $data = $this->processResponse($response);
 
@@ -46,14 +46,14 @@ class PayFacade extends BaseFacade
      * @param int   $ownerRunetId
      * @param array $attributes
      */
-    public function addOrderItem($productId, $payerRunetId, $ownerRunetId, $attributes = [])
+    public function addOrderItem($productId, $payerRunetId, $ownerRunetId, $attributes = array())
     {
-        $response = $this->apiClient->post('pay/add', [
+        $response = $this->apiClient->post('pay/add', array(
             'ProductId' => $productId,
             'PayerRunetId' => $payerRunetId,
             'OwnerRunetId' => $ownerRunetId,
             'Attributes' => $attributes,
-        ]);
+        ));
 
         $this->processResponse($response);
     }
@@ -64,10 +64,10 @@ class PayFacade extends BaseFacade
      */
     public function deleteOrderItem($orderItemId, $payerRunetId)
     {
-        $response = $this->apiClient->post('pay/delete', [
+        $response = $this->apiClient->post('pay/delete', array(
             'OrderItemId' => $orderItemId,
             'PayerRunetId' => $payerRunetId,
-        ]);
+        ));
 
         $this->processResponse($response);
     }
@@ -78,9 +78,9 @@ class PayFacade extends BaseFacade
      */
     public function getUrl($payerRunetId)
     {
-        $response = $this->apiClient->get('pay/url', [
+        $response = $this->apiClient->get('pay/url', array(
             'PayerRunetId' => $payerRunetId,
-        ]);
+        ));
 
         $data = $this->processResponse($response);
 
@@ -94,11 +94,11 @@ class PayFacade extends BaseFacade
      */
     public function activateCoupon($couponCode, $payerRunetId, $ownerRunetId)
     {
-        $response = $this->apiClient->post('pay/coupon', [
+        $response = $this->apiClient->post('pay/coupon', array(
             'CouponCode' => $couponCode,
             'PayerRunetId' => $payerRunetId,
             'OwnerRunetId' => $ownerRunetId,
-        ]);
+        ));
 
         $this->processResponse($response);
     }

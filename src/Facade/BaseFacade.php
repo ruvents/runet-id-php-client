@@ -88,7 +88,7 @@ abstract class BaseFacade
     protected function getPaginatedData($path, array $params, $maxResults, $usefulDataOffset)
     {
         $pageToken = null;
-        $usefulData = [];
+        $usefulData = array();
 
         while (!isset($maxResults) || $maxResults > 0) {
             $params['MaxResults'] = $maxResults;

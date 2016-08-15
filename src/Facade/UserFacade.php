@@ -39,9 +39,9 @@ class UserFacade extends BaseFacade
      */
     public function get()
     {
-        $response = $this->apiClient->get('user/get', [
+        $response = $this->apiClient->get('user/get', array(
             'RunetId' => $this->getRunetId(),
-        ]);
+        ));
 
         return $this->processResponse($response, 'user');
     }
@@ -52,7 +52,7 @@ class UserFacade extends BaseFacade
      */
     public function auth($token)
     {
-        $response = $this->apiClient->get('user/auth', ['token' => $token]);
+        $response = $this->apiClient->get('user/auth', array('token' => $token));
 
         return $this->processResponse($response, 'user');
     }
@@ -74,10 +74,10 @@ class UserFacade extends BaseFacade
     {
         return $this->apiClient->post(
             'user/setphoto',
-            ['RunetId' => $this->getRunetId()],
+            array('RunetId' => $this->getRunetId()),
             null,
-            [],
-            ['Image' => $file]
+            array(),
+            array('Image' => $file)
         );
     }
 
@@ -88,12 +88,12 @@ class UserFacade extends BaseFacade
      *                          символьный код доп атрибута
      * @return Response
      */
-    public function setData($attributes = [])
+    public function setData($attributes = array())
     {
-        return $this->apiClient->post('user/setdata', [
+        return $this->apiClient->post('user/setdata', array(
             'RunetId' => $this->getRunetId(),
             'Attributes' => $attributes,
-        ]);
+        ));
     }
 
     /**
@@ -107,10 +107,10 @@ class UserFacade extends BaseFacade
 
         $profInterestOrId = (int)$profInterestOrId;
 
-        $this->apiClient->get('professionalinterest/add', [
+        $this->apiClient->get('professionalinterest/add', array(
             'RunetId' => $this->getRunetId(),
             'ProfessionalInterestId' => $profInterestOrId,
-        ]);
+        ));
     }
 
     /**
@@ -124,10 +124,10 @@ class UserFacade extends BaseFacade
 
         $profInterestOrId = (int)$profInterestOrId;
 
-        $this->apiClient->get('professionalinterest/delete', [
+        $this->apiClient->get('professionalinterest/delete', array(
             'RunetId' => $this->getRunetId(),
             'ProfessionalInterestId' => $profInterestOrId,
-        ]);
+        ));
     }
 
     /**
@@ -137,7 +137,7 @@ class UserFacade extends BaseFacade
      */
     public function search($query, $maxResults = self::DEFAULT_MAX_RESULTS)
     {
-        $data = $this->getPaginatedData('user/search', ['Query' => $query], $maxResults, 'Users');
+        $data = $this->getPaginatedData('user/search', array('Query' => $query), $maxResults, 'Users');
 
         return $this->modelReconstructor->reconstruct($data, 'user[]');
     }
@@ -157,7 +157,7 @@ class UserFacade extends BaseFacade
             $data = get_object_vars($data);
         }
 
-        $response = $this->apiClient->post('user/create', [], $data);
+        $response = $this->apiClient->post('user/create', array(), $data);
 
         return $this->processResponse($response, 'user');
     }

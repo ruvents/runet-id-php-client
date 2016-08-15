@@ -84,13 +84,13 @@ class Report
      */
     public static function getRoles()
     {
-        return [
+        return array(
             self::ROLE_ORGANIZER,
             self::ROLE_HOST,
             self::ROLE_REPORTER,
             self::ROLE_ORGANIZER_HOST,
             self::ROLE_ROUND_TABLE,
-        ];
+        );
     }
 
     /**
@@ -106,10 +106,10 @@ class Report
      */
     public function isRoleHost()
     {
-        return in_array($this->SectionRoleId, [
+        return in_array($this->SectionRoleId, array(
             self::ROLE_HOST,
             self::ROLE_ORGANIZER_HOST,
-        ]);
+        ));
     }
 
     /**
@@ -117,10 +117,10 @@ class Report
      */
     public function isRoleOrganizer()
     {
-        return in_array($this->SectionRoleId, [
+        return in_array($this->SectionRoleId, array(
             self::ROLE_ORGANIZER,
             self::ROLE_ORGANIZER_HOST,
-        ]);
+        ));
     }
 
     /**

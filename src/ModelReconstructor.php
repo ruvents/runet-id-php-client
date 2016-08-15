@@ -14,39 +14,39 @@ class ModelReconstructor extends DataReconstructor
     /**
      * @inheritdoc
      */
-    protected static $defaults = [
-        'map' => [
-            'user' => [
+    protected static $defaults = array(
+        'map' => array(
+            'user' => array(
                 'CreationTime' => 'DateTime',
                 'Photo' => 'user_photo',
                 'Work' => 'user_work',
                 'Status' => 'user_status',
-            ],
-            'user_work' => [
+            ),
+            'user_work' => array(
                 'Company' => 'user_work_company',
-            ],
-            'user_status' => [
+            ),
+            'user_status' => array(
                 'UpdateTime' => 'DateTime',
-            ],
-            'section' => [
+            ),
+            'section' => array(
                 'Start' => 'DateTime',
                 'End' => 'DateTime',
                 'UpdateTime' => 'DateTime',
                 'Halls' => 'section_hall[]',
-            ],
-            'section_report' => [
+            ),
+            'section_report' => array(
                 'User' => 'user',
                 'UpdateTime' => 'DateTime',
-            ],
-            'order_item' => [
+            ),
+            'order_item' => array(
                 'Product' => 'product',
                 'Payer' => 'user',
                 'Owner' => 'user',
                 'PaidTime' => 'DateTime',
                 'CreationTime' => 'DateTime',
-            ],
-        ],
-        'model_classes' => [
+            ),
+        ),
+        'model_classes' => array(
             'error' => 'RunetId\ApiClient\Model\Error',
             'user' => 'RunetId\ApiClient\Model\User',
             'user_work_company' => 'RunetId\ApiClient\Model\User\Company',
@@ -60,8 +60,8 @@ class ModelReconstructor extends DataReconstructor
             'section_report' => 'RunetId\ApiClient\Model\Section\Report',
             'product' => 'RunetId\ApiClient\Model\Product',
             'order_item' => 'RunetId\ApiClient\Model\OrderItem',
-        ],
-    ];
+        ),
+    );
 
     /**
      * @inheritdoc
@@ -70,11 +70,13 @@ class ModelReconstructor extends DataReconstructor
     {
         parent::configureOptions($resolver);
 
+        $defModelClasses = static::$defaults['model_classes'];
+
         /** @noinspection PhpUnusedParameterInspection */
         $resolver
             ->setAllowedTypes('model_classes', 'array')
-            ->setNormalizer('model_classes', function (Options $options, $value) {
-                return array_replace(static::$defaults['model_classes'], $value);
+            ->setNormalizer('model_classes', function (Options $options, $value) use ($defModelClasses) {
+                return array_replace($defModelClasses, $value);
             });
     }
 

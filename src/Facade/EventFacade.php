@@ -32,11 +32,11 @@ class EventFacade extends BaseFacade
      */
     public function register($runetId, $roleId = User\Status::ROLE_PARTICIPANT, $usePriority = true)
     {
-        $response = $this->apiClient->post('event/register', [
+        $response = $this->apiClient->post('event/register', array(
             'RunetId' => $runetId,
             'RoleId' => $roleId,
             'UsePriority' => $usePriority,
-        ]);
+        ));
 
         $this->processResponse($response);
 
@@ -48,9 +48,9 @@ class EventFacade extends BaseFacade
      * @param array $roleIds
      * @return User[]
      */
-    public function users($maxResults = self::DEFAULT_MAX_RESULTS, array $roleIds = [])
+    public function users($maxResults = self::DEFAULT_MAX_RESULTS, array $roleIds = array())
     {
-        $data = $this->getPaginatedData('event/users', ['RoleId' => $roleIds], $maxResults, 'Users');
+        $data = $this->getPaginatedData('event/users', array('RoleId' => $roleIds), $maxResults, 'Users');
 
         return $this->modelReconstructor->reconstruct($data, 'user[]');
     }
@@ -64,10 +64,10 @@ class EventFacade extends BaseFacade
      */
     public function changeRole($runetId, $roleId)
     {
-        $response = $this->apiClient->post('event/changerole', [
+        $response = $this->apiClient->post('event/changerole', array(
             'RunetId' => $runetId,
             'RoleId' => $roleId,
-        ]);
+        ));
 
         $data = $this->processResponse($response);
 

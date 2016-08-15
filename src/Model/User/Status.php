@@ -51,7 +51,7 @@ class Status
      */
     public static function getRoles()
     {
-        return [
+        return array(
             self::ROLE_PARTICIPANT,
             self::ROLE_MASS_MEDIA,
             self::ROLE_REPORTER,
@@ -59,7 +59,7 @@ class Status
             self::ROLE_ORGANIZER,
             self::ROLE_VIDEO,
             self::ROLE_VIRTUAL,
-        ];
+        );
     }
 
     /**
