@@ -3,6 +3,7 @@
 namespace RunetId\ApiClient\Facade;
 
 use RunetId\ApiClient\Model\Event;
+use RunetId\ApiClient\Model\EventRole;
 use RunetId\ApiClient\Model\User;
 
 /**
@@ -53,6 +54,21 @@ class EventFacade extends BaseFacade
         $data = $this->getPaginatedData('event/users', array('RoleId' => $roleIds), $maxResults, 'Users');
 
         return $this->modelReconstructor->reconstruct($data, 'user[]');
+    }
+
+    /**
+     * Возвращает список статусов участия, доступных на мероприятии.
+     *
+     * @return EventRole[]
+     */
+    public function roles()
+    {
+        $roles = $this->processResponse(
+            $this->apiClient->get('event/roles')
+        );
+
+        return $this->modelReconstructor
+            ->reconstruct($roles, 'event_role[]');
     }
 
     /**

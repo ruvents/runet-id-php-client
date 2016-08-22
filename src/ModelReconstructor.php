@@ -55,6 +55,7 @@ class ModelReconstructor extends DataReconstructor
             'user_work' => 'RunetId\ApiClient\Model\User\Work',
             'prof_interest' => 'RunetId\ApiClient\Model\ProfInterest',
             'event' => 'RunetId\ApiClient\Model\Event',
+            'event_role' => 'RunetId\ApiClient\Model\EventRole',
             'section' => 'RunetId\ApiClient\Model\Section',
             'section_hall' => 'RunetId\ApiClient\Model\Section\Hall',
             'section_report' => 'RunetId\ApiClient\Model\Section\Report',

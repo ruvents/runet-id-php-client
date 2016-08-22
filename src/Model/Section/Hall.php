@@ -37,6 +37,6 @@ class Hall
      */
     public function __toString()
     {
-        return (string)$this->Title;
+        return $this->Title;
     }
 }
