@@ -2,6 +2,7 @@
 
 namespace RunetId\ApiClient\Facade;
 
+use RunetId\ApiClient\Model\Basket;
 use RunetId\ApiClient\Model\Product;
 use RunetId\ApiClient\Model\User;
 
@@ -13,6 +14,7 @@ class PayFacade extends BaseFacade
     /**
      * @param bool $onlyPublic
      * @return Product[]
+     * @throws \RunetId\ApiClient\Exception\ResponseException
      */
     public function getProducts($onlyPublic = false)
     {
@@ -22,22 +24,43 @@ class PayFacade extends BaseFacade
     }
 
     /**
-     * @param User|int $payerRunetId
-     * @return array
+     * Получает информацию о позициях в корзине и совершённых ранее заказах
+     *
+     * @param $payer
+     * @return Basket
+     * @throws \RunetId\ApiClient\Exception\ResponseException
      */
-    public function getOrderItems($payerRunetId)
+    public function getBasket($payer)
     {
-        if ($payerRunetId instanceof User) {
-            $payerRunetId = $payerRunetId->RunetId;
+        if ($payer instanceof User) {
+            $payer = $payer->RunetId;
         }
 
-        $response = $this->apiClient->get('pay/list', array('PayerRunetId' => $payerRunetId));
+        $data = $this->processResponse($this->apiClient->get('pay/list', [
+            'PayerRunetId' => $payer
+        ]));
 
-        $data = $this->processResponse($response);
+        $basket = new Basket();
+        $basket->setItems($this->modelReconstructor->reconstruct($data['Items'], 'order_item[]'));
+        $basket->setOrders($this->modelReconstructor->reconstruct($data['Orders'], 'order[]'));
 
-        $data['Items'] = $this->modelReconstructor->reconstruct($data['Items'], 'order_item[]');
+        return $basket;
+    }
 
-        return $data;
+    /**
+     * @deprecated Данный метод будет убран в версии 3.0. Переходим на использование getBasket()
+     * @param User|int $payer
+     * @return array
+     * @throws \RunetId\ApiClient\Exception\ResponseException
+     */
+    public function getOrderItems($payer)
+    {
+        $basket = $this->getBasket($payer);
+
+        return array(
+            'Items' => $basket->getItems(),
+            'Orders' => $basket->getOrders()
+        );
     }
 
     /**

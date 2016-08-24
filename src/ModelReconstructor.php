@@ -45,6 +45,10 @@ class ModelReconstructor extends DataReconstructor
                 'PaidTime' => 'DateTime',
                 'CreationTime' => 'DateTime',
             ),
+            'order' => array(
+                'CreationTime' => 'DateTime',
+                'Items' => 'order_item[]'
+            )
         ),
         'model_classes' => array(
             'error' => 'RunetId\ApiClient\Model\Error',
@@ -60,6 +64,7 @@ class ModelReconstructor extends DataReconstructor
             'section_hall' => 'RunetId\ApiClient\Model\Section\Hall',
             'section_report' => 'RunetId\ApiClient\Model\Section\Report',
             'product' => 'RunetId\ApiClient\Model\Product',
+            'order' => 'RunetId\ApiClient\Model\Order',
             'order_item' => 'RunetId\ApiClient\Model\OrderItem',
         ),
     );

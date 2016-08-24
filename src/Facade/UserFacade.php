@@ -174,7 +174,7 @@ class UserFacade extends BaseFacade
      * @throws MissingArgumentException
      * @return int
      */
-    protected function getRunetId()
+    public function getRunetId()
     {
         if (!isset($this->runetId)) {
             throw new MissingArgumentException('RunetId is not set');
