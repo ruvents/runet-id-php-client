@@ -149,15 +149,23 @@ class UserFacade extends BaseFacade
     public function create($data)
     {
         if (is_object($data)) {
-            @trigger_error(
-                'Passig an object to user.create is deprecated since version 2.1.5 and will be removed in 3.0.',
-                E_USER_DEPRECATED
-            );
-
+            @trigger_error('Passig an object to user.create is deprecated since version 2.1.5 and will be removed in 3.0.',
+                E_USER_DEPRECATED);
             $data = get_object_vars($data);
         }
 
         $response = $this->apiClient->post('user/create', array(), $data);
+
+        return $this->processResponse($response, 'user');
+    }
+
+    /**
+     * @param array|object $data
+     * @return User
+     */
+    public function edit($data)
+    {
+        $response = $this->apiClient->post('user/edit', ['RunetId' => $this->getRunetId()], $data);
 
         return $this->processResponse($response, 'user');
     }
