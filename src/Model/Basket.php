@@ -51,6 +51,51 @@ class Basket
     }
 
     /**
+	 * Проверяет наличие посетителя в корзине и выставленных счетах
+	 *
+	 * @param $person int RunetId посетителя
+	 * @return bool
+	 */
+	public function isPersonExists($person)
+	{
+		if (!is_numeric($person))
+			throw new InvalidArgumentException('The $runetId argument must be numeric.');
+		
+		foreach ($this->Items as $item)
+		{
+			/** @noinspection TypeUnsafeComparisonInspection */
+			if ($item->Payer->RunetId == $person)
+			{
+				return true;
+			}
+			/** @noinspection TypeUnsafeComparisonInspection */
+			if ($item->Owner->RunetId == $person)
+			{
+				return true;
+			}
+		}
+		
+		foreach ($this->Orders as $order)
+		{
+			foreach ($order->Items as $item)
+			{
+				/** @noinspection TypeUnsafeComparisonInspection */
+				if ($item->Payer->RunetId == $person)
+				{
+					return true;
+				}
+				/** @noinspection TypeUnsafeComparisonInspection */
+				if ($item->Owner->RunetId == $person)
+				{
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
      * @return OrderItem[]
      */
     public function getItems()
