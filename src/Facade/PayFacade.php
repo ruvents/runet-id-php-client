@@ -83,6 +83,24 @@ class PayFacade extends BaseFacade
 
     /**
      * @param int $orderItemId
+     * @param int $productId
+     * @param int $payerRunetId
+     * @param int $ownerRunetId
+     */
+    public function editOrderItem($orderItemId, $productId, $payerRunetId, $ownerRunetId)
+    {
+        $response = $this->apiClient->post('pay/edit', array(
+            'ProductId' => $productId,
+            'OrderItemId' => $orderItemId,
+            'PayerRunetId' => $payerRunetId,
+            'OwnerRunetId' => $ownerRunetId
+        ));
+
+        $this->processResponse($response);
+    }
+
+    /**
+     * @param int $orderItemId
      * @param int $payerRunetId
      */
     public function deleteOrderItem($orderItemId, $payerRunetId)
