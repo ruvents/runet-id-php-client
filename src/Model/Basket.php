@@ -2,6 +2,7 @@
 
 namespace RunetId\ApiClient\Model;
 
+use AppBundle\Entity\RunetId\Role;
 use RunetId\ApiClient\Exception\InvalidArgumentException;
 
 class Basket
@@ -86,6 +87,44 @@ class Basket
         }
 
         return false;
+    }
+
+    /**
+     * Возвращает статистику по находящимся в счетах посетителям
+     *
+     * @return array[]
+     */
+    public function getPersonsStat()
+    {
+        $result = array();
+
+        foreach ($this->Items as $item) {
+            if (isset($result[$item->Owner->RunetId]) === false) {
+                $result[$item->Owner->RunetId] = [];
+            }
+
+            $result[$item->Owner->RunetId]['isCounted'] = true;
+        }
+
+        foreach ($this->Orders as $order) {
+            foreach ($order->Items as $item) {
+                if (isset($result[$item->Owner->RunetId]) === false) {
+                    $result[$item->Owner->RunetId] = [];
+                }
+
+                /** @noinspection TypeUnsafeComparisonInspection */
+                $result[$item->Owner->RunetId]['isPaidFor'] = $order->Paid;
+                $result[$item->Owner->RunetId]['isOrdered'] = true;
+            }
+        }
+
+        foreach ($result as $runetid => $stat) {
+            if (isset($stat['isCounted']) === false) $stat['isCounted'] = false;
+            if (isset($stat['isOrdered']) === false) $stat['isOrdered'] = false;
+            if (isset($stat['isPaidFor']) === false) $stat['isPaidFor'] = false;
+        }
+
+        return $result;
     }
 
     /**
