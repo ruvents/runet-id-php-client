@@ -163,6 +163,17 @@ class UserFacade extends BaseFacade
     }
 
     /**
+     * @param array $data
+     * @return User
+     */
+    public function edit($data)
+    {
+        $response = $this->apiClient->post('user/edit', array(), $data);
+
+        return $this->processResponse($response, 'user');
+    }
+
+    /**
      * @return bool
      */
     public function isParticipant()
