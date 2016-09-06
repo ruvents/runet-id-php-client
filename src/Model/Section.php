@@ -137,10 +137,6 @@ class Section
      */
     public function getGroupedReports(array $map = null)
     {
-        if (!$this->Reports) {
-            return array();
-        }
-
         $reports = array();
 
         foreach ($this->Reports as $report) {
