@@ -168,7 +168,10 @@ class UserFacade extends BaseFacade
      */
     public function edit($data)
     {
-        $response = $this->apiClient->post('user/edit', array(), $data);
+        $response = $this->apiClient->post('user/edit', array(), array_replace(
+            array('RunetId' => $this->getRunetId()),
+            $data
+        ));
 
         return $this->processResponse($response, 'user');
     }
