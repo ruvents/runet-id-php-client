@@ -31,6 +31,11 @@ class Section
     /**
      * @var string
      */
+    public $ShortTitle;
+
+    /**
+     * @var string
+     */
     public $Info;
 
     /**
