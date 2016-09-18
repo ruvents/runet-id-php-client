@@ -92,6 +92,11 @@ class User
     public $Phones;
 
     /**
+     * @var array
+     */
+    public $Attributes = [];
+
+    /**
      * @param int $runetId
      * @return string
      * @throws InvalidArgumentException
