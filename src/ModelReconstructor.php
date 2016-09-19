@@ -38,6 +38,9 @@ class ModelReconstructor extends DataReconstructor
                 'User' => 'user',
                 'UpdateTime' => 'DateTime',
             ),
+            'section_favorite' => array(
+                'UpdateTime' => 'DateTime',
+            ),
             'order_item' => array(
                 'Product' => 'product',
                 'Payer' => 'user',
@@ -47,8 +50,8 @@ class ModelReconstructor extends DataReconstructor
             ),
             'order' => array(
                 'CreationTime' => 'DateTime',
-                'Items' => 'order_item[]'
-            )
+                'Items' => 'order_item[]',
+            ),
         ),
         'model_classes' => array(
             'error' => 'RunetId\ApiClient\Model\Error',
@@ -63,6 +66,7 @@ class ModelReconstructor extends DataReconstructor
             'section' => 'RunetId\ApiClient\Model\Section',
             'section_hall' => 'RunetId\ApiClient\Model\Section\Hall',
             'section_report' => 'RunetId\ApiClient\Model\Section\Report',
+            'section_favorite' => 'RunetId\ApiClient\Model\Section\Favorite',
             'product' => 'RunetId\ApiClient\Model\Product',
             'order' => 'RunetId\ApiClient\Model\Order',
             'order_item' => 'RunetId\ApiClient\Model\OrderItem',

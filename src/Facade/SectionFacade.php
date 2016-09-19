@@ -2,6 +2,7 @@
 
 namespace RunetId\ApiClient\Facade;
 
+use DateTime;
 use RunetId\ApiClient\ApiClient;
 use RunetId\ApiClient\Exception\MissingArgumentException;
 use RunetId\ApiClient\Model\Section;
@@ -75,12 +76,12 @@ class SectionFacade extends BaseFacade
     /**
      * Получение всех секций
      *
-     * @param \DateTime $fromUpdateTime
-     * @param bool      $withDeleted
-     * @param bool      $withReports
+     * @param DateTime $fromUpdateTime
+     * @param bool     $withDeleted
+     * @param bool     $withReports
      * @return Section[]
      */
-    public function getAll(\DateTime $fromUpdateTime = null, $withDeleted = false, $withReports = false)
+    public function getAll(DateTime $fromUpdateTime = null, $withDeleted = false, $withReports = false)
     {
         $response = $this->apiClient->get('section/list', array(
             'FromUpdateTime' => $fromUpdateTime ? $this->formatDateTime($fromUpdateTime) : null,
@@ -121,11 +122,11 @@ class SectionFacade extends BaseFacade
     /**
      * Получение докладов в секции
      *
-     * @param \DateTime $fromUpdateTime
-     * @param bool      $withDeleted
+     * @param DateTime $fromUpdateTime
+     * @param bool     $withDeleted
      * @return Section\Report[]
      */
-    public function getReports(\DateTime $fromUpdateTime = null, $withDeleted = false)
+    public function getReports(DateTime $fromUpdateTime = null, $withDeleted = false)
     {
         return $this->getReportsBySectionId($this->getSectionId(), $fromUpdateTime, $withDeleted);
     }
@@ -133,13 +134,13 @@ class SectionFacade extends BaseFacade
     /**
      * Получение докладов в секции
      *
-     * @param \DateTime $fromUpdateTime
-     * @param bool      $withDeleted
+     * @param DateTime $fromUpdateTime
+     * @param bool     $withDeleted
      * @return Section\Report[]
      * @deprecated method is deprecated since version 2.1.9 and will be removed in 3.0
      * @see        SectionFacade::getReports
      */
-    public function reports(\DateTime $fromUpdateTime = null, $withDeleted = false)
+    public function reports(DateTime $fromUpdateTime = null, $withDeleted = false)
     {
         @trigger_error(
             'The "'.__METHOD__.'" method is deprecated since version 2.1.9 and will be removed in version 3.0. Use the "'.__CLASS__.'::get()" method instead.',
@@ -147,6 +148,57 @@ class SectionFacade extends BaseFacade
         );
 
         return $this->getReports($fromUpdateTime, $withDeleted);
+    }
+
+    /**
+     * @param int $runetId
+     * @param int $sectionId
+     * @return bool
+     */
+    public function addFavorite($runetId, $sectionId)
+    {
+        $response = $this->apiClient->post('section/addFavorite', array(
+            'RunetId' => $runetId,
+            'SectionId' => $sectionId,
+        ));
+
+        $data = $this->processResponse($response);
+
+        return (bool)$data['Success'];
+    }
+
+    /**
+     * @param int $runetId
+     * @param int $sectionId
+     * @return bool
+     */
+    public function deleteFavorite($runetId, $sectionId)
+    {
+        $response = $this->apiClient->post('section/deleteFavorite', array(
+            'RunetId' => $runetId,
+            'SectionId' => $sectionId,
+        ));
+
+        $data = $this->processResponse($response);
+
+        return (bool)$data['Success'];
+    }
+
+    /**
+     * @param int           $runetId
+     * @param DateTime|null $fromUpdateTime
+     * @param bool          $withDeleted
+     * @return Section\Favorite[]
+     */
+    public function getFavorites($runetId, DateTime $fromUpdateTime = null, $withDeleted = false)
+    {
+        $response = $this->apiClient->post('section/favorites', array(
+            'RunetId' => $runetId,
+            'FromUpdateTime' => $fromUpdateTime ? $this->formatDateTime($fromUpdateTime) : null,
+            'WithDeleted' => $withDeleted,
+        ));
+
+        return $this->processResponse($response, 'section_favorite[]');
     }
 
     /**
@@ -165,14 +217,14 @@ class SectionFacade extends BaseFacade
     }
 
     /**
-     * @param int       $sectionId
-     * @param \DateTime $fromUpdateTime
-     * @param bool      $withDeleted
+     * @param int      $sectionId
+     * @param DateTime $fromUpdateTime
+     * @param bool     $withDeleted
      * @return Section\Report[]
      */
     protected function getReportsBySectionId(
         $sectionId,
-        \DateTime $fromUpdateTime = null,
+        DateTime $fromUpdateTime = null,
         $withDeleted = false
     ) {
         $response = $this->apiClient->get('section/reports', array(
