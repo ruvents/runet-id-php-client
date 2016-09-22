@@ -2,7 +2,6 @@
 
 namespace RunetId\ApiClient\Model;
 
-use AppBundle\Entity\RunetId\Role;
 use RunetId\ApiClient\Exception\InvalidArgumentException;
 
 class Basket
@@ -29,8 +28,9 @@ class Basket
      */
     public function isProductExists($product)
     {
-        if (!is_numeric($product))
+        if (!is_numeric($product)) {
             throw new InvalidArgumentException('The $runetId argument must be numeric.');
+        }
 
         foreach ($this->Items as $item) {
             /** @noinspection TypeUnsafeComparisonInspection */
@@ -59,8 +59,9 @@ class Basket
      */
     public function isPersonExists($person)
     {
-        if (!is_numeric($person))
+        if (!is_numeric($person)) {
             throw new InvalidArgumentException('The $runetId argument must be numeric.');
+        }
 
         foreach ($this->Items as $item) {
             /** @noinspection TypeUnsafeComparisonInspection */
@@ -119,9 +120,15 @@ class Basket
         }
 
         foreach ($result as $runetid => $stat) {
-            if (isset($stat['isCounted']) === false) $stat['isCounted'] = false;
-            if (isset($stat['isOrdered']) === false) $stat['isOrdered'] = false;
-            if (isset($stat['isPaidFor']) === false) $stat['isPaidFor'] = false;
+            if (isset($stat['isCounted']) === false) {
+                $stat['isCounted'] = false;
+            }
+            if (isset($stat['isOrdered']) === false) {
+                $stat['isOrdered'] = false;
+            }
+            if (isset($stat['isPaidFor']) === false) {
+                $stat['isPaidFor'] = false;
+            }
         }
 
         return $result;

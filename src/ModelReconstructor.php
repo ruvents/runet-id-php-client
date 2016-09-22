@@ -52,6 +52,10 @@ class ModelReconstructor extends DataReconstructor
                 'CreationTime' => 'DateTime',
                 'Items' => 'order_item[]',
             ),
+            'basket' => array(
+                'Items' => 'order_item[]',
+                'Orders' => 'order[]',
+            ),
         ),
         'model_classes' => array(
             'error' => 'RunetId\ApiClient\Model\Error',
@@ -70,6 +74,7 @@ class ModelReconstructor extends DataReconstructor
             'product' => 'RunetId\ApiClient\Model\Product',
             'order' => 'RunetId\ApiClient\Model\Order',
             'order_item' => 'RunetId\ApiClient\Model\OrderItem',
+            'basket' => 'RunetId\ApiClient\Model\Basket',
         ),
     );
 

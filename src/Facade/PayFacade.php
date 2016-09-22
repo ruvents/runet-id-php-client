@@ -2,6 +2,7 @@
 
 namespace RunetId\ApiClient\Facade;
 
+use RunetId\ApiClient\Exception\ResponseException;
 use RunetId\ApiClient\Model\Basket;
 use RunetId\ApiClient\Model\Product;
 use RunetId\ApiClient\Model\User;
@@ -14,7 +15,7 @@ class PayFacade extends BaseFacade
     /**
      * @param bool $onlyPublic
      * @return Product[]
-     * @throws \RunetId\ApiClient\Exception\ResponseException
+     * @throws ResponseException
      */
     public function getProducts($onlyPublic = false)
     {
@@ -28,7 +29,7 @@ class PayFacade extends BaseFacade
      *
      * @param $payer
      * @return Basket
-     * @throws \RunetId\ApiClient\Exception\ResponseException
+     * @throws ResponseException
      */
     public function getBasket($payer)
     {
@@ -36,22 +37,17 @@ class PayFacade extends BaseFacade
             $payer = $payer->RunetId;
         }
 
-        $data = $this->processResponse($this->apiClient->get('pay/list', [
-            'PayerRunetId' => $payer
-        ]));
-
-        $basket = new Basket();
-        $basket->setItems($this->modelReconstructor->reconstruct($data['Items'], 'order_item[]'));
-        $basket->setOrders($this->modelReconstructor->reconstruct($data['Orders'], 'order[]'));
-
-        return $basket;
+        return $this->processResponse(
+            $this->apiClient->get('pay/list', ['PayerRunetId' => $payer]),
+            'basket'
+        );
     }
 
     /**
      * @deprecated Данный метод будет убран в версии 3.0. Переходим на использование getBasket()
      * @param User|int $payer
      * @return array
-     * @throws \RunetId\ApiClient\Exception\ResponseException
+     * @throws ResponseException
      */
     public function getOrderItems($payer)
     {
@@ -59,7 +55,7 @@ class PayFacade extends BaseFacade
 
         return array(
             'Items' => $basket->getItems(),
-            'Orders' => $basket->getOrders()
+            'Orders' => $basket->getOrders(),
         );
     }
 
@@ -93,7 +89,7 @@ class PayFacade extends BaseFacade
             'ProductId' => $productId,
             'OrderItemId' => $orderItemId,
             'PayerRunetId' => $payerRunetId,
-            'OwnerRunetId' => $ownerRunetId
+            'OwnerRunetId' => $ownerRunetId,
         ));
 
         $this->processResponse($response);
