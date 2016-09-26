@@ -75,6 +75,7 @@ class ModelReconstructor extends DataReconstructor
             'order' => 'RunetId\ApiClient\Model\Order',
             'order_item' => 'RunetId\ApiClient\Model\OrderItem',
             'basket' => 'RunetId\ApiClient\Model\Basket',
+            'connect_place' => 'RunetId\ApiClient\Model\Connect\Place',
         ),
     );
 

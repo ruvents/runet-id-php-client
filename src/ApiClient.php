@@ -3,6 +3,7 @@
 namespace RunetId\ApiClient;
 
 use RunetId\ApiClient\Exception\UnexpectedValueException;
+use RunetId\ApiClient\Facade\ConnectFacade;
 use RunetId\ApiClient\Facade\EventFacade;
 use RunetId\ApiClient\Facade\PayFacade;
 use RunetId\ApiClient\Facade\ProfInterestFacade;
@@ -31,7 +32,7 @@ class ApiClient
     protected $modelReconstructor;
 
     /**
-     * @param array $options
+     * @param array                  $options
      * @param DataReconstructor|null $modelReconstructor
      * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
      * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
@@ -89,8 +90,8 @@ class ApiClient
 
     /**
      * @param string $path
-     * @param array $data
-     * @param array $headers
+     * @param array  $data
+     * @param array  $headers
      * @return Response
      * @throws \Ruvents\HttpClient\Exception\RuntimeException
      * @throws \Ruvents\HttpClient\Exception\CurlException
@@ -104,11 +105,11 @@ class ApiClient
     }
 
     /**
-     * @param string $path
-     * @param array $query
+     * @param string            $path
+     * @param array             $query
      * @param null|string|array $data
-     * @param array $headers
-     * @param array $files
+     * @param array             $headers
+     * @param array             $files
      * @return Response
      * @throws \Ruvents\HttpClient\Exception\RuntimeException
      * @throws \Ruvents\HttpClient\Exception\CurlException
@@ -164,6 +165,14 @@ class ApiClient
     }
 
     /**
+     * @return ConnectFacade
+     */
+    public function connect()
+    {
+        return new ConnectFacade($this, $this->modelReconstructor);
+    }
+
+    /**
      * @param OptionsResolver $resolver
      * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
      * @throws \Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException
@@ -191,11 +200,11 @@ class ApiClient
     }
 
     /**
-     * @param string $path
-     * @param array $query
+     * @param string            $path
+     * @param array             $query
      * @param null|string|array $data
-     * @param array $headers
-     * @param array $files
+     * @param array             $headers
+     * @param array             $files
      * @return Request
      * @throws \Ruvents\HttpClient\Exception\InvalidArgumentException
      */
@@ -219,7 +228,7 @@ class ApiClient
     }
 
     /**
-     * @param string $method
+     * @param string  $method
      * @param Request $request
      * @return Response
      * @throws \Ruvents\HttpClient\Exception\RuntimeException
