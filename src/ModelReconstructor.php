@@ -6,9 +6,6 @@ use Ruvents\DataReconstructor\DataReconstructor;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class ModelReconstructor
- */
 class ModelReconstructor extends DataReconstructor
 {
     /**
@@ -56,6 +53,16 @@ class ModelReconstructor extends DataReconstructor
                 'Items' => 'order_item[]',
                 'Orders' => 'order[]',
             ),
+            'connection' => array(
+                'Place' => 'connection_place',
+                'Creator' => 'user',
+                'Users' => 'connection_response[]',
+                'Date' => 'DateTime',
+                'CreateTime' => 'DateTime',
+            ),
+            'connection_user_info' => array(
+                'User' => 'user',
+            ),
         ),
         'model_classes' => array(
             'error' => 'RunetId\ApiClient\Model\Error',
@@ -75,7 +82,9 @@ class ModelReconstructor extends DataReconstructor
             'order' => 'RunetId\ApiClient\Model\Order',
             'order_item' => 'RunetId\ApiClient\Model\OrderItem',
             'basket' => 'RunetId\ApiClient\Model\Basket',
-            'connect_place' => 'RunetId\ApiClient\Model\Connect\Place',
+            'connection' => 'RunetId\ApiClient\Model\Connection',
+            'connection_place' => 'RunetId\ApiClient\Model\Connection\Place',
+            'connection_response' => 'RunetId\ApiClient\Model\Connection\Response',
         ),
     );
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace RunetId\ApiClient\Model\Connect;
+namespace RunetId\ApiClient\Model\Connection;
 
 class Place
 {

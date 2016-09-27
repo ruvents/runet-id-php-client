@@ -2,7 +2,8 @@
 
 namespace RunetId\ApiClient\Facade;
 
-use RunetId\ApiClient\Model\Connect\Place;
+use RunetId\ApiClient\Model\Connection;
+use RunetId\ApiClient\Model\Connection\Place;
 use RunetId\ApiClient\Model\User;
 
 class ConnectFacade extends BaseFacade
@@ -42,6 +43,19 @@ class ConnectFacade extends BaseFacade
     }
 
     /**
+     * @param array $parameters
+     * @return Connection
+     */
+    public function create(array $parameters)
+    {
+        $response = $this->apiClient->post('connect/create', $parameters);
+
+        $data = $this->processResponse($response);
+
+        return $this->modelReconstructor->reconstruct($data['Meeting'], 'connection');
+    }
+
+    /**
      * @return Place[]
      */
     public function getPlaces()
@@ -50,6 +64,76 @@ class ConnectFacade extends BaseFacade
 
         $data = $this->processResponse($response);
 
-        return $this->modelReconstructor->reconstruct($data['Places'], 'connect_place[]');
+        return $this->modelReconstructor->reconstruct($data['Places'], 'connection_place[]');
+    }
+
+    /**
+     * @param int|null $type
+     * @return Connection[]
+     */
+    public function getConnections($type = null)
+    {
+        $response = $this->apiClient->get('connect/list', array(
+            'Type' => $type,
+        ));
+
+        $data = $this->processResponse($response);
+
+        return $this->modelReconstructor->reconstruct($data['Meetings'], 'connection[]');
+    }
+
+    /**
+     * @param int $runetId
+     * @param int $meetingId
+     * @return bool
+     */
+    public function signup($runetId, $meetingId)
+    {
+        $response = $this->apiClient->post('connect/signup', array(
+            'RunetId' => $runetId,
+            'MeetingId' => $meetingId,
+        ));
+
+        $data = $this->processResponse($response);
+
+        return $data['Success'];
+    }
+
+    /**
+     * @param int    $runetId
+     * @param int    $meetingId
+     * @param string $response
+     * @return bool
+     */
+    public function accept($runetId, $meetingId, $response)
+    {
+        $response = $this->apiClient->post('connect/accept', array(
+            'RunetId' => $runetId,
+            'MeetingId' => $meetingId,
+            'Response' => $response,
+        ));
+
+        $data = $this->processResponse($response);
+
+        return $data['Success'];
+    }
+
+    /**
+     * @param int    $runetId
+     * @param int    $meetingId
+     * @param string $response
+     * @return bool
+     */
+    public function decline($runetId, $meetingId, $response)
+    {
+        $response = $this->apiClient->post('connect/decline', array(
+            'RunetId' => $runetId,
+            'MeetingId' => $meetingId,
+            'Response' => $response,
+        ));
+
+        $data = $this->processResponse($response);
+
+        return $data['Success'];
     }
 }
