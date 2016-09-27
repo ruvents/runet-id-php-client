@@ -101,7 +101,7 @@ class Basket
 
         foreach ($this->Items as $item) {
             if (isset($result[$item->Owner->RunetId]) === false) {
-                $result[$item->Owner->RunetId] = [];
+                $result[$item->Owner->RunetId] = array();
             }
 
             $result[$item->Owner->RunetId]['isCounted'] = true;
@@ -110,7 +110,7 @@ class Basket
         foreach ($this->Orders as $order) {
             foreach ($order->Items as $item) {
                 if (isset($result[$item->Owner->RunetId]) === false) {
-                    $result[$item->Owner->RunetId] = [];
+                    $result[$item->Owner->RunetId] = array();
                 }
 
                 /** @noinspection TypeUnsafeComparisonInspection */

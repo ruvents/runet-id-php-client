@@ -2,11 +2,6 @@
 
 namespace RunetId\ApiClient\Model;
 
-use RunetId\ApiClient\Exception\InvalidArgumentException;
-use RunetId\ApiClient\Model\User\Photo;
-use RunetId\ApiClient\Model\User\Status;
-use RunetId\ApiClient\Model\User\Work;
-
 /**
  * Статус участия посетителя на мероприятии
  */

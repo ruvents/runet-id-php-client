@@ -38,7 +38,7 @@ class PayFacade extends BaseFacade
         }
 
         return $this->processResponse(
-            $this->apiClient->get('pay/list', ['PayerRunetId' => $payer]),
+            $this->apiClient->get('pay/list', array('PayerRunetId' => $payer)),
             'basket'
         );
     }

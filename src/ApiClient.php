@@ -199,7 +199,8 @@ class ApiClient
      * @return Request
      * @throws \Ruvents\HttpClient\Exception\InvalidArgumentException
      */
-    protected function createRequest($path, array $query = [], $data = null, array $headers = [], array $files = [])
+    protected function createRequest($path, array $query = array(), $data = null, array $headers = array(), array $files = array()
+    )
     {
         $query = array_merge(array(
             'ApiKey' => $this->options['key'],

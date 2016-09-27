@@ -94,7 +94,7 @@ class User
     /**
      * @var array
      */
-    public $Attributes = [];
+    public $Attributes = array();
 
     /**
      * @param int $runetId

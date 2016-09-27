@@ -56,7 +56,7 @@ abstract class BaseFacade
      * @param null|string $modelName имя модели
      *                               (если не задано, вернется неденормализованный массив данных)
      * @throws ResponseException
-     * @return array|object
+     * @return mixed
      */
     protected function processResponse(Response $response, $modelName = null)
     {
