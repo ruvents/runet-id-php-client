@@ -2,6 +2,7 @@
 
 namespace RunetId\ApiClient\Model;
 
+use DateInterval;
 use DateTime;
 use RunetId\ApiClient\Model\Connection\Place;
 use Ruvents\DataReconstructor\DataReconstructor;
@@ -37,7 +38,12 @@ class Connection implements ReconstructableInterface
     /**
      * @var DateTime
      */
-    public $Date;
+    public $Start;
+
+    /**
+     * @var DateTime
+     */
+    public $End;
 
     /**
      * @var int
@@ -74,7 +80,8 @@ class Connection implements ReconstructableInterface
      */
     public function __construct(&$data, DataReconstructor $dataReconstructor, array $map)
     {
-        $data['Date'] = $data['Date'].' '.$data['Time'];
-        unset($data['Time']);
+        $this->Start = new DateTime($data['Date'].' '.$data['Time']);
+        $this->End = (clone $this->Start)->add(new DateInterval('PT'.$data['Place']['ReservationTime'].'M'));
+        unset($data['Date'], $data['Time']);
     }
 }

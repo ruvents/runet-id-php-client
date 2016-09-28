@@ -28,4 +28,12 @@ class Place
      * @var int
      */
     public $ReservationLimit;
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->Name;
+    }
 }
