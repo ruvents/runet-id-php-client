@@ -60,7 +60,7 @@ class ModelReconstructor extends DataReconstructor
                 'Date' => 'DateTime',
                 'CreateTime' => 'DateTime',
             ),
-            'connection_user_info' => array(
+            'connection_response' => array(
                 'User' => 'user',
             ),
         ),
