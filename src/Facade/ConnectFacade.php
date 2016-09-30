@@ -68,14 +68,12 @@ class ConnectFacade extends BaseFacade
     }
 
     /**
-     * @param int|null $type
+     * @param array $parameters
      * @return Connection[]
      */
-    public function getConnections($type = null)
+    public function getConnections($parameters = array())
     {
-        $response = $this->apiClient->get('connect/list', array(
-            'Type' => $type,
-        ));
+        $response = $this->apiClient->get('connect/list', $parameters);
 
         $data = $this->processResponse($response);
 
