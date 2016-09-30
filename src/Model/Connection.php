@@ -11,8 +11,11 @@ use Ruvents\DataReconstructor\ReconstructableInterface;
 class Connection implements ReconstructableInterface
 {
     const TYPE_PERSONAL = 1;
-
     const TYPE_GROUP = 2;
+
+    const STATUS_AWAITING = 0;
+    const STATUS_ACCEPTED = 1;
+    const STATUS_REJECTED = 2;
 
     /**
      * @var int
