@@ -10,6 +10,10 @@ use Ruvents\DataReconstructor\ReconstructableInterface;
 
 class Connection implements ReconstructableInterface
 {
+    const TYPE_PERSONAL = 1;
+
+    const TYPE_GROUP = 2;
+
     /**
      * @var int
      */
