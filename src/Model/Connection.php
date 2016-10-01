@@ -5,6 +5,7 @@ namespace RunetId\ApiClient\Model;
 use DateInterval;
 use DateTime;
 use RunetId\ApiClient\Model\Connection\Place;
+use RunetId\ApiClient\Model\Connection\Response;
 use Ruvents\DataReconstructor\DataReconstructor;
 use Ruvents\DataReconstructor\ReconstructableInterface;
 
@@ -33,7 +34,7 @@ class Connection implements ReconstructableInterface
     public $Creator;
 
     /**
-     * @var User[]
+     * @var Response[]
      */
     public $Users;
 
@@ -97,5 +98,16 @@ class Connection implements ReconstructableInterface
         $data['Users'] = $users;
 
         unset($data['Date'], $data['Time']);
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus()
+    {
+        /** @var Response $response */
+        $response = reset($this->Users);
+
+        return $response ? $response->Status : null;
     }
 }
