@@ -103,7 +103,7 @@ class ConnectFacade extends BaseFacade
      * @param string $response
      * @return bool
      */
-    public function accept($runetId, $meetingId, $response)
+    public function accept($runetId, $meetingId, $response = '')
     {
         $response = $this->apiClient->post('connect/accept', array(
             'RunetId' => $runetId,
@@ -122,7 +122,7 @@ class ConnectFacade extends BaseFacade
      * @param string $response
      * @return bool
      */
-    public function decline($runetId, $meetingId, $response)
+    public function decline($runetId, $meetingId, $response = '')
     {
         $response = $this->apiClient->post('connect/decline', array(
             'RunetId' => $runetId,
