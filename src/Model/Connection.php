@@ -2,6 +2,7 @@
 
 namespace RunetId\ApiClient\Model;
 
+use DateInterval;
 use DateTime;
 use RunetId\ApiClient\Model\Connection\Place;
 use RunetId\ApiClient\Model\Connection\Response;
@@ -11,10 +12,13 @@ use Ruvents\DataReconstructor\ReconstructableInterface;
 class Connection implements ReconstructableInterface
 {
     const TYPE_PERSONAL = 1;
+
     const TYPE_GROUP = 2;
 
     const STATUS_AWAITING = 0;
+
     const STATUS_ACCEPTED = 1;
+
     const STATUS_REJECTED = 2;
 
     /**
@@ -87,6 +91,10 @@ class Connection implements ReconstructableInterface
      */
     public function __construct(&$data, DataReconstructor $dataReconstructor, array $map)
     {
+        $this->Start = new DateTime($data['Start']);
+        $this->End = (new DateTime($data['Start']))
+            ->add(new DateInterval('PT'.$data['Place']['ReservationTime'].'M'));
+
         $users = [];
 
         foreach ($data['Users'] as $response) {
@@ -94,6 +102,7 @@ class Connection implements ReconstructableInterface
         }
 
         $data['Users'] = $users;
+        unset($data['Start']);
     }
 
     /**
