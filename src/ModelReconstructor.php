@@ -57,7 +57,7 @@ class ModelReconstructor extends DataReconstructor
                 'Place' => 'connection_place',
                 'Creator' => 'user',
                 'Users' => 'connection_response[]',
-                'Date' => 'DateTime',
+                'Start' => 'DateTime',
                 'CreateTime' => 'DateTime',
             ),
             'connection_response' => array(
