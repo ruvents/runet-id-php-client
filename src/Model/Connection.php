@@ -2,7 +2,6 @@
 
 namespace RunetId\ApiClient\Model;
 
-use DateInterval;
 use DateTime;
 use RunetId\ApiClient\Model\Connection\Place;
 use RunetId\ApiClient\Model\Connection\Response;
@@ -88,16 +87,13 @@ class Connection implements ReconstructableInterface
      */
     public function __construct(&$data, DataReconstructor $dataReconstructor, array $map)
     {
-        $this->Start = new DateTime($data['Date'].' '.$data['Time']);
-        $this->End = (clone $this->Start)->add(new DateInterval('PT'.$data['Place']['ReservationTime'].'M'));
-
         $users = [];
+
         foreach ($data['Users'] as $response) {
             $users[$response['User']['RunetId']] = $response;
         }
-        $data['Users'] = $users;
 
-        unset($data['Date'], $data['Time']);
+        $data['Users'] = $users;
     }
 
     /**
