@@ -12,12 +12,10 @@ use Ruvents\DataReconstructor\ReconstructableInterface;
 class Connection implements ReconstructableInterface
 {
     const TYPE_PERSONAL = 1;
-
     const TYPE_GROUP = 2;
 
-    const STATUS_CANCELED = 0;
-
-    const STATUS_ACTIVE = 1;
+    const STATUS_OPEN = 1;
+    const STATUS_CANCELLED = 2;
 
     /**
      * @var int
