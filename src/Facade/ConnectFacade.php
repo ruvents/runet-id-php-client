@@ -134,4 +134,23 @@ class ConnectFacade extends BaseFacade
 
         return $data['Success'];
     }
+
+    /**
+     * @param int    $runetId
+     * @param int    $meetingId
+     * @param string $response
+     * @return bool
+     */
+    public function cancel($runetId, $meetingId, $response = '')
+    {
+        $response = $this->apiClient->post('connect/cancel', array(
+            'RunetId' => $runetId,
+            'MeetingId' => $meetingId,
+            'Response' => $response,
+        ));
+
+        $data = $this->processResponse($response);
+
+        return $data['Success'];
+    }
 }
