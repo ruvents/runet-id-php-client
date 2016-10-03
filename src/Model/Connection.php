@@ -15,11 +15,9 @@ class Connection implements ReconstructableInterface
 
     const TYPE_GROUP = 2;
 
-    const STATUS_AWAITING = 0;
+    const STATUS_CANCELED = 0;
 
-    const STATUS_ACCEPTED = 1;
-
-    const STATUS_REJECTED = 2;
+    const STATUS_ACTIVE = 1;
 
     /**
      * @var int
@@ -72,6 +70,11 @@ class Connection implements ReconstructableInterface
     public $Subject;
 
     /**
+     * @var int
+     */
+    public $Status;
+
+    /**
      * @var string
      */
     public $File;
@@ -103,16 +106,5 @@ class Connection implements ReconstructableInterface
 
         $data['Users'] = $users;
         unset($data['Start']);
-    }
-
-    /**
-     * @return int
-     */
-    public function getStatus()
-    {
-        /** @var Response $response */
-        $response = reset($this->Users);
-
-        return $response ? $response->Status : null;
     }
 }
