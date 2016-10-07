@@ -94,7 +94,7 @@ class Connection implements ReconstructableInterface
     {
         $this->Start = new DateTime($data['Start']);
         $this->End = (new DateTime($data['Start']))
-            ->add(new DateInterval('PT'.$data['Place']['ReservationTime'].'M'));
+            ->add(new DateInterval('PT20M'));
 
         $users = [];
 
