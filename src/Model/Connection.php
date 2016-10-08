@@ -12,9 +12,11 @@ use Ruvents\DataReconstructor\ReconstructableInterface;
 class Connection implements ReconstructableInterface
 {
     const TYPE_PERSONAL = 1;
+
     const TYPE_GROUP = 2;
 
     const STATUS_OPEN = 1;
+
     const STATUS_CANCELLED = 2;
 
     /**
@@ -93,10 +95,10 @@ class Connection implements ReconstructableInterface
     public function __construct(&$data, DataReconstructor $dataReconstructor, array $map)
     {
         $this->Start = new DateTime($data['Start']);
-        $this->End = (new DateTime($data['Start']))
-            ->add(new DateInterval('PT20M'));
+        $this->End = new DateTime($data['Start']);
+        $this->End->add(new DateInterval('PT20M'));
 
-        $users = [];
+        $users = array();
 
         foreach ($data['Users'] as $response) {
             $users[$response['User']['RunetId']] = $response;
