@@ -19,6 +19,8 @@ class Report
 
     const ROLE_ROUND_TABLE = 5;
 
+    const ROLE_MODERATOR = 6;
+
     /**
      * @var int
      */
