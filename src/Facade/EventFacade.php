@@ -45,13 +45,21 @@ class EventFacade extends BaseFacade
     }
 
     /**
-     * @param int   $maxResults
-     * @param array $roleIds
+     * @param int        $maxResults
+     * @param array      $roleIds
+     * @param null|array $builders
      * @return User[]
      */
-    public function users($maxResults = self::DEFAULT_MAX_RESULTS, array $roleIds = array())
-    {
-        $data = $this->getPaginatedData('event/users', array('RoleId' => $roleIds), $maxResults, 'Users');
+    public function users(
+        $maxResults = self::DEFAULT_MAX_RESULTS,
+        array $roleIds = array(),
+        $builders = null
+    ) {
+        $data = $this->getPaginatedData('event/users',
+            array('RoleId' => $roleIds, 'Builders' => $builders),
+            $maxResults,
+            'Users'
+        );
 
         return $this->modelReconstructor->reconstruct($data, 'user[]');
     }
