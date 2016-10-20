@@ -22,6 +22,7 @@ class ResponseException extends ApiException implements ApiExceptionInterface
     public function __construct($message = '', $code = 0, Exception $previous = null, Response $response = null)
     {
         $this->response = $response;
+        parent::__construct($message, $code, $previous);
     }
 
     /**
