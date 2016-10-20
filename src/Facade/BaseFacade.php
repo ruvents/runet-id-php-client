@@ -60,10 +60,17 @@ abstract class BaseFacade
      */
     protected function processResponse(Response $response, $modelName = null)
     {
+        if ($response->getCode() !== 200) {
+            throw new ResponseException(
+                sprintf('Server responded with %s status code.', $response->getCode()),
+                0, null, $response
+            );
+        }
+
         $data = $response->jsonDecode(true);
 
         if (isset($data['Error'])) {
-            throw new ResponseException($data['Error']['Message'], $data['Error']['Code']);
+            throw new ResponseException($data['Error']['Message'], $data['Error']['Code'], null, $response);
         }
 
         if (isset($modelName)) {
