@@ -78,18 +78,20 @@ class UserFacade extends BaseFacade
     }
 
     /**
-     * Устанавливаем доп атрибуты пользователя
-     * @param array $attributes ['Event' => 111, 'Course' => 222 ]
-     *                          Доп атрибут сначала необходимо добавить в партнерском интерфейсе, ключ массива -
-     *                          символьный код доп атрибута
+     * Установка дополнительных атрибутов пользователя
+     * @param array $attributes Ключ - символьный код доп. атрибута
      * @return Response
      */
     public function setData($attributes = array())
     {
-        return $this->apiClient->post('user/setdata', array(), array(
+        $response = $this->apiClient->post('user/setdata', array(), array(
             'RunetId' => $this->getRunetId(),
             'Attributes' => $attributes,
         ));
+
+        $this->processResponse($response);
+
+        return $response;
     }
 
     /**
