@@ -72,11 +72,7 @@ class UserFacade extends BaseFacade
      */
     public function setPhoto($file)
     {
-        return $this->apiClient->post(
-            'user/setphoto',
-            array('RunetId' => $this->getRunetId()),
-            null,
-            array(),
+        return $this->apiClient->post('user/setphoto', array('RunetId' => $this->getRunetId()), null, array(),
             array('Image' => $file)
         );
     }
@@ -90,7 +86,7 @@ class UserFacade extends BaseFacade
      */
     public function setData($attributes = array())
     {
-        return $this->apiClient->post('user/setdata', array(
+        return $this->apiClient->post('user/setdata', array(), array(
             'RunetId' => $this->getRunetId(),
             'Attributes' => $attributes,
         ));
