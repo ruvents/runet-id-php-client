@@ -14,6 +14,8 @@ use Ruvents\HttpClient\Request\Request;
 use Ruvents\HttpClient\Request\Uri;
 use Ruvents\HttpClient\Response\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\Exception as ResolverException;
+use Ruvents\HttpClient\Exception as HttpException;
 
 /**
  * Class ApiClient
@@ -31,14 +33,14 @@ class ApiClient
     protected $modelReconstructor;
 
     /**
-     * @param array $options
+     * @param array                  $options
      * @param DataReconstructor|null $modelReconstructor
-     * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
-     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
-     * @throws \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
-     * @throws \Symfony\Component\OptionsResolver\Exception\NoSuchOptionException
-     * @throws \Symfony\Component\OptionsResolver\Exception\OptionDefinitionException
-     * @throws \Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException
+     * @throws ResolverException\AccessException
+     * @throws ResolverException\InvalidOptionsException
+     * @throws ResolverException\MissingOptionsException
+     * @throws ResolverException\NoSuchOptionException
+     * @throws ResolverException\OptionDefinitionException
+     * @throws ResolverException\UndefinedOptionsException
      */
     public function __construct(array $options, DataReconstructor $modelReconstructor = null)
     {
@@ -89,12 +91,12 @@ class ApiClient
 
     /**
      * @param string $path
-     * @param array $data
-     * @param array $headers
+     * @param array  $data
+     * @param array  $headers
      * @return Response
-     * @throws \Ruvents\HttpClient\Exception\RuntimeException
-     * @throws \Ruvents\HttpClient\Exception\CurlException
-     * @throws \Ruvents\HttpClient\Exception\InvalidArgumentException
+     * @throws HttpException\RuntimeException
+     * @throws HttpException\CurlException
+     * @throws HttpException\InvalidArgumentException
      */
     public function get($path, array $data = array(), array $headers = array())
     {
@@ -104,15 +106,15 @@ class ApiClient
     }
 
     /**
-     * @param string $path
-     * @param array $query
+     * @param string            $path
+     * @param array             $query
      * @param null|string|array $data
-     * @param array $headers
-     * @param array $files
+     * @param array             $headers
+     * @param array             $files
      * @return Response
-     * @throws \Ruvents\HttpClient\Exception\RuntimeException
-     * @throws \Ruvents\HttpClient\Exception\CurlException
-     * @throws \Ruvents\HttpClient\Exception\InvalidArgumentException
+     * @throws HttpException\RuntimeException
+     * @throws HttpException\CurlException
+     * @throws HttpException\InvalidArgumentException
      */
     public function post($path, array $query = array(), $data = null, array $headers = array(), array $files = array())
     {
@@ -165,8 +167,8 @@ class ApiClient
 
     /**
      * @param OptionsResolver $resolver
-     * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
-     * @throws \Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException
+     * @throws ResolverException\AccessException
+     * @throws ResolverException\UndefinedOptionsException
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -191,17 +193,17 @@ class ApiClient
     }
 
     /**
-     * @param string $path
-     * @param array $query
+     * @param string            $path
+     * @param array             $query
      * @param null|string|array $data
-     * @param array $headers
-     * @param array $files
+     * @param array             $headers
+     * @param array             $files
      * @return Request
-     * @throws \Ruvents\HttpClient\Exception\InvalidArgumentException
+     * @throws HttpException\InvalidArgumentException
      */
-    protected function createRequest($path, array $query = array(), $data = null, array $headers = array(), array $files = array()
-    )
-    {
+    protected function createRequest(
+        $path, array $query = array(), $data = null, array $headers = array(), array $files = array()
+    ) {
         $query = array_merge(array(
             'ApiKey' => $this->options['key'],
             'Hash' => $this->generateHash($this->options['key'], $this->options['secret']),
@@ -219,11 +221,11 @@ class ApiClient
     }
 
     /**
-     * @param string $method
+     * @param string  $method
      * @param Request $request
      * @return Response
-     * @throws \Ruvents\HttpClient\Exception\RuntimeException
-     * @throws \Ruvents\HttpClient\Exception\CurlException
+     * @throws HttpException\RuntimeException
+     * @throws HttpException\CurlException
      */
     protected function send($method, Request $request)
     {
