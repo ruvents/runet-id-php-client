@@ -157,7 +157,7 @@ class SectionFacade extends BaseFacade
      */
     public function addFavorite($runetId, $sectionId)
     {
-        $response = $this->apiClient->post('section/addFavorite', array(
+        $response = $this->apiClient->post('section/addFavorite', array(), array(
             'RunetId' => $runetId,
             'SectionId' => $sectionId,
         ));
@@ -174,7 +174,7 @@ class SectionFacade extends BaseFacade
      */
     public function deleteFavorite($runetId, $sectionId)
     {
-        $response = $this->apiClient->post('section/deleteFavorite', array(
+        $response = $this->apiClient->post('section/deleteFavorite', array(), array(
             'RunetId' => $runetId,
             'SectionId' => $sectionId,
         ));
@@ -192,7 +192,7 @@ class SectionFacade extends BaseFacade
      */
     public function getFavorites($runetId, DateTime $fromUpdateTime = null, $withDeleted = false)
     {
-        $response = $this->apiClient->post('section/favorites', array(
+        $response = $this->apiClient->post('section/favorites', array(), array(
             'RunetId' => $runetId,
             'FromUpdateTime' => $fromUpdateTime ? $this->formatDateTime($fromUpdateTime) : null,
             'WithDeleted' => $withDeleted,

@@ -33,7 +33,7 @@ class EventFacade extends BaseFacade
      */
     public function register($runetId, $roleId = User\Status::ROLE_PARTICIPANT, $usePriority = true)
     {
-        $response = $this->apiClient->post('event/register', array(
+        $response = $this->apiClient->post('event/register', array(), array(
             'RunetId' => $runetId,
             'RoleId' => $roleId,
             'UsePriority' => $usePriority,
@@ -80,7 +80,7 @@ class EventFacade extends BaseFacade
      */
     public function changeRole($runetId, $roleId)
     {
-        $response = $this->apiClient->post('event/changerole', array(
+        $response = $this->apiClient->post('event/changerole', array(), array(
             'RunetId' => $runetId,
             'RoleId' => $roleId,
         ));

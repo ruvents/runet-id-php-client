@@ -67,7 +67,7 @@ class PayFacade extends BaseFacade
      */
     public function addOrderItem($productId, $payerRunetId, $ownerRunetId, $attributes = array())
     {
-        $response = $this->apiClient->post('pay/add', array(
+        $response = $this->apiClient->post('pay/add', array(), array(
             'ProductId' => $productId,
             'PayerRunetId' => $payerRunetId,
             'OwnerRunetId' => $ownerRunetId,
@@ -85,7 +85,7 @@ class PayFacade extends BaseFacade
      */
     public function editOrderItem($orderItemId, $productId, $payerRunetId, $ownerRunetId)
     {
-        $response = $this->apiClient->post('pay/edit', array(
+        $response = $this->apiClient->post('pay/edit', array(), array(
             'ProductId' => $productId,
             'OrderItemId' => $orderItemId,
             'PayerRunetId' => $payerRunetId,
@@ -101,7 +101,7 @@ class PayFacade extends BaseFacade
      */
     public function deleteOrderItem($orderItemId, $payerRunetId)
     {
-        $response = $this->apiClient->post('pay/delete', array(
+        $response = $this->apiClient->post('pay/delete', array(), array(
             'OrderItemId' => $orderItemId,
             'PayerRunetId' => $payerRunetId,
         ));
@@ -131,7 +131,7 @@ class PayFacade extends BaseFacade
      */
     public function activateCoupon($couponCode, $payerRunetId, $ownerRunetId)
     {
-        $response = $this->apiClient->post('pay/coupon', array(
+        $response = $this->apiClient->post('pay/coupon', array(), array(
             'CouponCode' => $couponCode,
             'PayerRunetId' => $payerRunetId,
             'OwnerRunetId' => $ownerRunetId,
