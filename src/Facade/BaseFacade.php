@@ -74,7 +74,7 @@ abstract class BaseFacade
         }
 
         if (!empty($data['Errors'])) {
-            throw new ResponseException($response->getRawBody(), 0, null, $response);
+            throw new ResponseException(json_encode($data['Errors']), 0, null, $response);
         }
 
         if (isset($modelName)) {
