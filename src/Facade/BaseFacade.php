@@ -69,11 +69,11 @@ abstract class BaseFacade
 
         $data = $response->jsonDecode(true);
 
-        if (isset($data['Error'])) {
+        if (!empty($data['Error'])) {
             throw new ResponseException($data['Error']['Message'], $data['Error']['Code'], null, $response);
         }
 
-        if (isset($data['Errors'])) {
+        if (!empty($data['Errors'])) {
             throw new ResponseException($response->getRawBody(), 0, null, $response);
         }
 
