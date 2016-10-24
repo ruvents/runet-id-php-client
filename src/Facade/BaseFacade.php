@@ -73,6 +73,10 @@ abstract class BaseFacade
             throw new ResponseException($data['Error']['Message'], $data['Error']['Code'], null, $response);
         }
 
+        if (isset($data['Errors'])) {
+            throw new ResponseException($response->getRawBody(), 0, null, $response);
+        }
+
         if (isset($modelName)) {
             return $this->modelReconstructor->reconstruct($data, $modelName);
         }
