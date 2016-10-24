@@ -48,7 +48,7 @@ class ConnectFacade extends BaseFacade
      */
     public function create(array $parameters)
     {
-        $response = $this->apiClient->post('connect/create', $parameters);
+        $response = $this->apiClient->post('connect/create', array(), $parameters);
 
         $data = $this->processResponse($response);
 
@@ -87,7 +87,7 @@ class ConnectFacade extends BaseFacade
      */
     public function signup($runetId, $meetingId)
     {
-        $response = $this->apiClient->post('connect/signup', array(
+        $response = $this->apiClient->post('connect/signup', array(), array(
             'RunetId' => $runetId,
             'MeetingId' => $meetingId,
         ));
@@ -105,7 +105,7 @@ class ConnectFacade extends BaseFacade
      */
     public function accept($runetId, $meetingId, $response = '')
     {
-        $response = $this->apiClient->post('connect/accept', array(
+        $response = $this->apiClient->post('connect/accept', array(), array(
             'RunetId' => $runetId,
             'MeetingId' => $meetingId,
             'Response' => $response,
@@ -124,7 +124,7 @@ class ConnectFacade extends BaseFacade
      */
     public function decline($runetId, $meetingId, $response = '')
     {
-        $response = $this->apiClient->post('connect/decline', array(
+        $response = $this->apiClient->post('connect/decline', array(), array(
             'RunetId' => $runetId,
             'MeetingId' => $meetingId,
             'Response' => $response,
@@ -143,7 +143,7 @@ class ConnectFacade extends BaseFacade
      */
     public function cancel($runetId, $meetingId, $response = '')
     {
-        $response = $this->apiClient->post('connect/cancel', array(
+        $response = $this->apiClient->post('connect/cancel', array(), array(
             'RunetId' => $runetId,
             'MeetingId' => $meetingId,
             'Response' => $response,
