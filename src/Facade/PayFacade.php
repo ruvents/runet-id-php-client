@@ -137,6 +137,6 @@ class PayFacade extends BaseFacade
             'OwnerRunetId' => $ownerRunetId,
         ));
 
-        $this->processResponse($response);
+        return $this->processResponse($response);
     }
 }
