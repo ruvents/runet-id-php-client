@@ -35,7 +35,7 @@ $options = array(
     // хост (по умолчанию: 'api.runet-id.com')
     'host' => 'api.runet-id.com',
     // использовать https? (по умолчанию: false)
-    'secure' => true,
+    'secure' => false,
 );
 ```
 
