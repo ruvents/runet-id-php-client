@@ -6,7 +6,19 @@
 
 ## Установка
 
-`$ composer require runet-id/api-client:^2.0@alpha`
+`$ composer require runet-id/api-client:^2.0`
+
+Если при установке возникает ошибка вида `symfony/options-resolver v3.2.2 requires php >=5.5.9 -> your PHP version (5.4.45) does not satisfy that requirement`, явно пропишите в `composer.json` проекта версию php ([подробнее об этом](https://getcomposer.org/doc/06-config.md#platform)):
+
+```json
+{
+    "config": {
+        "platform": {
+            "php": "5.4"
+        }
+    }
+}
+```
 
 ## Инициализация объекта клиента
 
