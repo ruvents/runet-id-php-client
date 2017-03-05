@@ -100,3 +100,14 @@ $client->post(
 ```
 
 Методы `Client::get` и `Client::post` возвращают объект класса `Ruvents\HttpClient\Response\Response`. [Подробнее в документации RUVENTS Http Client](https://bitbucket.org/ruvents/http-client).
+
+#Старые версии php
+Для старых версий необходимо прописать версию в composer.json,  например для php 5.4
+ ```json
+{
+  "require": {
+    "php": ">=5.4.0",
+    "runet-id/api-client": "*"
+  }
+}
+```
