@@ -83,44 +83,39 @@ abstract class BaseFacade
     /**
      * Получает методом GET данные, разбитые на страницы с учетом переданного ограничения
      *
-     * @param string $path             путь для GET запроса
-     * @param array  $params           параметры GET запроса
-     * @param int    $maxResults       максимум результатов, которые требуется получить
+     * @param string   $path           путь для GET запроса
+     * @param array    $query          параметры GET запроса
+     * @param int|null $maxResults     максимум результатов, которые требуется получить
      *                                 (если null, вернутся все имеющиеся)
-     * @param string $usefulDataOffset ключ в возвращаемом массиве с данными,
+     * @param string   $dataOffset     ключ в возвращаемом массиве с данными,
      *                                 содержащий реальные данные.
      *                                 например, 'Users' для метода user.search
+     *
      * @return array
      */
-    protected function getPaginatedData($path, array $params, $maxResults, $usefulDataOffset)
+    protected function getPaginatedData($path, array $query, $maxResults, $dataOffset)
     {
-        $pageToken = null;
-        $usefulData = array();
+        $data = array();
 
-        while (!isset($maxResults) || $maxResults > 0) {
-            $params['MaxResults'] = $maxResults;
-            $params['PageToken'] = $pageToken;
+        do {
+            if (null !== $maxResults) {
+                $query['MaxResults'] = $maxResults;
+            }
 
-            $response = $this->apiClient->get($path, $params);
-            $responseData = $this->processResponse($response);
+            $response = $this->apiClient->get($path, $query)->jsonDecode(true);
+            $data = array_merge($data, $response[$dataOffset]);
 
-            if (empty($responseData) || empty($responseData[$usefulDataOffset])) {
+            if (!isset($response['NextPageToken'])) {
                 break;
             }
 
-            $usefulData = array_merge($usefulData, $responseData[$usefulDataOffset]);
+            $query['PageToken'] = $response['NextPageToken'];
 
-            if (empty($responseData['NextPageToken'])) {
-                break;
+            if (null === $maxResults) {
+                $maxResults = $response['TotalCount'];
             }
+        } while (($maxResults -= 200) > 0);
 
-            $pageToken = $responseData['NextPageToken'];
-
-            if (isset($maxResults)) {
-                $maxResults -= count($usefulData);
-            }
-        }
-
-        return $usefulData;
+        return $data;
     }
 }
