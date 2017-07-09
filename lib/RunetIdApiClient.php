@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use RunetId\ApiClient\Exception;
 use RunetId\ApiClient\Facade;
 use Ruvents\AbstractApiClient\AbstractApiClient;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RunetIdApiClient extends AbstractApiClient
@@ -44,10 +45,15 @@ class RunetIdApiClient extends AbstractApiClient
      */
     protected function configureContext(OptionsResolver $resolver)
     {
-        /** @noinspection PhpUnusedParameterInspection */
         $resolver
             ->setDefaults([
                 'authenticate' => true,
+                'endpoint' => function (Options $options) {
+                    /** @var RequestInterface $request */
+                    $request = $options['request'];
+
+                    return $request->getUri()->getPath();
+                },
                 'event_id' => null,
                 'json_decode_assoc' => true,
                 'language' => 'ru',
@@ -67,13 +73,18 @@ class RunetIdApiClient extends AbstractApiClient
 
         parse_str($request->getUri()->getQuery(), $query);
 
-        $query['Language'] = $context['language'];
-        $query['EventId'] = $context['event_id'];
+        if (!isset($query['EventId'])) {
+            $query['EventId'] = $context['event_id'];
+        }
+
+        if (!isset($query['Language'])) {
+            $query['Language'] = $context['language'];
+        }
 
         $uri = $request->getUri()
             ->withScheme($options['scheme'])
             ->withHost($options['host'])
-            ->withQuery(http_build_query(array_filter($query)));
+            ->withQuery(http_build_query($query));
 
         $request = $request->withUri($uri);
 
