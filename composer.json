@@ -1,6 +1,6 @@
 {
     "name": "runet-id/api-client",
-    "description": "The Official RUNET-ID API Client",
+    "description": "RUNET-ID Api Client",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -9,31 +9,28 @@
             "email": "udaltsov@ruvents.com"
         }
     ],
-    "require": {
-        "php": ">=5.3.9",
-        "ruvents/http-client": "^2.1",
-        "ruvents/data-reconstructor": "^2.0.0",
-        "symfony/options-resolver": "^2.8||^3.0"
-    },
     "autoload": {
         "psr-4": {
-            "RunetId\\ApiClient\\": "src/"
+            "RunetId\\ApiClient\\": "lib/"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "RunetId\\ApiClient\\": "tests/"
-        }
+    "require": {
+        "php": "^5.4 || ^7.0",
+        "ruvents/abstract-api-client": "dev-master"
     },
-    "minimum-stability": "dev",
+    "require-dev": {
+        "guzzlehttp/psr7": "^1.0",
+        "php-http/mock-client": "^1.0",
+        "symfony/serializer": "^2.8 || ^3.0"
+    },
     "config": {
         "platform": {
-            "php": "5.3.9"
+            "php": "5.5.0"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.0-dev"
+            "dev-master": "3.0-dev"
         }
     }
 }

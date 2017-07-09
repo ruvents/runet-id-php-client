@@ -1,114 +1,76 @@
-# Официальный API-клиент -RUNET--ID-
-
-Отправляет запрос к RUNET-ID и возвращает ответ в объектно-ориентированном виде.
-
-Использует библиотеки [RUVENTS Http Client](https://bitbucket.org/ruvents/http-client) и [RUVENTS Data Reconstructor](https://bitbucket.org/ruvents/data-reconstructor)
+# Официальный API клиент RUNET ID для PHP
 
 ## Установка
 
-`$ composer require runet-id/api-client:^2.0`
+### php >=5.5
 
-Если при установке возникает ошибка вида `symfony/options-resolver v3.2.2 requires php >=5.5.9 -> your PHP version (5.4.45) does not satisfy that requirement`, явно пропишите в `composer.json` проекта версию php ([подробнее об этом](https://getcomposer.org/doc/06-config.md#platform)):
+`$ composer require guzzlehttp/psr7 php-http/guzzle6-adapter runet-id/api-client:^3.0@alpha`
+
+### php 5.4
 
 ```json
 {
-    "config": {
-        "platform": {
-            "php": "5.4"
+    "require": {
+        "guzzlehttp/psr7": "^1.0",
+        "php-http/discovery": "dev-php54",
+        "php-http/guzzle5-adapter": "dev-php54",
+        "runet-id/api-client": "^3.0@alpha"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:ruvents/php-http-discovery.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:ruvents/php-http-guzzle5-adapter.git"
         }
-    }
+    ]
 }
 ```
 
-## Инициализация объекта клиента
+## Использование
+
+### Без денормализации в объекты
 
 ```php
 <?php
 
-use RunetId\ApiClient\ApiClient;
+use RunetId\ApiClient\RunetIdApiClient;
 
-$client = new ApiClient($options = array(
-    'key' => 'runetidkey',
-    'secret' => 'runetidsecret',
-));
-?>
+$options = [
+    'key' => 'key',
+    'secret' => 'secret',
+];
+
+$client = new RunetIdApiClient($options);
+
+$client->user()->get(1); //: array
+
+$client->user()->get(1, [
+    'language' => 'en',
+    'event_id' => 123
+]);
 ```
 
-## Конфигурация
+### С денормализацией
 
 ```php
 <?php
 
-$options = array(
-    // API key (обязательный параметр)
-    'key' => 'runetidkey',
-    // API secret (обязательный параметр)
-    'secret' => 'runetidsecret',
-    // хост (по умолчанию: 'api.runet-id.com')
-    'host' => 'api.runet-id.com',
-    // использовать https? (по умолчанию: false)
-    'secure' => false,
-);
+use RunetId\ApiClient\RunetIdApiClient;
+use RunetId\ApiClient\Extension\DenormalizationExtension;
+
+$options = [
+    'key' => 'key',
+    'secret' => 'secret',
+];
+
+$extensions = [
+    new DenormalizationExtension()
+];
+
+$client = new RunetIdApiClient($options, $extensions);
+
+$client->user()->get(1); //: UserInterface
 ```
-
-## Примеры построения запроса встроенными методами
-
-Все методы возвращают объекты или массивы объектов соответствующих классов. По умолчанию это классы из неймспейса `RunetId\ApiClient\Model`.
-
-```php
-<?php
-
-use RunetId\ApiClient\ApiClient;
-use RunetId\ApiClient\Model\User\Status;
-
-/** @var ApiClient $client */
-
-$user = $client->user($runetId = 1)->get();
-$user = $client->user()->getByToken('123asd3r34rsdawd3');
-$users = $client->user()->search('Поиск', $maxResults = 10);
-
-$event = $client->event()->get();
-$client->event()->changeRole($runetId = 1, Status::ROLE_ORGANIZER);
-$users = $client->event()->users($maxResults = 10, array(Status::ROLE_MASS_MEDIA, Status::ROLE_PARTNER));
-
-$section = $client->section($sectionId = 1)->get($withReports = true);
-$sections = $client->section()->getAll($fromUpdateTime = new \DateTime(), $withDeleted = false, $withReports = true);
-?>
-```
-
-## Свободный запрос
-
-```php
-<?php
-
-use RunetId\ApiClient\ApiClient;
-use Ruvents\HttpClient\Request\File;
-
-/** @var ApiClient $client */
-
-// отправка GET-запроса
-$client->get(
-    // относительный путь метода API (обязательный параметр)
-    $path = 'event/section/list',
-    // параметры строки запроса
-    $query = array('name' => 'value'),
-    // заголовки
-    $headers = array('name' => 'value')
-);
-
-// отправка POST-запроса
-$client->post(
-    // относительный путь метода API (обязательный параметр)
-    $path = 'event/section/list',
-    // параметры строки запроса
-    $query = array('name' => 'value'),
-    // данные (строка, или массив данных)
-    $data = array('name' => 'value'),
-    // заголовки
-    $headers = array('name' => 'value'),
-    // файлы
-    $files = array('name' => new File('path/to/file'))
-);
-```
-
-Методы `Client::get` и `Client::post` возвращают объект класса `Ruvents\HttpClient\Response\Response`. [Подробнее в документации RUVENTS Http Client](https://bitbucket.org/ruvents/http-client).
