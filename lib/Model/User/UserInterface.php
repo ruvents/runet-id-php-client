@@ -6,8 +6,8 @@ use RunetId\ApiClient\Model\Event\RoleInterface;
 
 interface UserInterface extends RunetIdInterface
 {
-    const MALE = 1;
-    const FEMALE = 0;
+    const MALE = 'male';
+    const FEMALE = 'female';
 
     /**
      * @return string
@@ -50,7 +50,7 @@ interface UserInterface extends RunetIdInterface
     public function isVerified();
 
     /**
-     * @return int
+     * @return string
      */
     public function getGender();
 

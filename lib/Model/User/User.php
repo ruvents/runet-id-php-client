@@ -2,11 +2,11 @@
 
 namespace RunetId\ApiClient\Model\User;
 
+use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
 use RunetId\ApiClient\Model\Event\RoleInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-class User implements UserInterface, DenormalizableInterface
+class User implements UserInterface, RunetIdDenormalizableInterface
 {
     /**
      * @var int
@@ -193,7 +193,7 @@ class User implements UserInterface, DenormalizableInterface
     /**
      * {@inheritdoc}
      */
-    public function denormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = [])
+    public function runetIdDenormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = [])
     {
         $this->runetId = (int)$data['RunetId'];
         $this->firstName = $data['FirstName'];
@@ -203,9 +203,7 @@ class User implements UserInterface, DenormalizableInterface
         $this->phone = $data['Phone'];
         $this->visible = (bool)$data['Visible'];
         $this->verified = (bool)$data['Verified'];
-        $this->gender = 'male' === strtolower($data['Gender'])
-            ? UserInterface::MALE
-            : UserInterface::FEMALE;
+        $this->gender = 'male' === strtolower($data['Gender']) ? UserInterface::MALE : UserInterface::FEMALE;
         $this->createdAt = new \DateTimeImmutable($data['CreationTime']);
         $this->attributes = (array)$data['Attributes'];
 

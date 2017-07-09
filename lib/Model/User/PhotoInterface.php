@@ -4,12 +4,12 @@ namespace RunetId\ApiClient\Model\User;
 
 interface PhotoInterface
 {
-    const SMALL = 1;
-    const MEDIUM = 2;
-    const LARGE = 3;
+    const SMALL = 'small';
+    const MEDIUM = 'medium';
+    const LARGE = 'large';
 
     /**
-     * @param int $type
+     * @param string $type
      *
      * @return string|null
      */

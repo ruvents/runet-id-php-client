@@ -2,11 +2,11 @@
 
 namespace RunetId\ApiClient\Model\User;
 
+use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
 use RunetId\ApiClient\Model\Company\CompanyInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-class Work implements WorkInterface, DenormalizableInterface
+class Work implements WorkInterface, RunetIdDenormalizableInterface
 {
     /**
      * @var string
@@ -63,7 +63,7 @@ class Work implements WorkInterface, DenormalizableInterface
     /**
      * {@inheritdoc}
      */
-    public function denormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = array())
+    public function runetIdDenormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = [])
     {
         $this->position = $data['Position'];
 

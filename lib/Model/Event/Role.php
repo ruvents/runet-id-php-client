@@ -2,7 +2,10 @@
 
 namespace RunetId\ApiClient\Model\Event;
 
-class Role implements RoleInterface
+use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+
+class Role implements RoleInterface, RunetIdDenormalizableInterface
 {
     /**
      * @var int
@@ -28,15 +31,6 @@ class Role implements RoleInterface
      * @var \DateTimeInterface
      */
     protected $updatedAt;
-
-    public function __construct(array $data)
-    {
-        $this->id = (int)$data['RoleId'];
-        $this->title = $data['RoleTitle'];
-        $this->ticketUrl = $data['TicketUrl'];
-        $this->registered = (bool)$data['Registered'];
-        $this->updatedAt = new \DateTimeImmutable($data['UpdateTime']);
-    }
 
     /**
      * {@inheritdoc}
@@ -76,5 +70,17 @@ class Role implements RoleInterface
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function runetIdDenormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = [])
+    {
+        $this->id = (int)$data['RoleId'];
+        $this->title = $data['RoleTitle'];
+        $this->ticketUrl = $data['TicketUrl'];
+        $this->registered = (bool)$data['Registered'];
+        $this->updatedAt = new \DateTimeImmutable($data['UpdateTime']);
     }
 }
