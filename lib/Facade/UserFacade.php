@@ -3,7 +3,7 @@
 namespace RunetId\ApiClient\Facade;
 
 use RunetId\ApiClient\Model\User\RunetIdInterface;
-use RunetId\ApiClient\Model\User\UserInterface;
+use RunetId\ApiClient\Model\User\User;
 
 class UserFacade extends AbstractFacade
 {
@@ -11,7 +11,7 @@ class UserFacade extends AbstractFacade
      * @param int|RunetIdInterface $runetId
      * @param array                $context
      *
-     * @return array|UserInterface
+     * @return array|User
      */
     public function get($runetId, array $context = [])
     {
@@ -22,7 +22,7 @@ class UserFacade extends AbstractFacade
      * @param string $token
      * @param array  $context
      *
-     * @return array|UserInterface
+     * @return array|User
      */
     public function getByToken($token, array $context = [])
     {
@@ -33,7 +33,7 @@ class UserFacade extends AbstractFacade
      * @param array $data
      * @param array $context
      *
-     * @return array|UserInterface
+     * @return array|User
      */
     public function create(array $data, array $context = [])
     {
@@ -44,7 +44,7 @@ class UserFacade extends AbstractFacade
      * @param array $data
      * @param array $context
      *
-     * @return array|UserInterface
+     * @return array|User
      */
     public function edit(array $data, array $context = [])
     {
