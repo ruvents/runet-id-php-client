@@ -3,7 +3,7 @@
 namespace RunetId\ApiClient\Extension;
 
 use Psr\Http\Message\RequestInterface;
-use RunetId\ApiClient\Denormalizer\ModelDenormalizer;
+use RunetId\ApiClient\Denormalizer\RunetIdDenormalizer;
 use Ruvents\AbstractApiClient\Extension\AbstractDenormalizationExtension;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -14,7 +14,11 @@ class DenormalizationExtension extends AbstractDenormalizationExtension
     /**
      * @var string[]
      */
-    private static $endpointModels = [
+    private static $endpointClasses = [
+        '/user/address' => 'RunetId\ApiClient\Model\User\Address',
+        '/user/auth' => 'RunetId\ApiClient\Model\User\User',
+        '/user/create' => 'RunetId\ApiClient\Model\User\User',
+        '/user/edit' => 'RunetId\ApiClient\Model\User\User',
         '/user/get' => 'RunetId\ApiClient\Model\User\User',
     ];
 
@@ -26,7 +30,7 @@ class DenormalizationExtension extends AbstractDenormalizationExtension
         if (null === $denormalizer) {
             $denormalizer = new Serializer([
                 new ArrayDenormalizer(),
-                new ModelDenormalizer(),
+                new RunetIdDenormalizer(),
             ]);
         }
 
@@ -40,6 +44,6 @@ class DenormalizationExtension extends AbstractDenormalizationExtension
     {
         $endpoint = $context['endpoint'];
 
-        return isset(self::$endpointModels[$endpoint]) ? self::$endpointModels[$endpoint] : null;
+        return isset(self::$endpointClasses[$endpoint]) ? self::$endpointClasses[$endpoint] : null;
     }
 }

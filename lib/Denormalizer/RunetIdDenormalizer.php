@@ -8,19 +8,8 @@ use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
 /**
  * @property DenormalizerInterface $serializer
  */
-class ModelDenormalizer extends SerializerAwareNormalizer implements DenormalizerInterface
+class RunetIdDenormalizer extends SerializerAwareNormalizer implements DenormalizerInterface
 {
-    /**
-     * @var string[]
-     */
-    private static $models = [
-        'RunetId\ApiClient\Model\Company\Company' => true,
-        'RunetId\ApiClient\Model\Event\Role' => true,
-        'RunetId\ApiClient\Model\User\Photo' => true,
-        'RunetId\ApiClient\Model\User\User' => true,
-        'RunetId\ApiClient\Model\User\Work' => true,
-    ];
-
     /**
      * {@inheritdoc}
      */
@@ -29,7 +18,9 @@ class ModelDenormalizer extends SerializerAwareNormalizer implements Denormalize
         $object = new $class();
 
         if (!$object instanceof RunetIdDenormalizableInterface) {
-            throw new \UnexpectedValueException('Class defined in ModelDenormalizer must implement RunetIdDenormalizableInterface by design.');
+            throw new \UnexpectedValueException(
+                sprintf('"%s" must implement RunetIdDenormalizableInterface.', get_class($object))
+            );
         }
 
         $object->runetIdDenormalize($this->serializer, $data, $format, $context);
@@ -42,6 +33,7 @@ class ModelDenormalizer extends SerializerAwareNormalizer implements Denormalize
      */
     public function supportsDenormalization($data, $class, $format = null)
     {
-        return isset(self::$models[$class]);
+        return class_exists($class)
+            && is_subclass_of($class, 'RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface');
     }
 }
