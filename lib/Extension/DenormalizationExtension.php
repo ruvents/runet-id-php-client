@@ -5,6 +5,7 @@ namespace RunetId\ApiClient\Extension;
 use Psr\Http\Message\RequestInterface;
 use RunetId\ApiClient\Denormalizer\ModelDenormalizer;
 use Ruvents\AbstractApiClient\Extension\AbstractDenormalizationExtension;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Serializer;
 
@@ -22,7 +23,13 @@ class DenormalizationExtension extends AbstractDenormalizationExtension
      */
     public function __construct(DenormalizerInterface $denormalizer = null)
     {
-        $denormalizer = $denormalizer ?: new Serializer([new ModelDenormalizer()]);
+        if (null === $denormalizer) {
+            $denormalizer = new Serializer([
+                new ArrayDenormalizer(),
+                new ModelDenormalizer(),
+            ]);
+        }
+
         parent::__construct($denormalizer);
     }
 
