@@ -8,13 +8,13 @@
 
 ### PHP 5.4
 
+Пропишите вручную в `composer.json`:
+
 ```json
 {
     "require": {
-        "guzzlehttp/psr7": "^1.0",
         "php-http/discovery": "dev-php54",
-        "php-http/guzzle5-adapter": "dev-php54",
-        "runet-id/api-client": "^3.0@alpha"
+        "php-http/guzzle5-adapter": "dev-php54"
     },
     "repositories": [
         {
@@ -33,6 +33,8 @@
     }
 }
 ```
+
+`$ composer require guzzlehttp/psr7 runet-id/api-client:^3.0@alpha`
 
 ### HTTP клиент
 
