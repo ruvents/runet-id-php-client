@@ -7,7 +7,7 @@ class Photo implements PhotoInterface
     /**
      * @var string[]
      */
-    private $urls = [];
+    protected $urls = [];
 
     public function __construct($data)
     {

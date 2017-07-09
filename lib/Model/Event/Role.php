@@ -7,27 +7,27 @@ class Role implements RoleInterface
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      */
-    private $ticketUrl;
+    protected $ticketUrl;
 
     /**
      * @var bool
      */
-    private $registered;
+    protected $registered;
 
     /**
      * @var \DateTimeInterface
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     public function __construct(array $data)
     {

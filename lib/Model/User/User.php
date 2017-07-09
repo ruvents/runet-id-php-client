@@ -11,72 +11,72 @@ class User implements UserInterface, DenormalizableInterface
     /**
      * @var int
      */
-    private $runetId;
+    protected $runetId;
 
     /**
      * @var string
      */
-    private $firstName;
+    protected $firstName;
 
     /**
      * @var string
      */
-    private $lastName;
+    protected $lastName;
 
     /**
      * @var string
      */
-    private $fatherName;
+    protected $fatherName;
 
     /**
      * @var string
      */
-    private $email;
+    protected $email;
 
     /**
      * @var string
      */
-    private $phone;
+    protected $phone;
 
     /**
      * @var RoleInterface
      */
-    private $eventRole;
+    protected $eventRole;
 
     /**
      * @var bool
      */
-    private $visible;
+    protected $visible;
 
     /**
      * @var bool
      */
-    private $verified;
+    protected $verified;
 
     /**
      * @var string
      */
-    private $gender;
+    protected $gender;
 
     /**
      * @var WorkInterface
      */
-    private $work;
+    protected $work;
 
     /**
      * @var PhotoInterface
      */
-    private $photo;
+    protected $photo;
 
     /**
      * @var \DateTimeImmutable
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var array
      */
-    private $attributes;
+    protected $attributes;
 
     /**
      * {@inheritdoc}

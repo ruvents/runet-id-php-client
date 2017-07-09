@@ -7,12 +7,12 @@ class Company implements CompanyInterface
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     public function __construct(array $data)
     {

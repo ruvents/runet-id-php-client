@@ -11,22 +11,22 @@ class Work implements WorkInterface, DenormalizableInterface
     /**
      * @var string
      */
-    private $position;
+    protected $position;
 
     /**
      * @var CompanyInterface
      */
-    private $company;
+    protected $company;
 
     /**
      * @var \DateTimeInterface|null
      */
-    private $start;
+    protected $start;
 
     /**
      * @var \DateTimeInterface|null
      */
-    private $end;
+    protected $end;
 
     /**
      * {@inheritdoc}
@@ -71,6 +71,15 @@ class Work implements WorkInterface, DenormalizableInterface
             $this->company = $denormalizer->denormalize($data['Company'],
                 'RunetId\ApiClient\Model\Company\CompanyInterface', $format, $context);
         }
-        // todo: start, end
+
+        if (isset($data['StartYear'])) {
+            $start = $data['StartYear'].'-'.(isset($data['StartMonth']) ? $data['StartMonth'] : 1);
+            $this->start = new \DateTimeImmutable($start);
+
+            if (isset($data['EndYear'])) {
+                $end = $data['EndYear'].'-'.(isset($data['EndMonth']) ? $data['EndMonth'] : 1);
+                $this->end = new \DateTimeImmutable($end);
+            }
+        }
     }
 }
