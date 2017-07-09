@@ -11,7 +11,10 @@ use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
  */
 class ModelDenormalizer extends SerializerAwareNormalizer implements DenormalizerInterface
 {
-    private static $classes = [
+    /**
+     * @var string[]
+     */
+    private $implementations = [
         'RunetId\ApiClient\Model\Company\CompanyInterface' => 'RunetId\ApiClient\Model\Company\Company',
         'RunetId\ApiClient\Model\Event\RoleInterface' => 'RunetId\ApiClient\Model\Event\Role',
         'RunetId\ApiClient\Model\User\PhotoInterface' => 'RunetId\ApiClient\Model\User\Photo',
@@ -19,12 +22,17 @@ class ModelDenormalizer extends SerializerAwareNormalizer implements Denormalize
         'RunetId\ApiClient\Model\User\WorkInterface' => 'RunetId\ApiClient\Model\User\Work',
     ];
 
+    public function __construct(array $implementations = [])
+    {
+        $this->implementations = array_replace($this->implementations, $implementations);
+    }
+
     /**
      * {@inheritdoc}
      */
     public function denormalize($data, $interface, $format = null, array $context = [])
     {
-        $class = self::$classes[$interface];
+        $class = $this->implementations[$interface];
         $interfaces = class_implements($class);
 
         if (isset($interfaces['Symfony\Component\Serializer\Normalizer\DenormalizableInterface'])) {
@@ -43,6 +51,6 @@ class ModelDenormalizer extends SerializerAwareNormalizer implements Denormalize
      */
     public function supportsDenormalization($data, $interface, $format = null)
     {
-        return isset(self::$classes[$interface]);
+        return isset($this->implementations[$interface]);
     }
 }
