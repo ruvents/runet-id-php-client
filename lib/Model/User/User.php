@@ -3,11 +3,14 @@
 namespace RunetId\ApiClient\Model\User;
 
 use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
-use RunetId\ApiClient\Model\Event\RoleInterface;
+use RunetId\ApiClient\Model\Event\Role;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-class User implements UserInterface, RunetIdDenormalizableInterface
+class User implements RunetIdInterface, RunetIdDenormalizableInterface
 {
+    const MALE = 'm';
+    const FEMALE = 'f';
+
     /**
      * @var int
      */
@@ -39,7 +42,7 @@ class User implements UserInterface, RunetIdDenormalizableInterface
     protected $phone;
 
     /**
-     * @var RoleInterface
+     * @var Role
      */
     protected $eventRole;
 
@@ -59,12 +62,12 @@ class User implements UserInterface, RunetIdDenormalizableInterface
     protected $gender;
 
     /**
-     * @var WorkInterface
+     * @var Work
      */
     protected $work;
 
     /**
-     * @var PhotoInterface
+     * @var Photo
      */
     protected $photo;
 
@@ -79,7 +82,7 @@ class User implements UserInterface, RunetIdDenormalizableInterface
     protected $attributes;
 
     /**
-     * {@inheritdoc}
+     * @return int
      */
     public function getRunetId()
     {
@@ -87,7 +90,7 @@ class User implements UserInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getFirstName()
     {
@@ -95,7 +98,7 @@ class User implements UserInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getLastName()
     {
@@ -103,7 +106,7 @@ class User implements UserInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getFatherName()
     {
@@ -111,7 +114,7 @@ class User implements UserInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getEmail()
     {
@@ -119,7 +122,7 @@ class User implements UserInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getPhone()
     {
@@ -127,7 +130,7 @@ class User implements UserInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return Role
      */
     public function getEventRole()
     {
@@ -135,7 +138,7 @@ class User implements UserInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return bool
      */
     public function isVisible()
     {
@@ -143,7 +146,7 @@ class User implements UserInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return bool
      */
     public function isVerified()
     {
@@ -151,7 +154,7 @@ class User implements UserInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getGender()
     {
@@ -159,7 +162,7 @@ class User implements UserInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return Work
      */
     public function getWork()
     {
@@ -167,7 +170,7 @@ class User implements UserInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return Photo
      */
     public function getPhoto()
     {
@@ -175,7 +178,7 @@ class User implements UserInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return \DateTimeImmutable
      */
     public function getCreatedAt()
     {
@@ -183,7 +186,7 @@ class User implements UserInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
     public function getAttributes()
     {
@@ -203,23 +206,23 @@ class User implements UserInterface, RunetIdDenormalizableInterface
         $this->phone = $data['Phone'];
         $this->visible = (bool)$data['Visible'];
         $this->verified = (bool)$data['Verified'];
-        $this->gender = 'male' === strtolower($data['Gender']) ? UserInterface::MALE : UserInterface::FEMALE;
+        $this->gender = 'male' === strtolower($data['Gender']) ? self::MALE : self::FEMALE;
         $this->createdAt = new \DateTimeImmutable($data['CreationTime']);
         $this->attributes = (array)$data['Attributes'];
 
         if (isset($data['Work'])) {
             $this->work = $denormalizer
-                ->denormalize($data['Work'], 'RunetId\ApiClient\Model\User\WorkInterface', $format, $context);
+                ->denormalize($data['Work'], 'RunetId\ApiClient\Model\User\Work', $format, $context);
         }
 
         if (false === strpos($data['Photo']['Small'], '/files/photo/nophoto')) {
             $this->photo = $denormalizer
-                ->denormalize($data['Photo'], 'RunetId\ApiClient\Model\User\PhotoInterface', $format, $context);
+                ->denormalize($data['Photo'], 'RunetId\ApiClient\Model\User\Photo', $format, $context);
         }
 
         if (isset($data['Status'])) {
             $this->eventRole = $denormalizer
-                ->denormalize($data['Status'], 'RunetId\ApiClient\Model\Event\RoleInterface', $format, $context);
+                ->denormalize($data['Status'], 'RunetId\ApiClient\Model\Event\Role', $format, $context);
         }
     }
 }

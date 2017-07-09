@@ -14,8 +14,8 @@ class DenormalizationExtension extends AbstractDenormalizationExtension
     /**
      * @var string[]
      */
-    private static $classes = [
-        '/user/get' => 'RunetId\ApiClient\Model\User\UserInterface',
+    private static $endpointModels = [
+        '/user/get' => 'RunetId\ApiClient\Model\User\User',
     ];
 
     /**
@@ -36,10 +36,10 @@ class DenormalizationExtension extends AbstractDenormalizationExtension
     /**
      * {@inheritdoc}
      */
-    protected function getClass(RequestInterface $request)
+    protected function getClass(RequestInterface $request, array $context)
     {
-        $path = $request->getUri()->getPath();
+        $endpoint = $context['endpoint'];
 
-        return isset(self::$classes[$path]) ? self::$classes[$path] : null;
+        return isset(self::$endpointModels[$endpoint]) ? self::$endpointModels[$endpoint] : null;
     }
 }

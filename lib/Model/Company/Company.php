@@ -5,7 +5,7 @@ namespace RunetId\ApiClient\Model\Company;
 use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-class Company implements CompanyInterface, RunetIdDenormalizableInterface
+class Company implements RunetIdDenormalizableInterface
 {
     /**
      * @var int
@@ -18,7 +18,7 @@ class Company implements CompanyInterface, RunetIdDenormalizableInterface
     protected $name;
 
     /**
-     * {@inheritdoc}
+     * @return int
      */
     public function getId()
     {
@@ -26,7 +26,7 @@ class Company implements CompanyInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getName()
     {

@@ -13,20 +13,19 @@ class ModelDenormalizer extends SerializerAwareNormalizer implements Denormalize
     /**
      * @var string[]
      */
-    private static $implementations = [
-        'RunetId\ApiClient\Model\Company\CompanyInterface' => 'RunetId\ApiClient\Model\Company\Company',
-        'RunetId\ApiClient\Model\Event\RoleInterface' => 'RunetId\ApiClient\Model\Event\Role',
-        'RunetId\ApiClient\Model\User\PhotoInterface' => 'RunetId\ApiClient\Model\User\Photo',
-        'RunetId\ApiClient\Model\User\UserInterface' => 'RunetId\ApiClient\Model\User\User',
-        'RunetId\ApiClient\Model\User\WorkInterface' => 'RunetId\ApiClient\Model\User\Work',
+    private static $models = [
+        'RunetId\ApiClient\Model\Company\Company' => true,
+        'RunetId\ApiClient\Model\Event\Role' => true,
+        'RunetId\ApiClient\Model\User\Photo' => true,
+        'RunetId\ApiClient\Model\User\User' => true,
+        'RunetId\ApiClient\Model\User\Work' => true,
     ];
 
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $interface, $format = null, array $context = [])
+    public function denormalize($data, $class, $format = null, array $context = [])
     {
-        $class = self::$implementations[$interface];
         $object = new $class();
 
         if (!$object instanceof RunetIdDenormalizableInterface) {
@@ -41,8 +40,8 @@ class ModelDenormalizer extends SerializerAwareNormalizer implements Denormalize
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, $interface, $format = null)
+    public function supportsDenormalization($data, $class, $format = null)
     {
-        return isset(self::$implementations[$interface]);
+        return isset(self::$models[$class]);
     }
 }

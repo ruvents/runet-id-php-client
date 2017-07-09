@@ -3,10 +3,10 @@
 namespace RunetId\ApiClient\Model\User;
 
 use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
-use RunetId\ApiClient\Model\Company\CompanyInterface;
+use RunetId\ApiClient\Model\Company\Company;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-class Work implements WorkInterface, RunetIdDenormalizableInterface
+class Work implements RunetIdDenormalizableInterface
 {
     /**
      * @var string
@@ -14,22 +14,22 @@ class Work implements WorkInterface, RunetIdDenormalizableInterface
     protected $position;
 
     /**
-     * @var CompanyInterface
+     * @var Company
      */
     protected $company;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var null|\DateTimeImmutable
      */
     protected $start;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var null|\DateTimeImmutable
      */
     protected $end;
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getPosition()
     {
@@ -37,7 +37,7 @@ class Work implements WorkInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return Company
      */
     public function getCompany()
     {
@@ -45,7 +45,7 @@ class Work implements WorkInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return null|\DateTimeImmutable
      */
     public function getStart()
     {
@@ -53,7 +53,7 @@ class Work implements WorkInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return null|\DateTimeImmutable
      */
     public function getEnd()
     {
@@ -69,7 +69,7 @@ class Work implements WorkInterface, RunetIdDenormalizableInterface
 
         if (isset($data['Company'])) {
             $this->company = $denormalizer->denormalize($data['Company'],
-                'RunetId\ApiClient\Model\Company\CompanyInterface', $format, $context);
+                'RunetId\ApiClient\Model\Company\Company', $format, $context);
         }
 
         if (isset($data['StartYear'])) {

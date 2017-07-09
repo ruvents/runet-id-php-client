@@ -5,7 +5,7 @@ namespace RunetId\ApiClient\Model\Event;
 use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-class Role implements RoleInterface, RunetIdDenormalizableInterface
+class Role implements RunetIdDenormalizableInterface
 {
     /**
      * @var int
@@ -28,12 +28,12 @@ class Role implements RoleInterface, RunetIdDenormalizableInterface
     protected $registered;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeImmutable
      */
     protected $updatedAt;
 
     /**
-     * {@inheritdoc}
+     * @return int
      */
     public function getId()
     {
@@ -41,7 +41,7 @@ class Role implements RoleInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getTitle()
     {
@@ -49,7 +49,7 @@ class Role implements RoleInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getTicketUrl()
     {
@@ -57,7 +57,7 @@ class Role implements RoleInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return bool
      */
     public function isRegistered()
     {
@@ -65,7 +65,7 @@ class Role implements RoleInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return \DateTimeImmutable
      */
     public function getUpdatedAt()
     {
