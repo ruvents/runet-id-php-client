@@ -16,7 +16,7 @@
     },
     "require": {
         "php": "^5.4 || ^7.0",
-        "ruvents/abstract-api-client": "dev-master"
+        "ruvents/abstract-api-client": "~0.1.0"
     },
     "require-dev": {
         "guzzlehttp/psr7": "^1.0",
