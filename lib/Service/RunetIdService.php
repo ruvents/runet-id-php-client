@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RunetIdService implements Service\ApiServiceInterface
 {
-    use Service\HttpClientTrait;
+    use Service\HttpClientDiscoveryTrait;
     use Service\Response200Trait;
     use Service\JsonDecodeTrait;
 
