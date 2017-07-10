@@ -2,12 +2,15 @@
 
 namespace RunetId\ApiClient\Facade;
 
+use RunetId\ApiClient\Common\ClassTrait;
 use RunetId\ApiClient\Model\User\ExternalIdInterface;
 use RunetId\ApiClient\Model\User\RunetIdInterface;
 use RunetId\ApiClient\RunetIdClient;
 
 abstract class AbstractFacade
 {
+    use ClassTrait;
+
     /**
      * @var RunetIdClient
      */
@@ -16,14 +19,6 @@ abstract class AbstractFacade
     public function __construct(RunetIdClient $client)
     {
         $this->client = $client;
-    }
-
-    /**
-     * @return string
-     */
-    final public static function getClass()
-    {
-        return get_called_class();
     }
 
     /**
