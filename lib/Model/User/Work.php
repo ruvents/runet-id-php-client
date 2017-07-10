@@ -2,12 +2,15 @@
 
 namespace RunetId\ApiClient\Model\User;
 
+use RunetId\ApiClient\Common\ClassTrait;
 use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
 use RunetId\ApiClient\Model\Company\Company;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class Work implements RunetIdDenormalizableInterface
 {
+    use ClassTrait;
+
     /**
      * @var string
      */
@@ -45,7 +48,7 @@ class Work implements RunetIdDenormalizableInterface
     }
 
     /**
-     * @return null|\DateTimeImmutable
+     * @return null|\DateTimeInterface
      */
     public function getStart()
     {
@@ -53,7 +56,7 @@ class Work implements RunetIdDenormalizableInterface
     }
 
     /**
-     * @return null|\DateTimeImmutable
+     * @return null|\DateTimeInterface
      */
     public function getEnd()
     {

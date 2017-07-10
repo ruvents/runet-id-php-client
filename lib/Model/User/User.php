@@ -2,14 +2,23 @@
 
 namespace RunetId\ApiClient\Model\User;
 
+use RunetId\ApiClient\Common\ClassTrait;
 use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
+use RunetId\ApiClient\Model\Common\Image;
 use RunetId\ApiClient\Model\Event\Role;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class User implements RunetIdInterface, RunetIdDenormalizableInterface
 {
-    const MALE = 'm';
-    const FEMALE = 'f';
+    use ClassTrait;
+
+    const MALE = 'male';
+    const FEMALE = 'female';
+
+    const PHOTO_SMALL = 'Small';
+    const PHOTO_MEDIUM = 'Medium';
+    const PHOTO_LARGE = 'Large';
+    const PHOTO_ORIGINAL = 'Original';
 
     /**
      * @var int
@@ -37,12 +46,12 @@ class User implements RunetIdInterface, RunetIdDenormalizableInterface
     protected $email;
 
     /**
-     * @var string
+     * @var null|string
      */
     protected $phone;
 
     /**
-     * @var Role
+     * @var null|Role
      */
     protected $eventRole;
 
@@ -57,7 +66,7 @@ class User implements RunetIdInterface, RunetIdDenormalizableInterface
     protected $verified;
 
     /**
-     * @var string
+     * @var null|string
      */
     protected $gender;
 
@@ -67,9 +76,9 @@ class User implements RunetIdInterface, RunetIdDenormalizableInterface
     protected $work;
 
     /**
-     * @var Photo
+     * @var Image[]
      */
-    protected $photo;
+    protected $photos = [];
 
     /**
      * @var \DateTimeImmutable
@@ -80,6 +89,11 @@ class User implements RunetIdInterface, RunetIdDenormalizableInterface
      * @var array
      */
     protected $attributes;
+
+    public function __toString()
+    {
+        return trim($this->firstName.' '.$this->lastName);
+    }
 
     /**
      * @return int
@@ -122,7 +136,7 @@ class User implements RunetIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getPhone()
     {
@@ -130,7 +144,7 @@ class User implements RunetIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return Role
+     * @return null|Role
      */
     public function getEventRole()
     {
@@ -154,7 +168,7 @@ class User implements RunetIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getGender()
     {
@@ -170,15 +184,25 @@ class User implements RunetIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return Photo
+     * @param string $size
+     *
+     * @return null|Image
      */
-    public function getPhoto()
+    public function getPhoto($size = self::PHOTO_LARGE)
     {
-        return $this->photo;
+        return isset($this->photos[$size]) ? $this->photos[$size] : null;
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return Image[]
+     */
+    public function getPhotos()
+    {
+        return $this->photos;
+    }
+
+    /**
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -203,26 +227,30 @@ class User implements RunetIdInterface, RunetIdDenormalizableInterface
         $this->lastName = $data['LastName'];
         $this->fatherName = $data['FatherName'];
         $this->email = $data['Email'];
-        $this->phone = $data['Phone'];
+        $this->phone = $data['Phone'] ?: null;
         $this->visible = (bool)$data['Visible'];
         $this->verified = (bool)$data['Verified'];
-        $this->gender = 'male' === strtolower($data['Gender']) ? self::MALE : self::FEMALE;
+
+        if ('none' !== $data['Gender']) {
+            $this->gender = $data['Gender'];
+        }
+
         $this->createdAt = new \DateTimeImmutable($data['CreationTime']);
         $this->attributes = (array)$data['Attributes'];
 
         if (isset($data['Work'])) {
-            $this->work = $denormalizer
-                ->denormalize($data['Work'], 'RunetId\ApiClient\Model\User\Work', $format, $context);
+            $this->work = $denormalizer->denormalize($data['Work'], Work::className(), $format, $context);
         }
 
-        if (false === strpos($data['Photo']['Small'], '/files/photo/nophoto')) {
-            $this->photo = $denormalizer
-                ->denormalize($data['Photo'], 'RunetId\ApiClient\Model\User\Photo', $format, $context);
+        foreach ($data['Photo'] as $size => $url) {
+            $filename = pathinfo($url, PATHINFO_FILENAME);
+            $width = substr($filename, strrpos($filename, '_') + 1);
+            $width = false === $width ? null : (int)$width;
+            $this->photos[$size] = new Image($url, $width, $width);
         }
 
         if (isset($data['Status'])) {
-            $this->eventRole = $denormalizer
-                ->denormalize($data['Status'], 'RunetId\ApiClient\Model\Event\Role', $format, $context);
+            $this->eventRole = $denormalizer->denormalize($data['Status'], Role::className(), $format, $context);
         }
     }
 }

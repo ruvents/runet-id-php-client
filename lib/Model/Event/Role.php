@@ -2,11 +2,14 @@
 
 namespace RunetId\ApiClient\Model\Event;
 
+use RunetId\ApiClient\Common\ClassTrait;
 use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class Role implements RunetIdDenormalizableInterface
 {
+    use ClassTrait;
+
     /**
      * @var int
      */
@@ -31,6 +34,11 @@ class Role implements RunetIdDenormalizableInterface
      * @var \DateTimeImmutable
      */
     protected $updatedAt;
+
+    public function __toString()
+    {
+        return $this->title;
+    }
 
     /**
      * @return int
@@ -65,7 +73,7 @@ class Role implements RunetIdDenormalizableInterface
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return \DateTimeInterface
      */
     public function getUpdatedAt()
     {

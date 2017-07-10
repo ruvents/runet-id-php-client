@@ -2,7 +2,7 @@
 
 namespace RunetId\ApiClient\Facade;
 
-use RunetId\ApiClient\Model\User\Address;
+use RunetId\ApiClient\Model\Common\Address;
 use RunetId\ApiClient\Model\User\ExternalIdInterface;
 use RunetId\ApiClient\Model\User\RunetIdInterface;
 use RunetId\ApiClient\Model\User\User;

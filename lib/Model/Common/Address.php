@@ -1,12 +1,15 @@
 <?php
 
-namespace RunetId\ApiClient\Model\User;
+namespace RunetId\ApiClient\Model\Common;
 
+use RunetId\ApiClient\Common\ClassTrait;
 use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class Address implements RunetIdDenormalizableInterface
 {
+    use ClassTrait;
+
     /**
      * @var null|string
      */

@@ -8,6 +8,7 @@ use Ruvents\AbstractApiClient\AbstractApiClient;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
+ * @method Facade\EventFacade event()
  * @method Facade\UserFacade user()
  */
 class RunetIdClient extends AbstractApiClient
