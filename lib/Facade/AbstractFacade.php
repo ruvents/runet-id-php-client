@@ -22,13 +22,13 @@ abstract class AbstractFacade
     }
 
     /**
+     * @param array  $context
      * @param string $endpoint
      * @param array  $params
-     * @param array  $context
      *
      * @return mixed
      */
-    protected function requestGet($endpoint, array $params = [], array $context = [])
+    protected function requestGet(array $context, $endpoint, array $params = [])
     {
         return $this->client->request(array_replace_recursive($context, [
             'endpoint' => $endpoint,
@@ -38,13 +38,13 @@ abstract class AbstractFacade
     }
 
     /**
+     * @param array  $context
      * @param string $endpoint
      * @param array  $params
-     * @param array  $context
      *
      * @return mixed
      */
-    protected function requestPost($endpoint, array $params = [], array $context = [])
+    protected function requestPost(array $context, $endpoint, array $params = [])
     {
         return $this->client->request(array_replace_recursive($context, [
             'endpoint' => $endpoint,

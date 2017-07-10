@@ -5,7 +5,7 @@ namespace RunetId\ApiClient\Model\User;
 use RunetId\ApiClient\Common\ClassTrait;
 use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
 use RunetId\ApiClient\Model\Common\Image;
-use RunetId\ApiClient\Model\Event\Role;
+use RunetId\ApiClient\Model\Event\Participation;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class User implements RunetIdInterface, RunetIdDenormalizableInterface
@@ -51,9 +51,9 @@ class User implements RunetIdInterface, RunetIdDenormalizableInterface
     protected $phone;
 
     /**
-     * @var null|Role
+     * @var null|Participation
      */
-    protected $eventRole;
+    protected $participation;
 
     /**
      * @var bool
@@ -144,11 +144,11 @@ class User implements RunetIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return null|Role
+     * @return null|Participation
      */
-    public function getEventRole()
+    public function getParticipation()
     {
-        return $this->eventRole;
+        return $this->participation;
     }
 
     /**
@@ -250,7 +250,8 @@ class User implements RunetIdInterface, RunetIdDenormalizableInterface
         }
 
         if (isset($data['Status'])) {
-            $this->eventRole = $denormalizer->denormalize($data['Status'], Role::className(), $format, $context);
+            $this->participation = $denormalizer
+                ->denormalize($data['Status'], Participation::className(), $format, $context);
         }
     }
 }

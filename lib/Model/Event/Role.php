@@ -21,19 +21,9 @@ class Role implements RunetIdDenormalizableInterface
     protected $title;
 
     /**
-     * @var string
+     * @var int
      */
-    protected $ticketUrl;
-
-    /**
-     * @var bool
-     */
-    protected $registered;
-
-    /**
-     * @var \DateTimeImmutable
-     */
-    protected $updatedAt;
+    protected $priority;
 
     public function __toString()
     {
@@ -57,27 +47,11 @@ class Role implements RunetIdDenormalizableInterface
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getTicketUrl()
+    public function getPriority()
     {
-        return $this->ticketUrl;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isRegistered()
-    {
-        return $this->registered;
-    }
-
-    /**
-     * @return \DateTimeInterface
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
+        return $this->priority;
     }
 
     /**
@@ -86,9 +60,7 @@ class Role implements RunetIdDenormalizableInterface
     public function runetIdDenormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = [])
     {
         $this->id = (int)$data['RoleId'];
-        $this->title = $data['RoleTitle'];
-        $this->ticketUrl = $data['TicketUrl'];
-        $this->registered = (bool)$data['Registered'];
-        $this->updatedAt = new \DateTimeImmutable($data['UpdateTime']);
+        $this->title = $data['Name'];
+        $this->priority = (int)$data['Priority'];
     }
 }

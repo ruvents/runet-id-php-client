@@ -16,6 +16,7 @@ class DenormalizationExtension extends AbstractDenormalizationExtension
      */
     private static $endpointClasses = [
         '/event/info' => 'RunetId\ApiClient\Model\Event\Event',
+        '/event/roles' => 'RunetId\ApiClient\Model\Event\Role[]',
         '/user/address' => 'RunetId\ApiClient\Model\Common\Address',
         '/user/auth' => 'RunetId\ApiClient\Model\User\User',
         '/user/create' => 'RunetId\ApiClient\Model\User\User',
