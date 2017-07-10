@@ -7,6 +7,9 @@ use RunetId\ApiClient\Service\RunetIdService;
 use Ruvents\AbstractApiClient\AbstractApiClient;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * @method Facade\UserFacade user()
+ */
 class RunetIdClient extends AbstractApiClient
 {
     /**
@@ -33,20 +36,15 @@ class RunetIdClient extends AbstractApiClient
     }
 
     /**
-     * @return Facade\UserFacade
-     */
-    public function user()
-    {
-        return $this->getFacade(Facade\UserFacade::getClass());
-    }
-
-    /**
-     * @param string $class
+     * @param string $name
+     * @param array  $arguments
      *
-     * @return mixed
+     * @return Facade\AbstractFacade
      */
-    protected function getFacade($class)
+    public function __call($name, array $arguments = [])
     {
+        $class = __NAMESPACE__.'\\Facade\\'.ucfirst($name).'Facade';
+
         if (!isset($this->facades[$class])) {
             $this->facades[$class] = new $class($this);
         }
