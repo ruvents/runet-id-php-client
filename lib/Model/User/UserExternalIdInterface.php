@@ -2,7 +2,7 @@
 
 namespace RunetId\ApiClient\Model\User;
 
-interface ExternalIdInterface
+interface UserExternalIdInterface
 {
     /**
      * @return string

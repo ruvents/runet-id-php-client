@@ -2,7 +2,7 @@
 
 namespace RunetId\ApiClient\Model\User;
 
-interface RunetIdInterface
+interface UserRunetIdInterface
 {
     /**
      * @return int

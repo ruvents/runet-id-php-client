@@ -8,7 +8,7 @@ use RunetId\ApiClient\Model\Common\GeoPoint;
 use RunetId\ApiClient\Model\Common\Image;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-class Event implements RunetIdDenormalizableInterface
+class Event implements EventIdInterface, RunetIdDenormalizableInterface
 {
     const IMAGE_SMALL = 'Mini';
     const IMAGE_MEDIUM = 'Normal';

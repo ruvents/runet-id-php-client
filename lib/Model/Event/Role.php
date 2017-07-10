@@ -6,7 +6,7 @@ use RunetId\ApiClient\Common\ClassTrait;
 use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-class Role implements RunetIdDenormalizableInterface
+class Role implements RoleIdInterface, RunetIdDenormalizableInterface
 {
     use ClassTrait;
 

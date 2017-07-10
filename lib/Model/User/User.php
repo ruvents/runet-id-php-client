@@ -8,7 +8,7 @@ use RunetId\ApiClient\Model\Common\Image;
 use RunetId\ApiClient\Model\Event\Participation;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-class User implements RunetIdInterface, RunetIdDenormalizableInterface
+class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
 {
     use ClassTrait;
 
@@ -244,8 +244,10 @@ class User implements RunetIdInterface, RunetIdDenormalizableInterface
 
         foreach ($data['Photo'] as $size => $url) {
             $filename = pathinfo($url, PATHINFO_FILENAME);
-            $width = substr($filename, strrpos($filename, '_') + 1);
-            $width = false === $width ? null : (int)$width;
+            $width = null;
+            if (false !== $_pos = strrpos($filename, '_')) {
+                $width = (int)substr($filename, $_pos + 1);
+            }
             $this->photos[$size] = new Image($url, $width, $width);
         }
 
