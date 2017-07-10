@@ -66,6 +66,10 @@ $client->user()->get(1, [
 
 ### С денормализацией
 
+Для работы расширения необходимо установить пакет
+
+`$ composer require symfony/serializer`
+
 ```php
 <?php
 
@@ -83,5 +87,5 @@ $extensions = [
 
 $client = new RunetIdClient($options, $extensions);
 
-$client->user()->get(1); //: UserInterface
+$client->user()->get(1); //: User
 ```
