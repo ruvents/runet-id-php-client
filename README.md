@@ -47,14 +47,14 @@
 ```php
 <?php
 
-use RunetId\ApiClient\RunetIdApiClient;
+use RunetId\ApiClient\RunetIdClient;
 
 $options = [
     'key' => 'key',
     'secret' => 'secret',
 ];
 
-$client = new RunetIdApiClient($options);
+$client = new RunetIdClient($options);
 
 $client->user()->get(1); //: array
 
@@ -69,7 +69,7 @@ $client->user()->get(1, [
 ```php
 <?php
 
-use RunetId\ApiClient\RunetIdApiClient;
+use RunetId\ApiClient\RunetIdClient;
 use RunetId\ApiClient\Extension\DenormalizationExtension;
 
 $options = [
@@ -81,7 +81,7 @@ $extensions = [
     new DenormalizationExtension(),
 ];
 
-$client = new RunetIdApiClient($options, $extensions);
+$client = new RunetIdClient($options, $extensions);
 
 $client->user()->get(1); //: UserInterface
 ```

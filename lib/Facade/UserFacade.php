@@ -17,7 +17,7 @@ class UserFacade extends AbstractFacade
      */
     public function get($runetId, array $context = [])
     {
-        return $this->requestGet($context, '/user/get', ['RunetId' => $this->toRunetId($runetId)]);
+        return $this->requestGet('/user/get', ['RunetId' => $this->toRunetId($runetId)], $context);
     }
 
     /**
@@ -28,7 +28,7 @@ class UserFacade extends AbstractFacade
      */
     public function getByExternalId($externalId, array $context = [])
     {
-        return $this->requestGet($context, '/user/get', ['ExternalId' => $this->toExternalId($externalId)]);
+        return $this->requestGet('/user/get', ['ExternalId' => $this->toExternalId($externalId)], $context);
     }
 
     /**
@@ -39,7 +39,7 @@ class UserFacade extends AbstractFacade
      */
     public function getByToken($token, array $context = [])
     {
-        return $this->requestGet($context, '/user/auth', ['token' => $token]);
+        return $this->requestGet('/user/auth', ['token' => $token], $context);
     }
 
     /**
@@ -50,7 +50,7 @@ class UserFacade extends AbstractFacade
      */
     public function create(array $data, array $context = [])
     {
-        return $this->requestPost($context, '/user/create', $data);
+        return $this->requestPost('/user/create', $data, $context);
     }
 
     /**
@@ -61,7 +61,7 @@ class UserFacade extends AbstractFacade
      */
     public function edit(array $data, array $context = [])
     {
-        return $this->requestPost($context, '/user/edit', $data);
+        return $this->requestPost('/user/edit', $data, $context);
     }
 
     /**
@@ -72,6 +72,6 @@ class UserFacade extends AbstractFacade
      */
     public function address($runetId, array $context = [])
     {
-        return $this->requestGet($context, '/user/address', ['RunetId' => $this->toRunetId($runetId)]);
+        return $this->requestGet('/user/address', ['RunetId' => $this->toRunetId($runetId)], $context);
     }
 }

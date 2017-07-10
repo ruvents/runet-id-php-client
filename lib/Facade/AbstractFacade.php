@@ -4,16 +4,66 @@ namespace RunetId\ApiClient\Facade;
 
 use RunetId\ApiClient\Model\User\ExternalIdInterface;
 use RunetId\ApiClient\Model\User\RunetIdInterface;
-use Ruvents\AbstractApiClient\AbstractApiFacade;
+use RunetId\ApiClient\RunetIdClient;
 
-abstract class AbstractFacade extends AbstractApiFacade
+abstract class AbstractFacade
 {
+    /**
+     * @var RunetIdClient
+     */
+    protected $client;
+
+    public function __construct(RunetIdClient $client)
+    {
+        $this->client = $client;
+    }
+
+    /**
+     * @return string
+     */
+    final public static function getClass()
+    {
+        return get_called_class();
+    }
+
+    /**
+     * @param string $endpoint
+     * @param array  $params
+     * @param array  $context
+     *
+     * @return mixed
+     */
+    protected function requestGet($endpoint, array $params = [], array $context = [])
+    {
+        return $this->client->request(array_replace_recursive($context, [
+            'endpoint' => $endpoint,
+            'get_data' => $params,
+            'method' => 'GET',
+        ]));
+    }
+
+    /**
+     * @param string $endpoint
+     * @param array  $params
+     * @param array  $context
+     *
+     * @return mixed
+     */
+    protected function requestPost($endpoint, array $params = [], array $context = [])
+    {
+        return $this->client->request(array_replace_recursive($context, [
+            'endpoint' => $endpoint,
+            'post_data' => $params,
+            'method' => 'POST',
+        ]));
+    }
+
     /**
      * @param int|RunetIdInterface $runetId
      *
      * @return int
      */
-    public function toRunetId($runetId)
+    protected function toRunetId($runetId)
     {
         return $runetId instanceof RunetIdInterface ? $runetId->getRunetId() : (int)$runetId;
     }
@@ -23,7 +73,7 @@ abstract class AbstractFacade extends AbstractApiFacade
      *
      * @return string
      */
-    public function toExternalId($externalId)
+    protected function toExternalId($externalId)
     {
         return $externalId instanceof ExternalIdInterface ? $externalId->getExternalId() : $externalId;
     }
