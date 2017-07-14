@@ -4,6 +4,7 @@ namespace RunetId\ApiClient\Extension;
 
 use Psr\Http\Message\RequestInterface;
 use RunetId\ApiClient\Denormalizer\RunetIdDenormalizer;
+use Ruvents\AbstractApiClient\Event\PostDecodeEvent;
 use Ruvents\AbstractApiClient\Extension\AbstractDenormalizationExtension;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -37,6 +38,22 @@ class DenormalizationExtension extends AbstractDenormalizationExtension
         }
 
         parent::__construct($denormalizer);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function denormalize(PostDecodeEvent $event)
+    {
+        $data = $event->getData();
+
+        if (is_array($data) && isset($data['Success']) && true === $data['Success']) {
+            $event->setData(true);
+
+            return;
+        }
+
+        parent::denormalize($event);
     }
 
     /**
