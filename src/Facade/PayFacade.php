@@ -125,17 +125,27 @@ class PayFacade extends BaseFacade
     }
 
     /**
-     * @param string $couponCode
-     * @param int    $payerRunetId
-     * @param int    $ownerRunetId
+     * @param string   $couponCode
+     * @param int      $payerRunetId
+     * @param int      $ownerRunetId
+     * @param null|int $productId
+     *
+     * @return mixed
      */
-    public function activateCoupon($couponCode, $payerRunetId, $ownerRunetId)
+    public function activateCoupon($couponCode, $payerRunetId, $ownerRunetId, $productId = null)
     {
-        $response = $this->apiClient->post('pay/coupon', array(), array(
+        $data = array(
             'CouponCode' => $couponCode,
             'PayerRunetId' => $payerRunetId,
             'OwnerRunetId' => $ownerRunetId,
-        ));
+        );
+
+        // если в массив положить null, то RUNET-ID кинет ошибку, что товар с пустым ID не найден
+        if (null !== $productId) {
+            $data['ProductId'] = $productId;
+        }
+
+        $response = $this->apiClient->post('pay/coupon', array(), $data);
 
         return $this->processResponse($response);
     }
