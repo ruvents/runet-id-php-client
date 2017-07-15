@@ -16,10 +16,27 @@ class UserFacade extends AbstractFacade
      *
      * @return array|Address
      */
-    public function address($runetId, array $context = [])
+    public function getAddress($runetId, array $context = [])
     {
         return $this->requestGet($context, '/user/address', [
             'RunetId' => ArgHelper::getUserRunetId($runetId),
+        ]);
+    }
+
+    /**
+     * @param int|UserRunetIdInterface $runetId
+     * @param string                   $currentPassword
+     * @param string                   $newPassword
+     * @param array                    $context
+     *
+     * @return true|array
+     */
+    public function changePassword($runetId, $currentPassword, $newPassword, array $context = [])
+    {
+        return $this->requestPost($context, '/user/passwordChange', [
+            'RunetId' => ArgHelper::getUserRunetId($runetId),
+            'CurrentPassword' => ArgHelper::getUserRunetId($currentPassword),
+            'NewPassword' => $newPassword,
         ]);
     }
 
@@ -68,23 +85,6 @@ class UserFacade extends AbstractFacade
     {
         return $this->requestGet($context, '/user/auth', [
             'token' => $token,
-        ]);
-    }
-
-    /**
-     * @param int|UserRunetIdInterface $runetId
-     * @param string                   $currentPassword
-     * @param string                   $newPassword
-     * @param array                    $context
-     *
-     * @return true|array
-     */
-    public function changePassword($runetId, $currentPassword, $newPassword, array $context = [])
-    {
-        return $this->requestPost($context, '/user/passwordChange', [
-            'RunetId' => ArgHelper::getUserRunetId($runetId),
-            'CurrentPassword' => ArgHelper::getUserRunetId($currentPassword),
-            'NewPassword' => $newPassword,
         ]);
     }
 
