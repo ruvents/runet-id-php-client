@@ -125,7 +125,7 @@ abstract class AbstractIterator implements \Iterator, \Countable
         $rawData = $apiClient->request($context);
 
         /** @var \Symfony\Component\Serializer\Normalizer\DenormalizerInterface $denormalizer */
-        $data = $this->extractData($rawData);
+        $data = array_values($this->extractData($rawData));
         $class = $this->getDenormalizationClass();
         $denormalizer = isset($context['denormalizer']) ? $context['denormalizer'] : null;
 

@@ -107,7 +107,7 @@ class RunetIdService implements Service\ServiceInterface
             return;
         }
 
-        $message = isset($data['Error']['Message']) ? $data['Error']['Message'] : '';
+        $message = isset($data['Error']['Message']) ? $data['Error']['Message'] : 'Ошибка';
         $code = isset($data['Error']['Code']) ? $data['Error']['Code'] : 0;
 
         throw new ApiException($context, $message, $code);
