@@ -2,6 +2,7 @@
 
 namespace RunetId\ApiClient\Facade;
 
+use Psr\Http\Message\StreamInterface;
 use RunetId\ApiClient\Common\ClassTrait;
 use RunetId\ApiClient\RunetIdClient;
 
@@ -22,31 +23,35 @@ abstract class AbstractFacade
     /**
      * @param array  $context
      * @param string $endpoint
-     * @param array  $params
+     * @param array  $query
      *
      * @return mixed
      */
-    protected function requestGet(array $context, $endpoint, array $params = [])
+    protected function requestGet(array $context, $endpoint, array $query = [])
     {
-        return $this->client->request(array_replace_recursive($context, [
-            'endpoint' => $endpoint,
-            'get_data' => $params,
+        $context = array_replace([
             'method' => 'GET',
-        ]));
+            'endpoint' => $endpoint,
+            'query' => [],
+        ], $context);
+
+        $context['query'] = array_replace($query, $context['query']);
+
+        return $this->client->request($context);
     }
 
     /**
-     * @param array  $context
-     * @param string $endpoint
-     * @param array  $params
+     * @param array                        $context
+     * @param string                       $endpoint
+     * @param string|array|StreamInterface $body
      *
      * @return mixed
      */
-    protected function requestPost(array $context, $endpoint, array $params = [])
+    protected function requestPost(array $context, $endpoint, $body)
     {
-        return $this->client->request(array_replace_recursive($context, [
+        return $this->client->request(array_replace($context, [
+            'body' => $body,
             'endpoint' => $endpoint,
-            'post_data' => $params,
             'method' => 'POST',
         ]));
     }

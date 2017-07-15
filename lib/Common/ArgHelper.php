@@ -5,7 +5,6 @@ namespace RunetId\ApiClient\Common;
 use RunetId\ApiClient\Model\Company\CompanyIdInterface;
 use RunetId\ApiClient\Model\Event\EventIdInterface;
 use RunetId\ApiClient\Model\Event\RoleIdInterface;
-use RunetId\ApiClient\Model\User\UserExternalIdInterface;
 use RunetId\ApiClient\Model\User\UserRunetIdInterface;
 
 final class ArgHelper
@@ -59,23 +58,6 @@ final class ArgHelper
         }
 
         throw new \InvalidArgumentException('Argument must be numeric or implement RoleIdInterface.');
-    }
-
-    /**
-     * @param string|UserExternalIdInterface $externalId
-     *
-     * @return string
-     * @throws \InvalidArgumentException
-     */
-    public static function getUserExternalId($externalId)
-    {
-        if (is_string($externalId)) {
-            return $externalId;
-        } elseif ($externalId instanceof UserExternalIdInterface) {
-            return $externalId->getExternalId();
-        }
-
-        throw new \InvalidArgumentException('Argument must be a string or implement UserExternalIdInterface.');
     }
 
     /**

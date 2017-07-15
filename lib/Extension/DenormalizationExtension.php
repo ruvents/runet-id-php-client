@@ -2,20 +2,33 @@
 
 namespace RunetId\ApiClient\Extension;
 
-use Psr\Http\Message\RequestInterface;
 use RunetId\ApiClient\Denormalizer\RunetIdDenormalizer;
+use Ruvents\AbstractApiClient\Event\Events;
 use Ruvents\AbstractApiClient\Event\PostDecodeEvent;
-use Ruvents\AbstractApiClient\Extension\AbstractDenormalizationExtension;
+use Ruvents\AbstractApiClient\Event\PreSendEvent;
+use Ruvents\AbstractApiClient\Extension\ApiClientAwareInterface;
+use Ruvents\AbstractApiClient\Extension\ApiClientAwareTrait;
+use Ruvents\AbstractApiClient\Extension\ExtensionInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Serializer;
 
-class DenormalizationExtension extends AbstractDenormalizationExtension
+class DenormalizationExtension implements ExtensionInterface, ApiClientAwareInterface
 {
+    use ApiClientAwareTrait;
+
     /**
      * @var string[]
      */
-    private static $endpointClasses = [
+    private static $endpointIterators = [
+        '/user/search' => 'RunetId\ApiClient\Iterator\User\UserSearchIterator',
+    ];
+
+    /**
+     * @var string[]
+     */
+    private static $endpointModels = [
         '/event/info' => 'RunetId\ApiClient\Model\Event\Event',
         '/event/roles' => 'RunetId\ApiClient\Model\Event\Role[]',
         '/user/address' => 'RunetId\ApiClient\Model\Common\Address',
@@ -26,25 +39,70 @@ class DenormalizationExtension extends AbstractDenormalizationExtension
     ];
 
     /**
-     * {@inheritdoc}
+     * @var DenormalizerInterface
      */
+    protected $denormalizer;
+
     public function __construct(DenormalizerInterface $denormalizer = null)
     {
-        if (null === $denormalizer) {
-            $denormalizer = new Serializer([
+        $this->denormalizer = $denormalizer
+            ?: new Serializer([
                 new ArrayDenormalizer(),
                 new RunetIdDenormalizer(),
             ]);
-        }
-
-        parent::__construct($denormalizer);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function denormalize(PostDecodeEvent $event)
+    public function configureContext(OptionsResolver $resolver)
     {
+        $resolver
+            ->setDefaults([
+                'denormalize' => true,
+                'class' => null,
+            ])
+            ->setAllowedTypes('denormalize', 'bool')
+            ->setAllowedTypes('class', ['null', 'string']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            Events::PRE_SEND => 'denormalizeToIterator',
+            Events::POST_DECODE => 'denormalizeToModel',
+        ];
+    }
+
+    public function denormalizeToIterator(PreSendEvent $event)
+    {
+        $context = $event->getContext();
+
+        if (!$context['denormalize']) {
+            return;
+        }
+
+        /** @var string $endpoint */
+        $endpoint = $context['endpoint'];
+
+        if (isset(self::$endpointIterators[$endpoint])) {
+            $class = self::$endpointIterators[$endpoint];
+            $iterator = new $class($this->apiClient, $this->denormalizer, $context);
+            $event->setData($iterator);
+        }
+    }
+
+    public function denormalizeToModel(PostDecodeEvent $event)
+    {
+        $context = $event->getContext();
+
+        if (!$context['denormalize']) {
+            return;
+        }
+
         $data = $event->getData();
 
         if (is_array($data) && isset($data['Success']) && true === $data['Success']) {
@@ -53,16 +111,18 @@ class DenormalizationExtension extends AbstractDenormalizationExtension
             return;
         }
 
-        parent::denormalize($event);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getClass(RequestInterface $request, array $context)
-    {
+        /** @var string $endpoint */
         $endpoint = $context['endpoint'];
+        $class = $context['class'];
 
-        return isset(self::$endpointClasses[$endpoint]) ? self::$endpointClasses[$endpoint] : null;
+        if (null === $class && isset(self::$endpointModels[$endpoint])) {
+            $class = self::$endpointModels[$endpoint];
+        }
+
+        if (null !== $class && $this->denormalizer->supportsDenormalization($data, $class)) {
+            $event->setData($this->denormalizer->denormalize($data, $class, null, [
+                'api_client' => $this->apiClient,
+            ]));
+        }
     }
 }

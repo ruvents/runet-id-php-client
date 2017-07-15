@@ -10,7 +10,7 @@ use Ruvents\AbstractApiClient\Exception\ApiException;
 use Ruvents\AbstractApiClient\Service;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RunetIdService implements Service\ApiServiceInterface
+class RunetIdService implements Service\ServiceInterface
 {
     use Service\HttpClientDiscoveryTrait;
     use Service\Response200Trait;
@@ -40,25 +40,25 @@ class RunetIdService implements Service\ApiServiceInterface
                 'secret',
             ])
             ->setDefaults([
+                'body' => [],
                 'event_id' => null,
-                'get_data' => [],
                 'headers' => [],
                 'host' => 'api.runet-id.com',
                 'language' => 'ru',
                 'method' => 'GET',
-                'post_data' => [],
+                'query' => [],
                 'scheme' => 'http',
             ])
             ->setAllowedTypes('endpoint', 'string')
             ->setAllowedTypes('key', 'string')
             ->setAllowedTypes('secret', 'string')
+            ->setAllowedTypes('body', ['string', 'array', 'Psr\Http\Message\StreamInterface'])
             ->setAllowedTypes('event_id', ['null', 'int'])
-            ->setAllowedTypes('get_data', 'array')
             ->setAllowedTypes('headers', 'array')
             ->setAllowedTypes('host', 'string')
             ->setAllowedValues('language', ['ru', 'en'])
             ->setAllowedTypes('method', 'string')
-            ->setAllowedTypes('post_data', 'array')
+            ->setAllowedTypes('query', 'array')
             ->setAllowedTypes('scheme', 'string')
             ->setNormalizer('endpoint', function ($context, $endpoint) {
                 return '/'.ltrim($endpoint, '/');
@@ -70,10 +70,12 @@ class RunetIdService implements Service\ApiServiceInterface
      */
     public function createRequest(array $context)
     {
-        $getData = array_replace([
+        $query = array_replace([
             'EventId' => $context['event_id'],
             'Language' => $context['language'],
-        ], $context['get_data']);
+        ], $context['query']);
+
+        $query = $this->httpBuildQuery($query);
 
         $headers = array_replace([
             'Apikey' => $context['key'],
@@ -81,11 +83,18 @@ class RunetIdService implements Service\ApiServiceInterface
             'Hash' => substr(md5($context['key'].$timestamp.$context['secret']), 0, 16),
         ], $context['headers']);
 
+        $body = $context['body'];
+
+        if (is_array($body)) {
+            $body = $this->httpBuildQuery($context['body']);
+            $headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        }
+
         return $this->requestFactory->createRequest(
             $context['method'],
-            $context['scheme'].'://'.$context['host'].$context['endpoint'].'?'.http_build_query($getData),
+            $context['scheme'].'://'.$context['host'].$context['endpoint'].'?'.$query,
             $headers,
-            http_build_query($context['post_data'])
+            $body
         );
     }
 
@@ -102,5 +111,15 @@ class RunetIdService implements Service\ApiServiceInterface
         $code = isset($data['Error']['Code']) ? $data['Error']['Code'] : 0;
 
         throw new ApiException($context, $message, $code);
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return string
+     */
+    private function httpBuildQuery(array $data)
+    {
+        return http_build_query($data, '', '&');
     }
 }

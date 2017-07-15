@@ -218,6 +218,14 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isMale()
+    {
+        return self::MALE === $this->gender;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function runetIdDenormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = [])
@@ -251,9 +259,9 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
             $this->photos[$size] = new Image($url, $width, $width);
         }
 
-        if (isset($data['Status'])) {
+        /*if (isset($data['Status'])) {
             $this->participation = $denormalizer
                 ->denormalize($data['Status'], Participation::className(), $format, $context);
-        }
+        }*/
     }
 }
