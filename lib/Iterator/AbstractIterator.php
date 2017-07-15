@@ -5,7 +5,7 @@ namespace RunetId\ApiClient\Iterator;
 use Ruvents\AbstractApiClient\ApiClientInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-abstract class AbstractIterator implements \Iterator
+abstract class AbstractIterator implements \Iterator, \Countable
 {
     /**
      * @var DenormalizerInterface
@@ -59,6 +59,22 @@ abstract class AbstractIterator implements \Iterator
     }
 
     /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->loaded ? $this->data : iterator_to_array($this);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        return $this->loaded ? count($this->data) : iterator_count($this);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function current()
@@ -87,7 +103,7 @@ abstract class AbstractIterator implements \Iterator
      */
     public function valid()
     {
-        if (!$this->loaded && !isset($this->data[$this->index])) {
+        if (!isset($this->data[$this->index])) {
             $this->loadData();
         }
 
@@ -104,6 +120,10 @@ abstract class AbstractIterator implements \Iterator
 
     protected function loadData()
     {
+        if ($this->loaded) {
+            return;
+        }
+
         $maxResultsParName = $this->getMaxResultsParameterName();
         $pageTokenParName = $this->getPageTokenParameterName();
         $nextPageTokenParName = $this->getNextPageTokenParameterName();
