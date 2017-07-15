@@ -4,15 +4,11 @@ namespace RunetId\ApiClient\Extension;
 
 use Ruvents\AbstractApiClient\Event\Events;
 use Ruvents\AbstractApiClient\Event\PreSendEvent;
-use Ruvents\AbstractApiClient\Extension\ApiClientAwareInterface;
-use Ruvents\AbstractApiClient\Extension\ApiClientAwareTrait;
 use Ruvents\AbstractApiClient\Extension\ExtensionInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class IteratorExtension implements ExtensionInterface, ApiClientAwareInterface
+class IteratorExtension implements ExtensionInterface
 {
-    use ApiClientAwareTrait;
-
     /**
      * @var string[]
      */
@@ -58,7 +54,7 @@ class IteratorExtension implements ExtensionInterface, ApiClientAwareInterface
 
         if (isset(self::$endpointIterators[$endpoint])) {
             $class = self::$endpointIterators[$endpoint];
-            $iterator = new $class($this->apiClient, $context);
+            $iterator = new $class($context);
             $event->setData($iterator);
         }
     }

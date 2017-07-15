@@ -7,11 +7,6 @@ use Ruvents\AbstractApiClient\ApiClientInterface;
 abstract class AbstractIterator implements \Iterator, \Countable
 {
     /**
-     * @var ApiClientInterface
-     */
-    private $apiClient;
-
-    /**
      * @var array
      */
     private $context;
@@ -41,9 +36,8 @@ abstract class AbstractIterator implements \Iterator, \Countable
      */
     private $loaded = false;
 
-    public function __construct(ApiClientInterface $apiClient, array $context)
+    public function __construct(array $context)
     {
-        $this->apiClient = $apiClient;
         $this->context = $context;
 
         $mrpn = $this->getMaxResultsParameterName();
@@ -125,7 +119,10 @@ abstract class AbstractIterator implements \Iterator, \Countable
         $context['query'][$maxResultsParName] = $this->nextMaxResults;
         $context['use_iterators'] = false;
 
-        $rawData = $this->apiClient->request($context);
+        /** @var ApiClientInterface $apiClient */
+        $apiClient = $context['api_client'];
+
+        $rawData = $apiClient->request($context);
 
         /** @var \Symfony\Component\Serializer\Normalizer\DenormalizerInterface $denormalizer */
         $data = $this->extractData($rawData);
