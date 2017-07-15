@@ -2,17 +2,10 @@
 
 namespace RunetId\ApiClient\Iterator;
 
-use RunetId\ApiClient\Denormalizer\MockDenormalizer;
 use Ruvents\AbstractApiClient\ApiClientInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 abstract class AbstractIterator implements \Iterator, \Countable
 {
-    /**
-     * @var null|DenormalizerInterface
-     */
-    protected $denormalizer;
-
     /**
      * @var ApiClientInterface
      */
@@ -48,18 +41,13 @@ abstract class AbstractIterator implements \Iterator, \Countable
      */
     private $loaded = false;
 
-    public function __construct(
-        ApiClientInterface $apiClient,
-        array $context,
-        DenormalizerInterface $denormalizer = null
-    ) {
+    public function __construct(ApiClientInterface $apiClient, array $context)
+    {
         $this->apiClient = $apiClient;
         $this->context = $context;
-        $this->denormalizer = $denormalizer ?: new MockDenormalizer();
 
-        $maxResultsParName = $this->getMaxResultsParameterName();
-        $this->nextMaxResults = isset($this->context['query'][$maxResultsParName])
-            ? $this->context['query'][$maxResultsParName] : null;
+        $mrpn = $this->getMaxResultsParameterName();
+        $this->nextMaxResults = isset($this->context['query'][$mrpn]) ? $this->context['query'][$mrpn] : null;
     }
 
     /**
@@ -139,20 +127,46 @@ abstract class AbstractIterator implements \Iterator, \Countable
 
         $rawData = $this->apiClient->request($context);
 
-        $extractedData = $this->denormalize($rawData);
-        $countExtractedData = count($extractedData);
+        /** @var \Symfony\Component\Serializer\Normalizer\DenormalizerInterface $denormalizer */
+        $data = $this->extractData($rawData);
+        $class = $this->getDenormalizationClass();
+        $denormalizer = isset($context['denormalizer']) ? $context['denormalizer'] : null;
 
-        $this->data = array_merge($this->data, $extractedData);
-
-        if (null !== $this->nextMaxResults) {
-            $this->nextMaxResults -= $countExtractedData;
+        if (null !== $denormalizer && null !== $class
+            && isset($context['denormalize']) && true === $context['denormalize']
+            && $denormalizer->supportsDenormalization($data, $class)
+        ) {
+            $data = $denormalizer->denormalize($data, $class);
         }
 
-        if (0 === $countExtractedData || 0 === $this->nextMaxResults || !isset($rawData[$nextPageTokenParName])) {
+        $countData = count($data);
+
+        $this->data = array_merge($this->data, $data);
+
+        if (null !== $this->nextMaxResults) {
+            $this->nextMaxResults -= $countData;
+        }
+
+        if (0 === $countData || 0 === $this->nextMaxResults || !isset($rawData[$nextPageTokenParName])) {
             $this->loaded = true;
         } else {
             $this->nextPageToken = $rawData[$nextPageTokenParName];
         }
+    }
+
+    /**
+     * @param array $rawData
+     *
+     * @return array
+     */
+    abstract protected function extractData(array $rawData);
+
+    /**
+     * @return null|string
+     */
+    protected function getDenormalizationClass()
+    {
+        return null;
     }
 
     /**
@@ -178,11 +192,4 @@ abstract class AbstractIterator implements \Iterator, \Countable
     {
         return 'NextPageToken';
     }
-
-    /**
-     * @param array $rawData
-     *
-     * @return array
-     */
-    abstract protected function denormalize(array $rawData);
 }

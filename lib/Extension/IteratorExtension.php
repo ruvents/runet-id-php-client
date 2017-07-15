@@ -2,13 +2,11 @@
 
 namespace RunetId\ApiClient\Extension;
 
-use RunetId\ApiClient\Denormalizer\MockDenormalizer;
 use Ruvents\AbstractApiClient\Event\Events;
 use Ruvents\AbstractApiClient\Event\PreSendEvent;
 use Ruvents\AbstractApiClient\Extension\ApiClientAwareInterface;
 use Ruvents\AbstractApiClient\Extension\ApiClientAwareTrait;
 use Ruvents\AbstractApiClient\Extension\ExtensionInterface;
-use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class IteratorExtension implements ExtensionInterface, ApiClientAwareInterface
@@ -28,15 +26,12 @@ class IteratorExtension implements ExtensionInterface, ApiClientAwareInterface
      */
     public function configureContext(OptionsResolver $resolver)
     {
-        /** @noinspection PhpUnusedParameterInspection */
         $resolver
             ->setDefaults([
-                'denormalizer' => function (Options $context) {
-                    return new MockDenormalizer();
-                },
+                'denormalizer' => null,
                 'use_iterators' => true,
             ])
-            ->setAllowedTypes('denormalizer', 'Symfony\Component\Serializer\Normalizer\DenormalizerInterface')
+            ->setAllowedTypes('denormalizer', ['null', 'Symfony\Component\Serializer\Normalizer\DenormalizerInterface'])
             ->setAllowedTypes('use_iterators', 'bool');
     }
 
@@ -63,7 +58,7 @@ class IteratorExtension implements ExtensionInterface, ApiClientAwareInterface
 
         if (isset(self::$endpointIterators[$endpoint])) {
             $class = self::$endpointIterators[$endpoint];
-            $iterator = new $class($this->apiClient, $context, $context['denormalizer']);
+            $iterator = new $class($this->apiClient, $context);
             $event->setData($iterator);
         }
     }

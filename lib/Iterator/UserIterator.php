@@ -12,8 +12,16 @@ class UserIterator extends AbstractIterator
     /**
      * {@inheritdoc}
      */
-    protected function denormalize(array $rawData)
+    protected function extractData(array $rawData)
     {
-        return $this->denormalizer->denormalize($rawData['Users'], 'RunetId\ApiClient\Model\User\User[]');
+        return $rawData['Users'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDenormalizationClass()
+    {
+        return 'RunetId\ApiClient\Model\User\User[]';
     }
 }
