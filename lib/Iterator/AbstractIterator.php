@@ -2,13 +2,14 @@
 
 namespace RunetId\ApiClient\Iterator;
 
+use RunetId\ApiClient\Denormalizer\MockDenormalizer;
 use Ruvents\AbstractApiClient\ApiClientInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 abstract class AbstractIterator implements \Iterator, \Countable
 {
     /**
-     * @var DenormalizerInterface
+     * @var null|DenormalizerInterface
      */
     protected $denormalizer;
 
@@ -47,11 +48,14 @@ abstract class AbstractIterator implements \Iterator, \Countable
      */
     private $loaded = false;
 
-    public function __construct(ApiClientInterface $apiClient, DenormalizerInterface $denormalizer, array $context)
-    {
+    public function __construct(
+        ApiClientInterface $apiClient,
+        array $context,
+        DenormalizerInterface $denormalizer = null
+    ) {
         $this->apiClient = $apiClient;
-        $this->denormalizer = $denormalizer;
         $this->context = $context;
+        $this->denormalizer = $denormalizer ?: new MockDenormalizer();
 
         $maxResultsParName = $this->getMaxResultsParameterName();
         $this->nextMaxResults = isset($this->context['query'][$maxResultsParName])
@@ -131,7 +135,7 @@ abstract class AbstractIterator implements \Iterator, \Countable
         $context = $this->context;
         $context['query'][$pageTokenParName] = $this->nextPageToken;
         $context['query'][$maxResultsParName] = $this->nextMaxResults;
-        $context['denormalize'] = false;
+        $context['use_iterators'] = false;
 
         $rawData = $this->apiClient->request($context);
 
