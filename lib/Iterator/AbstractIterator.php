@@ -38,7 +38,7 @@ abstract class AbstractIterator implements \Iterator
     private $nextPageToken;
 
     /**
-     * @var int
+     * @var null|int
      */
     private $nextMaxResults;
 
@@ -52,7 +52,10 @@ abstract class AbstractIterator implements \Iterator
         $this->apiClient = $apiClient;
         $this->denormalizer = $denormalizer;
         $this->context = $context;
-        $this->nextMaxResults = $this->context['query'][$this->getMaxResultsParameterName()];
+
+        $maxResultsParName = $this->getMaxResultsParameterName();
+        $this->nextMaxResults = isset($this->context['query'][$maxResultsParName])
+            ? $this->context['query'][$maxResultsParName] : null;
     }
 
     /**

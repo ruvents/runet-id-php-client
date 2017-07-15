@@ -22,7 +22,8 @@ class DenormalizationExtension implements ExtensionInterface, ApiClientAwareInte
      * @var string[]
      */
     private static $endpointIterators = [
-        '/user/search' => 'RunetId\ApiClient\Iterator\User\UserSearchIterator',
+        '/event/users' => 'RunetId\ApiClient\Iterator\UserIterator',
+        '/user/search' => 'RunetId\ApiClient\Iterator\UserIterator',
     ];
 
     /**

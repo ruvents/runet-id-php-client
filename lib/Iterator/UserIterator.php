@@ -1,14 +1,13 @@
 <?php
 
-namespace RunetId\ApiClient\Iterator\User;
+namespace RunetId\ApiClient\Iterator;
 
-use RunetId\ApiClient\Iterator\AbstractIterator;
 use RunetId\ApiClient\Model\User\User;
 
 /**
  * @method User current()
  */
-class UserSearchIterator extends AbstractIterator
+class UserIterator extends AbstractIterator
 {
     /**
      * {@inheritdoc}
