@@ -40,9 +40,7 @@
 
 Вместо `php-http/guzzle(5|6)-adapter` вы можете использовать [любую имплементацию клиента](https://packagist.org/providers/php-http/client-implementation)
 
-## Использование
-
-### Без денормализации в объекты
+## Стандартное использование
 
 ```php
 <?php
@@ -56,17 +54,60 @@ $options = [
 
 $client = new RunetIdClient($options);
 
-$client->user()->get(1); //: array
-
-$client->user()->get(1, [
-    'language' => 'en',
-    'event_id' => 123
-]);
+$client->user()->get(1);
 ```
 
-### С денормализацией
+## Итераторы постраничных данных
 
-Для работы расширения необходимо установить пакет
+Некоторые методы API (например, `/event/users`) возвращают данные постранично. Для упрощения работы с такими методами в библиотеке есть расширение `IteratorExtension`.
+
+Во время перебора внутри цикла итератор при необходимости автоматически запрашивает следующую порцию данных.
+
+Без использования расширения:
+
+```php
+<?php
+
+use RunetId\ApiClient\RunetIdClient;
+
+$client = new RunetIdClient([
+    'key' => 'key',
+    'secret' => 'secret',
+]);
+
+$users = $client->event()->users(/** $maxResults */1000);
+
+// $users = ["Users" => [...], "NextPageToken" => "ZXZlMQ==", ...]
+// Результирующий массив будет содержать только 200 результатов
+// Чтобы получить остальное, потребуется сделать еще 4 запроса с PageToken
+```
+
+С расширением: 
+
+```php
+<?php
+
+use RunetId\ApiClient\RunetIdClient;
+use RunetId\ApiClient\Extension\IteratorExtension;
+
+$client = new RunetIdClient(['key' => 'key', 'secret' => 'secret'], [
+    new IteratorExtension(),
+]);
+
+$userIterator = $client->event()->users(1000);
+
+foreach ($userIterator as $user) {
+    var_dump($user['Email']);
+}
+
+$users = $userIterator->toArray();
+```
+
+## Денормализация в объекты
+
+Для удобства работы с результатом запроса можно включить денормализацию.
+
+Установите дополнительную библиотеку:
 
 `$ composer require symfony/serializer`
 
@@ -75,17 +116,14 @@ $client->user()->get(1, [
 
 use RunetId\ApiClient\RunetIdClient;
 use RunetId\ApiClient\Extension\DenormalizationExtension;
+use RunetId\ApiClient\Model\User\User;
 
-$options = [
-    'key' => 'key',
-    'secret' => 'secret',
-];
-
-$extensions = [
+$client = new RunetIdClient(['key' => 'key', 'secret' => 'secret'], [
     new DenormalizationExtension(),
-];
+]);
 
-$client = new RunetIdClient($options, $extensions);
+$user = $client->user()->get(1);
 
-$client->user()->get(1); //: User
+var_dump($user->getEmail());
+var_dump($user->getPhoto(User::PHOTO_LARGE)->getHeight());
 ```
