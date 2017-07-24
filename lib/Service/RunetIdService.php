@@ -40,7 +40,7 @@ class RunetIdService implements Service\ServiceInterface
                 'secret',
             ])
             ->setDefaults([
-                'body' => [],
+                'body' => null,
                 'event_id' => null,
                 'headers' => [],
                 'host' => 'api.runet-id.com',
@@ -52,7 +52,7 @@ class RunetIdService implements Service\ServiceInterface
             ->setAllowedTypes('endpoint', 'string')
             ->setAllowedTypes('key', 'string')
             ->setAllowedTypes('secret', 'string')
-            ->setAllowedTypes('body', ['string', 'array', 'Psr\Http\Message\StreamInterface'])
+            ->setAllowedTypes('body', ['null', 'string', 'array', 'Psr\Http\Message\StreamInterface'])
             ->setAllowedTypes('event_id', ['null', 'int'])
             ->setAllowedTypes('headers', 'array')
             ->setAllowedTypes('host', 'string')
