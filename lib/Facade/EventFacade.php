@@ -38,6 +38,21 @@ class EventFacade extends AbstractFacade
     }
 
     /**
+     * @param int|UserRunetIdInterface $runetId
+     * @param int|RoleIdInterface      $roleId
+     * @param array                    $context
+     *
+     * @return true|array
+     */
+    public function register($runetId, $roleId, array $context = [])
+    {
+        return $this->requestPost($context, '/event/register', [
+            'RunetId' => ArgHelper::getUserRunetId($runetId),
+            'RoleId' => ArgHelper::getEventRoleId($roleId),
+        ]);
+    }
+
+    /**
      * @param array $context
      *
      * @return array|Role[]
