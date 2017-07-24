@@ -4,6 +4,8 @@
 
 ### PHP \>=5.5
 
+Выполните установку пакетов:
+
 `$ composer require guzzlehttp/psr7 php-http/guzzle6-adapter runet-id/api-client:^3.0@alpha`
 
 ### PHP 5.4
@@ -34,11 +36,15 @@
 }
 ```
 
+И установите пакеты:
+
 `$ composer require guzzlehttp/psr7 runet-id/api-client:^3.0@alpha`
 
-### HTTP клиент
+### Библиотеки для работы с HTTP-запросами
 
-Вместо `php-http/guzzle(5|6)-adapter` вы можете использовать [любую имплементацию клиента](https://packagist.org/providers/php-http/client-implementation)
+Вместо `php-http/guzzle(5|6)-adapter` вы можете использовать [любую имплементацию клиента](https://packagist.org/providers/php-http/client-implementation).
+
+Вместо `guzzlehttp/psr7` вы можете использовать любую имплементацию psr7 сообщений, например, [zendframework/zend-diactoros](https://packagist.org/packages/zendframework/zend-diactoros) или [slim/slim](https://packagist.org/packages/slim/slim).
 
 ## Стандартное использование
 
@@ -126,4 +132,35 @@ $user = $client->user()->get(1);
 
 var_dump($user->getEmail());
 var_dump($user->getPhoto(User::PHOTO_LARGE)->getHeight());
+```
+
+## Свободные запросы
+
+```php
+<?php
+
+use RunetId\ApiClient\RunetIdClient;
+
+$client = new RunetIdClient(['key' => 'key', 'secret' => 'secret']);
+
+$user = $client->request([
+    // string
+    // метод
+    'method' => 'GET',
+    // string
+    // endpoint запроса
+    'endpoint' => '/user/get',
+    // array
+    // параметры GET
+    'query' => [
+        'RunetId' => 1,
+    ],
+    // null|string|array|Psr\Http\Message\StreamInterface
+    // тело запроса
+    // массив будет закодирован через http_build_query с добавлением соответствующих заголовков
+    'body' => null,
+    // array
+    // заголовки
+    'headers' => [],
+]);
 ```
