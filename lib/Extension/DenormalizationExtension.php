@@ -17,7 +17,7 @@ class DenormalizationExtension implements ExtensionInterface
     /**
      * @var string[]
      */
-    private static $endpointModels = [
+    private static $endpointClasses = [
         '/event/info' => 'RunetId\ApiClient\Model\Event\Event',
         '/event/roles' => 'RunetId\ApiClient\Model\Event\Role[]',
         '/user/address' => 'RunetId\ApiClient\Model\Common\Address',
@@ -35,7 +35,9 @@ class DenormalizationExtension implements ExtensionInterface
         /** @noinspection PhpUnusedParameterInspection */
         $resolver
             ->setDefaults([
-                'class' => null,
+                'class' => function (Options $context) {
+                    return $this->getEndpointClass($context['endpoint']);
+                },
                 'denormalize' => true,
                 'denormalizer' => function (Options $context) {
                     return new Serializer([
@@ -76,19 +78,24 @@ class DenormalizationExtension implements ExtensionInterface
         }
 
         /**
-         * @var string                $endpoint
+         * @var string                $class
          * @var DenormalizerInterface $denormalizer
          */
         $class = $context['class'];
         $denormalizer = $context['denormalizer'];
-        $endpoint = $context['endpoint'];
-
-        if (null === $class && isset(self::$endpointModels[$endpoint])) {
-            $class = self::$endpointModels[$endpoint];
-        }
 
         if (null !== $class && $denormalizer->supportsDenormalization($data, $class)) {
-            $event->setData($denormalizer->denormalize($data, $class, null));
+            $event->setData($denormalizer->denormalize($data, $class));
         }
+    }
+
+    /**
+     * @param string $endpoint
+     *
+     * @return null|string
+     */
+    protected function getEndpointClass($endpoint)
+    {
+        return isset(self::$endpointClasses[$endpoint]) ? self::$endpointClasses[$endpoint] : null;
     }
 }
