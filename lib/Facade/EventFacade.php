@@ -3,7 +3,7 @@
 namespace RunetId\ApiClient\Facade;
 
 use RunetId\ApiClient\Common\ArgHelper;
-use RunetId\ApiClient\Iterator\UserIterator;
+use RunetId\ApiClient\Iterator\PageTokenIterator;
 use RunetId\ApiClient\Model\Event\Event;
 use RunetId\ApiClient\Model\Event\Role;
 use RunetId\ApiClient\Model\Event\RoleIdInterface;
@@ -66,7 +66,7 @@ class EventFacade extends AbstractFacade
      * @param null|int $maxResults
      * @param array    $context
      *
-     * @return array|UserIterator|User[]
+     * @return array|PageTokenIterator|User[]
      */
     public function users($maxResults = null, array $context = [])
     {

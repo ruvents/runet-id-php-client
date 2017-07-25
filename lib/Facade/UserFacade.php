@@ -3,7 +3,7 @@
 namespace RunetId\ApiClient\Facade;
 
 use RunetId\ApiClient\Common\ArgHelper;
-use RunetId\ApiClient\Iterator\UserIterator;
+use RunetId\ApiClient\Iterator\PageTokenIterator;
 use RunetId\ApiClient\Model\Common\Address;
 use RunetId\ApiClient\Model\User\User;
 use RunetId\ApiClient\Model\User\UserRunetIdInterface;
@@ -110,7 +110,7 @@ class UserFacade extends AbstractFacade
      * @param null|int $maxResults
      * @param array    $context
      *
-     * @return array|UserIterator|User[]
+     * @return array|PageTokenIterator|User[]
      */
     public function search($query, $maxResults = null, array $context = [])
     {

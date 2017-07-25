@@ -65,7 +65,7 @@ class DenormalizationExtension implements ExtensionInterface
     {
         $context = $event->getContext();
 
-        if (!$context['denormalize']) {
+        if (false === $context['denormalize']) {
             return;
         }
 
