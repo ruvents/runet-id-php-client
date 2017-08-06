@@ -17,9 +17,11 @@ class DenormalizationExtension implements ExtensionInterface
     /**
      * @var string[]
      */
-    private $endpointClasses = [
+    private $classes = [
         '/event/info' => 'RunetId\ApiClient\Model\Event\Event',
         '/event/roles' => 'RunetId\ApiClient\Model\Event\Role[]',
+        '/event/search' => 'RunetId\ApiClient\Model\User\User[]',
+        '/event/users' => 'RunetId\ApiClient\Model\User\User[]',
         '/user/address' => 'RunetId\ApiClient\Model\Common\Address',
         '/user/auth' => 'RunetId\ApiClient\Model\User\User',
         '/user/create' => 'RunetId\ApiClient\Model\User\User',
@@ -28,17 +30,25 @@ class DenormalizationExtension implements ExtensionInterface
     ];
 
     /**
+     * @var string[]
+     */
+    private $dataPaths = [
+        '/event/search' => 'Users',
+        '/event/users' => 'Users',
+    ];
+
+    /**
      * @var DenormalizerInterface
      */
     private $denormalizer;
 
     /**
-     * @param string[]                   $endpointClasses
+     * @param string[]                   $classes
      * @param null|DenormalizerInterface $denormalizer
      */
-    public function __construct($endpointClasses = [], DenormalizerInterface $denormalizer = null)
+    public function __construct($classes = [], DenormalizerInterface $denormalizer = null)
     {
-        $this->endpointClasses = array_merge($this->endpointClasses, $endpointClasses);
+        $this->classes = array_merge($this->classes, $classes);
         $this->denormalizer = $denormalizer ?: new Serializer([new ArrayDenormalizer(), new RunetIdDenormalizer()]);
     }
 
@@ -50,11 +60,19 @@ class DenormalizationExtension implements ExtensionInterface
         $resolver
             ->setDefaults([
                 'class' => function (Options $context) {
-                    return $this->getEndpointClass($context['endpoint']);
+                    $endpoint = $context['endpoint'];
+
+                    return isset($this->classes[$endpoint]) ? $this->classes[$endpoint] : null;
+                },
+                'data_path' => function (Options $context) {
+                    $endpoint = $context['endpoint'];
+
+                    return isset($this->dataPaths[$endpoint]) ? $this->dataPaths[$endpoint] : null;
                 },
                 'denormalize' => true,
             ])
             ->setAllowedTypes('class', ['null', 'string'])
+            ->setAllowedTypes('data_path', ['null', 'string'])
             ->setAllowedTypes('denormalize', 'bool');
     }
 
@@ -84,21 +102,26 @@ class DenormalizationExtension implements ExtensionInterface
             return;
         }
 
-        /** @var null|string $class */
+        /**
+         * @var null|string $class
+         * @var null|string $dataPath
+         */
         $class = $context['class'];
+        $dataPath = $context['data_path'];
 
-        if (null !== $class && $this->denormalizer->supportsDenormalization($data, $class)) {
-            $event->setData($this->denormalizer->denormalize($data, $class));
+        if (null === $class) {
+            return;
         }
-    }
 
-    /**
-     * @param string $endpoint
-     *
-     * @return null|string
-     */
-    protected function getEndpointClass($endpoint)
-    {
-        return isset($this->endpointClasses[$endpoint]) ? $this->endpointClasses[$endpoint] : null;
+        if (null === $dataPath) {
+            $denormalizationData = &$data;
+        } else {
+            $denormalizationData = &$data[$dataPath];
+        }
+
+        if ($this->denormalizer->supportsDenormalization($denormalizationData, $class)) {
+            $denormalizationData = $this->denormalizer->denormalize($denormalizationData, $class);
+            $event->setData($data);
+        }
     }
 }

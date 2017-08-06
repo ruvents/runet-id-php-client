@@ -15,25 +15,25 @@ class IteratorExtension implements ExtensionInterface
     /**
      * @var string[]
      */
-    private $endpointConfigs = [
-        '/event/users' => [
-            'iterator_class' => 'RunetId\ApiClient\Iterator\PageTokenIterator',
-            'iterator_data_extractor' => 'Users',
-            'iterator_data_class' => 'RunetId\ApiClient\Model\User\User[]',
-        ],
-        '/event/search' => [
-            'iterator_class' => 'RunetId\ApiClient\Iterator\PageTokenIterator',
-            'iterator_data_extractor' => 'Users',
-            'iterator_data_class' => 'RunetId\ApiClient\Model\User\User[]',
-        ],
+    private $iteratorClasses = [
+        '/event/search' => 'RunetId\ApiClient\Iterator\PageTokenIterator',
+        '/event/users' => 'RunetId\ApiClient\Iterator\PageTokenIterator',
     ];
 
     /**
-     * @param array $endpointConfigs
+     * @var string[]
      */
-    public function __construct($endpointConfigs = [])
+    private $dataPaths = [
+        '/event/search' => 'Users',
+        '/event/users' => 'Users',
+    ];
+
+    /**
+     * @param string[] $iteratorClasses
+     */
+    public function __construct($iteratorClasses = [])
     {
-        $this->endpointConfigs = array_merge($this->endpointConfigs, $endpointConfigs);
+        $this->iteratorClasses = array_merge($this->iteratorClasses, $iteratorClasses);
     }
 
     /**
@@ -41,34 +41,34 @@ class IteratorExtension implements ExtensionInterface
      */
     public function configureContext(OptionsResolver $resolver)
     {
-        /** @noinspection PhpUnusedParameterInspection */
         $resolver
             ->setDefaults([
+                'data_path' => function (Options $context) {
+                    $endpoint = $context['endpoint'];
+
+                    return isset($this->dataPaths[$endpoint]) ? $this->dataPaths[$endpoint] : null;
+                },
                 'iterator' => true,
                 'iterator_class' => function (Options $context) {
-                    return $this->getEndpointConfig($context['endpoint'])['iterator_class'];
-                },
-                'iterator_data_extractor' => function (Options $context) {
-                    return $this->getEndpointConfig($context['endpoint'])['iterator_data_extractor'];
-                },
-                'iterator_data_class' => function (Options $context) {
-                    return $this->getEndpointConfig($context['endpoint'])['iterator_data_class'];
+                    $endpoint = $context['endpoint'];
+
+                    return isset($this->iteratorClasses[$endpoint]) ? $this->iteratorClasses[$endpoint] : null;
                 },
             ])
+            ->setAllowedTypes('data_path', ['null', 'string'])
             ->setAllowedTypes('iterator', 'bool')
-            ->setAllowedTypes('iterator_class', ['null', 'string'])
-            ->setAllowedTypes('iterator_data_extractor', ['null', 'string', 'callable'])
-            ->setAllowedTypes('iterator_data_class', ['null', 'string'])
-            ->setNormalizer('iterator_class', function (Options $options, $class) {
+            ->setAllowedValues('iterator_class', function ($class) {
                 if (null === $class) {
-                    return null;
+                    return true;
                 }
 
-                if (!isset(class_implements($class)['RunetId\ApiClient\Iterator\IteratorInterface'])) {
-                    throw new InvalidOptionsException('The option "iterator_class" must be null or an a FQCN, implementing "RunetId\ApiClient\Iterator\IteratorInterface"');
+                if (is_string($class) && class_exists($class)
+                    && isset(class_implements($class)['RunetId\ApiClient\Iterator\IteratorInterface'])
+                ) {
+                    return true;
                 }
 
-                return $class;
+                throw new InvalidOptionsException('The option "iterator_class" must be null or a name of the class, implementing "RunetId\ApiClient\Iterator\IteratorInterface".');
             });
     }
 
@@ -97,15 +97,5 @@ class IteratorExtension implements ExtensionInterface
         $iterator->setContext($context);
 
         $event->setData($iterator);
-    }
-
-    /**
-     * @param string $endpoint
-     *
-     * @return null|array
-     */
-    protected function getEndpointConfig($endpoint)
-    {
-        return isset($this->endpointConfigs[$endpoint]) ? $this->endpointConfigs[$endpoint] : null;
     }
 }

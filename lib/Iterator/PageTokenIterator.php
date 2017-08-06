@@ -121,30 +121,11 @@ class PageTokenIterator implements IteratorInterface, \Countable
         $rawData = $apiClient->request($context);
 
         // extract data
-        if (is_string($context['iterator_data_extractor'])) {
-            $data = $rawData[$context['iterator_data_extractor']];
-        } else {
-            $data = $context['iterator_data_extractor']($rawData);
-        }
-
-        // pre-normalize data
-        $data = array_values($data);
-
-        /**
-         * @var string                                                         $class
-         * @var \Symfony\Component\Serializer\Normalizer\DenormalizerInterface $denormalizer
-         */
-        $class = isset($context['iterator_data_class']) ? $context['iterator_data_class'] : null;
-        $denormalizer = isset($context['denormalizer']) ? $context['denormalizer'] : null;
-
-        // normalize data if possible
-        if (null !== $denormalizer && null !== $class && $denormalizer->supportsDenormalization($data, $class)) {
-            $data = $denormalizer->denormalize($data, $class);
-        }
+        $data = $rawData[$context['data_path']];
 
         $countData = count($data);
 
-        $this->data = array_merge($this->data, $data);
+        $this->data = array_merge($this->data, array_values($data));
 
         if (null !== $this->nextMaxResults) {
             $this->nextMaxResults -= $countData;
