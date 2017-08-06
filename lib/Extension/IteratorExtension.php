@@ -15,7 +15,7 @@ class IteratorExtension implements ExtensionInterface
     /**
      * @var string[]
      */
-    private $iteratorClasses = [
+    private static $iteratorClasses = [
         '/event/search' => 'RunetId\ApiClient\Iterator\PageTokenIterator',
         '/event/users' => 'RunetId\ApiClient\Iterator\PageTokenIterator',
     ];
@@ -23,18 +23,10 @@ class IteratorExtension implements ExtensionInterface
     /**
      * @var string[]
      */
-    private $dataPaths = [
+    private static $dataPaths = [
         '/event/search' => 'Users',
         '/event/users' => 'Users',
     ];
-
-    /**
-     * @param string[] $iteratorClasses
-     */
-    public function __construct($iteratorClasses = [])
-    {
-        $this->iteratorClasses = array_merge($this->iteratorClasses, $iteratorClasses);
-    }
 
     /**
      * {@inheritdoc}
@@ -46,13 +38,13 @@ class IteratorExtension implements ExtensionInterface
                 'data_path' => function (Options $context) {
                     $endpoint = $context['endpoint'];
 
-                    return isset($this->dataPaths[$endpoint]) ? $this->dataPaths[$endpoint] : null;
+                    return isset(self::$dataPaths[$endpoint]) ? self::$dataPaths[$endpoint] : null;
                 },
                 'iterator' => true,
                 'iterator_class' => function (Options $context) {
                     $endpoint = $context['endpoint'];
 
-                    return isset($this->iteratorClasses[$endpoint]) ? $this->iteratorClasses[$endpoint] : null;
+                    return isset(self::$iteratorClasses[$endpoint]) ? self::$iteratorClasses[$endpoint] : null;
                 },
             ])
             ->setAllowedTypes('data_path', ['null', 'string'])

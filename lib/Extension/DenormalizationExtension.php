@@ -17,7 +17,7 @@ class DenormalizationExtension implements ExtensionInterface
     /**
      * @var string[]
      */
-    private $classes = [
+    private static $classes = [
         '/event/info' => 'RunetId\ApiClient\Model\Event\Event',
         '/event/roles' => 'RunetId\ApiClient\Model\Event\Role[]',
         '/event/search' => 'RunetId\ApiClient\Model\User\User[]',
@@ -32,7 +32,7 @@ class DenormalizationExtension implements ExtensionInterface
     /**
      * @var string[]
      */
-    private $dataPaths = [
+    private static $dataPaths = [
         '/event/search' => 'Users',
         '/event/users' => 'Users',
     ];
@@ -42,13 +42,8 @@ class DenormalizationExtension implements ExtensionInterface
      */
     private $denormalizer;
 
-    /**
-     * @param string[]                   $classes
-     * @param null|DenormalizerInterface $denormalizer
-     */
-    public function __construct($classes = [], DenormalizerInterface $denormalizer = null)
+    public function __construct(DenormalizerInterface $denormalizer = null)
     {
-        $this->classes = array_merge($this->classes, $classes);
         $this->denormalizer = $denormalizer ?: new Serializer([new ArrayDenormalizer(), new RunetIdDenormalizer()]);
     }
 
@@ -62,12 +57,12 @@ class DenormalizationExtension implements ExtensionInterface
                 'class' => function (Options $context) {
                     $endpoint = $context['endpoint'];
 
-                    return isset($this->classes[$endpoint]) ? $this->classes[$endpoint] : null;
+                    return isset(self::$classes[$endpoint]) ? self::$classes[$endpoint] : null;
                 },
                 'data_path' => function (Options $context) {
                     $endpoint = $context['endpoint'];
 
-                    return isset($this->dataPaths[$endpoint]) ? $this->dataPaths[$endpoint] : null;
+                    return isset(self::$dataPaths[$endpoint]) ? self::$dataPaths[$endpoint] : null;
                 },
                 'denormalize' => true,
             ])
