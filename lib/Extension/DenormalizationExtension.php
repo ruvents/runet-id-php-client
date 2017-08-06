@@ -17,7 +17,7 @@ class DenormalizationExtension implements ExtensionInterface
     /**
      * @var string[]
      */
-    private static $endpointClasses = [
+    private $endpointClasses = [
         '/event/info' => 'RunetId\ApiClient\Model\Event\Event',
         '/event/roles' => 'RunetId\ApiClient\Model\Event\Role[]',
         '/user/address' => 'RunetId\ApiClient\Model\Common\Address',
@@ -28,27 +28,34 @@ class DenormalizationExtension implements ExtensionInterface
     ];
 
     /**
+     * @var DenormalizerInterface
+     */
+    private $denormalizer;
+
+    /**
+     * @param string[]                   $endpointClasses
+     * @param null|DenormalizerInterface $denormalizer
+     */
+    public function __construct($endpointClasses = [], DenormalizerInterface $denormalizer = null)
+    {
+        $this->endpointClasses = array_merge($this->endpointClasses, $endpointClasses);
+        $this->denormalizer = $denormalizer ?: new Serializer([new ArrayDenormalizer(), new RunetIdDenormalizer()]);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function configureContext(OptionsResolver $resolver)
     {
-        /** @noinspection PhpUnusedParameterInspection */
         $resolver
             ->setDefaults([
                 'class' => function (Options $context) {
                     return $this->getEndpointClass($context['endpoint']);
                 },
                 'denormalize' => true,
-                'denormalizer' => function (Options $context) {
-                    return new Serializer([
-                        new ArrayDenormalizer(),
-                        new RunetIdDenormalizer(),
-                    ]);
-                },
             ])
             ->setAllowedTypes('class', ['null', 'string'])
-            ->setAllowedTypes('denormalize', 'bool')
-            ->setAllowedTypes('denormalizer', 'Symfony\Component\Serializer\Normalizer\DenormalizerInterface');
+            ->setAllowedTypes('denormalize', 'bool');
     }
 
     /**
@@ -77,15 +84,11 @@ class DenormalizationExtension implements ExtensionInterface
             return;
         }
 
-        /**
-         * @var string                $class
-         * @var DenormalizerInterface $denormalizer
-         */
+        /** @var null|string $class */
         $class = $context['class'];
-        $denormalizer = $context['denormalizer'];
 
-        if (null !== $class && $denormalizer->supportsDenormalization($data, $class)) {
-            $event->setData($denormalizer->denormalize($data, $class));
+        if (null !== $class && $this->denormalizer->supportsDenormalization($data, $class)) {
+            $event->setData($this->denormalizer->denormalize($data, $class));
         }
     }
 
@@ -96,6 +99,6 @@ class DenormalizationExtension implements ExtensionInterface
      */
     protected function getEndpointClass($endpoint)
     {
-        return isset(self::$endpointClasses[$endpoint]) ? self::$endpointClasses[$endpoint] : null;
+        return isset($this->endpointClasses[$endpoint]) ? $this->endpointClasses[$endpoint] : null;
     }
 }

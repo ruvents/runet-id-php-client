@@ -15,7 +15,7 @@ class IteratorExtension implements ExtensionInterface
     /**
      * @var string[]
      */
-    private static $endpointConfigs = [
+    private $endpointConfigs = [
         '/event/users' => [
             'iterator_class' => 'RunetId\ApiClient\Iterator\PageTokenIterator',
             'iterator_data_extractor' => 'Users',
@@ -27,6 +27,14 @@ class IteratorExtension implements ExtensionInterface
             'iterator_data_class' => 'RunetId\ApiClient\Model\User\User[]',
         ],
     ];
+
+    /**
+     * @param array $endpointConfigs
+     */
+    public function __construct($endpointConfigs = [])
+    {
+        $this->endpointConfigs = array_merge($this->endpointConfigs, $endpointConfigs);
+    }
 
     /**
      * {@inheritdoc}
@@ -94,10 +102,10 @@ class IteratorExtension implements ExtensionInterface
     /**
      * @param string $endpoint
      *
-     * @return null|string
+     * @return null|array
      */
     protected function getEndpointConfig($endpoint)
     {
-        return isset(self::$endpointConfigs[$endpoint]) ? self::$endpointConfigs[$endpoint] : null;
+        return isset($this->endpointConfigs[$endpoint]) ? $this->endpointConfigs[$endpoint] : null;
     }
 }
