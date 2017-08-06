@@ -70,6 +70,9 @@ class Participation implements RunetIdDenormalizableInterface
         $this->ticketUrl = $data['TicketUrl'];
         $this->registered = (bool)$data['Registered'];
         $this->updatedAt = new \DateTimeImmutable($data['UpdateTime']);
-        $this->role = $denormalizer->denormalize($data['Role'], Role::className(), $format, $context);
+        $this->role = $denormalizer
+            ->denormalize($data['Role'], Role::className(), $format, array_merge($context, [
+                'parent' => $this,
+            ]));
     }
 }

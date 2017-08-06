@@ -257,7 +257,9 @@ class Event implements EventIdInterface, RunetIdDenormalizableInterface
 
         if (!empty($data['GeoPoint'][0]) && !empty($data['GeoPoint'][1]) && !empty($data['GeoPoint'][2])) {
             $this->geoPoint = $denormalizer
-                ->denormalize($data['GeoPoint'], GeoPoint::className(), $format, $context);
+                ->denormalize($data['GeoPoint'], GeoPoint::className(), $format, array_merge($context, [
+                    'parent' => $this,
+                ]));
         }
     }
 }
