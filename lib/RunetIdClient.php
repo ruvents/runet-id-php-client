@@ -27,8 +27,8 @@ class RunetIdClient extends AbstractApiClient
      */
     public function __construct(array $defaultContext = [], array $extensions = [], RunetIdService $service = null)
     {
-        parent::__construct($defaultContext, $extensions);
         $this->service = $service ?: new RunetIdService();
+        parent::__construct($defaultContext, $extensions);
     }
 
     /**
