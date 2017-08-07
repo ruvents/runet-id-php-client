@@ -18,17 +18,11 @@ class RunetIdClient extends AbstractApiClient
     protected $facades = [];
 
     /**
-     * @var RunetIdService
-     */
-    private $service;
-
-    /**
      * {@inheritdoc}
      */
     public function __construct(array $defaultContext = [], array $extensions = [], RunetIdService $service = null)
     {
-        $this->service = $service ?: new RunetIdService();
-        parent::__construct($defaultContext, $extensions);
+        parent::__construct($service ?: new RunetIdService(), $defaultContext, $extensions);
     }
 
     /**
@@ -46,13 +40,5 @@ class RunetIdClient extends AbstractApiClient
         }
 
         return $this->facades[$class];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    final protected function getService()
-    {
-        return $this->service;
     }
 }
