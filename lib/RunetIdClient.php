@@ -5,7 +5,6 @@ namespace RunetId\ApiClient;
 use RunetId\ApiClient\Facade;
 use RunetId\ApiClient\Service\RunetIdService;
 use Ruvents\AbstractApiClient\AbstractApiClient;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @method Facade\EventFacade event()
@@ -26,14 +25,10 @@ class RunetIdClient extends AbstractApiClient
     /**
      * {@inheritdoc}
      */
-    public function __construct(
-        array $defaultContext = [],
-        array $extensions = [],
-        RunetIdService $service = null,
-        EventDispatcherInterface $eventDispatcher = null
-    ) {
+    public function __construct(array $defaultContext = [], array $extensions = [], RunetIdService $service = null)
+    {
+        parent::__construct($defaultContext, $extensions);
         $this->service = $service ?: new RunetIdService();
-        parent::__construct($defaultContext, $extensions, $eventDispatcher);
     }
 
     /**
