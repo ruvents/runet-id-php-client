@@ -26,17 +26,17 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
     protected $runetId;
 
     /**
-     * @var string
+     * @var null|string
      */
     protected $firstName;
 
     /**
-     * @var string
+     * @var null|string
      */
     protected $lastName;
 
     /**
-     * @var string
+     * @var null|string
      */
     protected $fatherName;
 
@@ -71,7 +71,7 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
     protected $gender;
 
     /**
-     * @var Work
+     * @var null|Work
      */
     protected $work;
 
@@ -104,7 +104,7 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getFirstName()
     {
@@ -112,7 +112,7 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getLastName()
     {
@@ -120,7 +120,7 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getFatherName()
     {
@@ -176,7 +176,7 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return Work
+     * @return null|Work
      */
     public function getWork()
     {
@@ -231,9 +231,9 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
     public function runetIdDenormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = [])
     {
         $this->runetId = (int)$data['RunetId'];
-        $this->firstName = $data['FirstName'];
-        $this->lastName = $data['LastName'];
-        $this->fatherName = $data['FatherName'];
+        $this->firstName = $data['FirstName'] ?: null;
+        $this->lastName = $data['LastName'] ?: null;
+        $this->fatherName = $data['FatherName'] ?: null;
         $this->email = $data['Email'];
         $this->phone = $data['Phone'] ?: null;
         $this->visible = (bool)$data['Visible'];

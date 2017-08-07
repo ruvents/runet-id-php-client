@@ -12,12 +12,12 @@ class Work implements RunetIdDenormalizableInterface
     use ClassTrait;
 
     /**
-     * @var string
+     * @var null|string
      */
     protected $position;
 
     /**
-     * @var Company
+     * @var null|Company
      */
     protected $company;
 
@@ -32,7 +32,7 @@ class Work implements RunetIdDenormalizableInterface
     protected $end;
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getPosition()
     {
@@ -40,7 +40,7 @@ class Work implements RunetIdDenormalizableInterface
     }
 
     /**
-     * @return Company
+     * @return null|Company
      */
     public function getCompany()
     {
@@ -68,7 +68,7 @@ class Work implements RunetIdDenormalizableInterface
      */
     public function runetIdDenormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = [])
     {
-        $this->position = $data['Position'];
+        $this->position = $data['Position'] ?: null;
 
         if (isset($data['Company'])) {
             $this->company = $denormalizer
