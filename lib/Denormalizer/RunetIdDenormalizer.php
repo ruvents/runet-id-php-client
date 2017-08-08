@@ -2,14 +2,18 @@
 
 namespace RunetId\ApiClient\Denormalizer;
 
+use Ruvents\AbstractApiClient\Service\ServiceInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * @property DenormalizerInterface $serializer
- */
-class RunetIdDenormalizer extends SerializerAwareNormalizer implements DenormalizerInterface
+class RunetIdDenormalizer implements DenormalizerInterface, SerializerAwareInterface
 {
+    /**
+     * @var DenormalizerInterface
+     */
+    protected $denormalizer;
+
     /**
      * {@inheritdoc}
      */
@@ -23,7 +27,7 @@ class RunetIdDenormalizer extends SerializerAwareNormalizer implements Denormali
             );
         }
 
-        $object->runetIdDenormalize($this->serializer, $data, $format, $context);
+        $object->runetIdDenormalize($this->denormalizer, $data, $format, $context);
 
         return $object;
     }
@@ -35,5 +39,21 @@ class RunetIdDenormalizer extends SerializerAwareNormalizer implements Denormali
     {
         return class_exists($class)
             && is_subclass_of($class, 'RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface');
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param ServiceInterface|DenormalizerInterface $denormalizer
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function setSerializer(SerializerInterface $denormalizer)
+    {
+        if (!$denormalizer instanceof DenormalizerInterface) {
+            throw new \InvalidArgumentException(sprintf('Serializer must implement "Symfony\Component\Serializer\Normalizer\DenormalizerInterface".'));
+        }
+
+        $this->denormalizer = $denormalizer;
     }
 }
