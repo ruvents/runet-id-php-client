@@ -65,10 +65,12 @@ class DenormalizationExtension implements ExtensionInterface
                     return isset(self::$dataPaths[$endpoint]) ? self::$dataPaths[$endpoint] : null;
                 },
                 'denormalize' => true,
+                'denormalization_context' => [],
             ])
             ->setAllowedTypes('class', ['null', 'string'])
             ->setAllowedTypes('data_path', ['null', 'string'])
-            ->setAllowedTypes('denormalize', 'bool');
+            ->setAllowedTypes('denormalize', 'bool')
+            ->setAllowedTypes('denormalization_context', 'array');
     }
 
     /**
@@ -115,7 +117,8 @@ class DenormalizationExtension implements ExtensionInterface
         }
 
         if ($this->denormalizer->supportsDenormalization($denormalizationData, $class)) {
-            $denormalizationData = $this->denormalizer->denormalize($denormalizationData, $class);
+            $denormalizationData = $this->denormalizer
+                ->denormalize($denormalizationData, $class, null, $context['denormalization_context']);
             $event->setData($data);
         }
     }
