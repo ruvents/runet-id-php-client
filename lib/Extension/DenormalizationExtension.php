@@ -111,14 +111,17 @@ class DenormalizationExtension implements ExtensionInterface
         }
 
         if (null === $dataPath) {
-            $denormalizationData = &$data;
+            $dataToDenormalize = &$data;
         } else {
-            $denormalizationData = &$data[$dataPath];
+            $dataToDenormalize = &$data[$dataPath];
         }
 
-        if ($this->denormalizer->supportsDenormalization($denormalizationData, $class)) {
-            $denormalizationData = $this->denormalizer
-                ->denormalize($denormalizationData, $class, null, $context['denormalization_context']);
+        $supports = $this->denormalizer
+            ->supportsDenormalization($dataToDenormalize, $class, null, $context['denormalization_context']);
+
+        if ($supports) {
+            $dataToDenormalize = $this->denormalizer
+                ->denormalize($dataToDenormalize, $class, null, $context['denormalization_context']);
             $event->setData($data);
         }
     }
