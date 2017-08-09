@@ -9,6 +9,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class RunetIdDenormalizer implements DenormalizerInterface, SerializerAwareInterface
 {
+    const OBJECT_TO_POPULATE = 'object_to_populate';
+
     /**
      * @var DenormalizerInterface
      */
@@ -19,7 +21,7 @@ class RunetIdDenormalizer implements DenormalizerInterface, SerializerAwareInter
      */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
-        $object = new $class();
+        $object = $this->instantiateObject($data, $class, $context);
 
         if (!$object instanceof RunetIdDenormalizableInterface) {
             throw new \UnexpectedValueException(
@@ -55,5 +57,30 @@ class RunetIdDenormalizer implements DenormalizerInterface, SerializerAwareInter
         }
 
         $this->denormalizer = $denormalizer;
+    }
+
+    /**
+     * @param mixed  $data
+     * @param string $class
+     * @param array  $context
+     *
+     * @return RunetIdDenormalizableInterface
+     */
+    protected function instantiateObject(
+        /** @noinspection PhpUnusedParameterInspection */
+        &$data,
+        $class,
+        array &$context = []
+    ) {
+        if (isset($context[self::OBJECT_TO_POPULATE])
+            && $context[self::OBJECT_TO_POPULATE] instanceof RunetIdDenormalizableInterface
+        ) {
+            $object = $context[self::OBJECT_TO_POPULATE];
+            unset($context[self::OBJECT_TO_POPULATE]);
+
+            return $object;
+        }
+
+        return new $class();
     }
 }
