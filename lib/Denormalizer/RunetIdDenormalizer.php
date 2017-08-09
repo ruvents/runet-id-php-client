@@ -72,9 +72,7 @@ class RunetIdDenormalizer implements DenormalizerInterface, SerializerAwareInter
         $class,
         array &$context = []
     ) {
-        if (isset($context[self::OBJECT_TO_POPULATE])
-            && $context[self::OBJECT_TO_POPULATE] instanceof RunetIdDenormalizableInterface
-        ) {
+        if (isset($context[self::OBJECT_TO_POPULATE])) {
             $object = $context[self::OBJECT_TO_POPULATE];
             unset($context[self::OBJECT_TO_POPULATE]);
 
