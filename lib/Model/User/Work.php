@@ -71,10 +71,7 @@ class Work implements RunetIdDenormalizableInterface
         $this->position = $data['Position'] ?: null;
 
         if (isset($data['Company'])) {
-            $this->company = $denormalizer
-                ->denormalize($data['Company'], Company::className(), $format, array_merge($context, [
-                    'parent' => $this,
-                ]));
+            $this->company = $denormalizer->denormalize($data['Company'], Company::className(), $format, $context);
         }
 
         if (isset($data['StartYear'])) {

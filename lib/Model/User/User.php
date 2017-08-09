@@ -247,10 +247,7 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
         $this->attributes = (array)$data['Attributes'];
 
         if (isset($data['Work'])) {
-            $this->work = $denormalizer
-                ->denormalize($data['Work'], Work::className(), $format, array_merge($context, [
-                    'parent' => $this,
-                ]));
+            $this->work = $denormalizer->denormalize($data['Work'], Work::className(), $format, $context);
         }
 
         foreach ($data['Photo'] as $size => $url) {
@@ -263,9 +260,7 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
         }
         /*if (isset($data['Status'])) {
             $this->participation = $denormalizer
-                ->denormalize($data['Status'], Participation::className(), $format, array_merge($context, [
-                    'parent' => $this,
-                ]));
+                ->denormalize($data['Status'], Participation::className(), $format, $context);
         }*/
     }
 }
