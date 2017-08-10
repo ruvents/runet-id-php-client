@@ -8,6 +8,7 @@ use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\RequestFactory;
 use Ruvents\AbstractApiClient\Exception\ApiException;
 use Ruvents\AbstractApiClient\Service;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RunetIdService implements Service\ServiceInterface
@@ -33,6 +34,10 @@ class RunetIdService implements Service\ServiceInterface
     public function configureContext(OptionsResolver $resolver)
     {
         /** @noinspection PhpUnusedParameterInspection */
+        $endpointNormalizer = function (Options $context, $endpoint) {
+            return '/'.ltrim($endpoint, '/');
+        };
+
         $resolver
             ->setRequired([
                 'endpoint',
@@ -41,7 +46,6 @@ class RunetIdService implements Service\ServiceInterface
             ])
             ->setDefaults([
                 'body' => null,
-                'event_id' => null,
                 'headers' => [],
                 'host' => 'api.runet-id.com',
                 'language' => 'ru',
@@ -49,20 +53,19 @@ class RunetIdService implements Service\ServiceInterface
                 'query' => [],
                 'scheme' => 'http',
             ])
+            ->setDefined('event_id')
             ->setAllowedTypes('endpoint', 'string')
             ->setAllowedTypes('key', 'string')
             ->setAllowedTypes('secret', 'string')
             ->setAllowedTypes('body', ['null', 'string', 'array', 'Psr\Http\Message\StreamInterface'])
-            ->setAllowedTypes('event_id', ['null', 'int'])
+            ->setAllowedTypes('event_id', 'int')
             ->setAllowedTypes('headers', 'array')
             ->setAllowedTypes('host', 'string')
             ->setAllowedValues('language', ['ru', 'en'])
             ->setAllowedTypes('method', 'string')
             ->setAllowedTypes('query', 'array')
             ->setAllowedTypes('scheme', 'string')
-            ->setNormalizer('endpoint', function ($context, $endpoint) {
-                return '/'.ltrim($endpoint, '/');
-            });
+            ->setNormalizer('endpoint', $endpointNormalizer);
     }
 
     /**
@@ -71,9 +74,12 @@ class RunetIdService implements Service\ServiceInterface
     public function createRequest(array $context)
     {
         $query = array_replace([
-            'EventId' => $context['event_id'],
             'Language' => $context['language'],
         ], $context['query']);
+
+        if (isset($context['event_id'])) {
+            $query['EventId'] = $context['event_id'];
+        }
 
         $query = $this->httpBuildQuery($query);
 
