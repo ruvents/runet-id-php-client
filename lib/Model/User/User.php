@@ -246,16 +246,22 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
         $this->createdAt = new \DateTimeImmutable($data['CreationTime']);
         $this->attributes = (array)$data['Attributes'];
 
-        if (isset($data['Work'])) {
-            $this->work = $denormalizer->denormalize($data['Work'], Work::className(), $format, $context);
+        if (array_key_exists('Work', $data)) {
+            if (null === $data['Work']) {
+                $this->work = null;
+            } else {
+                $this->work = $denormalizer->denormalize($data['Work'], Work::className(), $format, $context);
+            }
         }
 
         foreach ($data['Photo'] as $size => $url) {
             $filename = pathinfo($url, PATHINFO_FILENAME);
             $width = null;
+
             if (false !== $_pos = strrpos($filename, '_')) {
                 $width = (int)substr($filename, $_pos + 1);
             }
+
             $this->photos[$size] = new Image($url, $width, $width);
         }
         /*if (isset($data['Status'])) {
