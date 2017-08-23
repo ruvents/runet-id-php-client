@@ -2,21 +2,10 @@
 
 namespace RunetId\ApiClient\Extension;
 
-use RunetId\ApiClient\Denormalizer\Common\AddressPreDenormalizer;
-use RunetId\ApiClient\Denormalizer\Common\GeoPointPreDenormalizer;
-use RunetId\ApiClient\Denormalizer\Company\CompanyPreDenormalizer;
 use RunetId\ApiClient\Denormalizer\DateTimeImmutableDenormalizer;
-use RunetId\ApiClient\Denormalizer\Event\EventPreDenormalizer;
-use RunetId\ApiClient\Denormalizer\Event\ParticipationPreDenormalizer;
-use RunetId\ApiClient\Denormalizer\Event\StatusPreDenormalizer;
 use RunetId\ApiClient\Denormalizer\ModelDenormalizer;
-use RunetId\ApiClient\Denormalizer\Pay\ItemListPreDenormalizer;
-use RunetId\ApiClient\Denormalizer\Pay\ItemPreDenormalizer;
 use RunetId\ApiClient\Denormalizer\Pay\OrderAwareItemDenormalizer;
-use RunetId\ApiClient\Denormalizer\Pay\OrderPreDenormalizer;
-use RunetId\ApiClient\Denormalizer\Pay\ProductPreDenormalizer;
-use RunetId\ApiClient\Denormalizer\User\UserPreDenormalizer;
-use RunetId\ApiClient\Denormalizer\User\WorkPreDenormalizer;
+use RunetId\ApiClient\Denormalizer\PreDenormalizer;
 use RunetId\ApiClient\Service\RunetIdService;
 use Ruvents\AbstractApiClient\Event\Events;
 use Ruvents\AbstractApiClient\Event\PostDecodeEvent;
@@ -59,18 +48,7 @@ class DenormalizationExtension implements ExtensionInterface
                 new DateTimeImmutableDenormalizer(),
                 new OrderAwareItemDenormalizer(),
                 new ModelDenormalizer(),
-                new UserPreDenormalizer(),
-                new ParticipationPreDenormalizer(),
-                new StatusPreDenormalizer(),
-                new WorkPreDenormalizer(),
-                new CompanyPreDenormalizer(),
-                new EventPreDenormalizer(),
-                new ItemListPreDenormalizer(),
-                new ItemPreDenormalizer(),
-                new ProductPreDenormalizer(),
-                new OrderPreDenormalizer(),
-                new AddressPreDenormalizer(),
-                new GeoPointPreDenormalizer(),
+                new PreDenormalizer(),
             ]);
     }
 

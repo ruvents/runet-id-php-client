@@ -3,9 +3,10 @@
 namespace RunetId\ApiClient\Model\Common;
 
 use RunetId\ApiClient\Common\ClassTrait;
+use RunetId\ApiClient\Denormalizer\PreDenormalizableInterface;
 use RunetId\ApiClient\Model\ModelInterface;
 
-class GeoPoint implements ModelInterface
+class GeoPoint implements ModelInterface, PreDenormalizableInterface
 {
     use ClassTrait;
 
@@ -46,5 +47,17 @@ class GeoPoint implements ModelInterface
     public function getScale()
     {
         return $this->scale;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'latitude' => 0,
+            'longitude' => 1,
+            'scale' => 2,
+        ];
     }
 }

@@ -3,9 +3,10 @@
 namespace RunetId\ApiClient\Model\Pay;
 
 use RunetId\ApiClient\Common\ClassTrait;
+use RunetId\ApiClient\Denormalizer\PreDenormalizableInterface;
 use RunetId\ApiClient\Model\ModelInterface;
 
-class Product implements ModelInterface, ProductIdInterface
+class Product implements ModelInterface, ProductIdInterface, PreDenormalizableInterface
 {
     use ClassTrait;
 
@@ -106,5 +107,21 @@ class Product implements ModelInterface, ProductIdInterface
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'id' => 'Id',
+            'title' => 'Title',
+            'manager' => 'Manager',
+            'price' => 'Price',
+            'priceStart' => 'PriceStartTime',
+            'priceEnd' => 'PriceEndTime',
+            'attributes' => 'Attributes',
+        ];
     }
 }

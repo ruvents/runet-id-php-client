@@ -3,9 +3,10 @@
 namespace RunetId\ApiClient\Model\Company;
 
 use RunetId\ApiClient\Common\ClassTrait;
+use RunetId\ApiClient\Denormalizer\PreDenormalizableInterface;
 use RunetId\ApiClient\Model\ModelInterface;
 
-class Company implements ModelInterface, CompanyIdInterface
+class Company implements ModelInterface, CompanyIdInterface, PreDenormalizableInterface
 {
     use ClassTrait;
 
@@ -38,5 +39,16 @@ class Company implements ModelInterface, CompanyIdInterface
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'id' => 'Id',
+            'title' => 'Name',
+        ];
     }
 }

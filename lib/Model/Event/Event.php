@@ -3,10 +3,11 @@
 namespace RunetId\ApiClient\Model\Event;
 
 use RunetId\ApiClient\Common\ClassTrait;
+use RunetId\ApiClient\Denormalizer\PreDenormalizableInterface;
 use RunetId\ApiClient\Model\Common\GeoPoint;
 use RunetId\ApiClient\Model\ModelInterface;
 
-class Event implements ModelInterface, EventIdInterface
+class Event implements ModelInterface, EventIdInterface, PreDenormalizableInterface
 {
     use ClassTrait;
 
@@ -195,5 +196,47 @@ class Event implements ModelInterface, EventIdInterface
     public function getStatistics()
     {
         return $this->statistics;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'id' => 'EventId',
+            'alias' => 'IdName',
+            'title' => 'Title',
+            'info' => 'Info',
+            'fullInfo' => 'FullInfo',
+            'place' => 'Place',
+            'url' => 'Url',
+            'registrationUrl' => 'UrlRegistration',
+            'programUrl' => 'UrlProgram',
+            'address' => 'Address',
+            'geoPoint' => function (array $raw, &$exists) {
+                if ($exists = isset($raw['GeoPoint'])) {
+                    return '' !== ($raw['GeoPoint'][0]) && '' !== ($raw['GeoPoint'][1]) && '' !== ($raw['GeoPoint'][2])
+                        ? $raw['GeoPoint']
+                        : null;
+                }
+
+                return null;
+            },
+            'start' => function (array $raw, &$exists) {
+                if ($exists = isset($raw['StartYear']) && isset($raw['StartMonth']) && isset($raw['StartDay'])) {
+                    return $raw['StartYear'].'-'.$raw['StartMonth'].'-'.$raw['StartDay'];
+                }
+
+                return null;
+            },
+            'end' => function (array $raw, &$exists) {
+                if ($exists = isset($raw['EndYear']) && isset($raw['EndMonth']) && isset($raw['EndDay'])) {
+                    return $raw['EndYear'].'-'.$raw['EndMonth'].'-'.$raw['EndDay'];
+                }
+
+                return null;
+            },
+        ];
     }
 }

@@ -10,9 +10,9 @@ abstract class AbstractPreDenormalizer implements DenormalizerInterface
     const PREFIX_LENGTH = 7;
 
     /**
-     * @var null|array
+     * @var array
      */
-    protected $map;
+    private $maps;
 
     /**
      * @param string $class
@@ -29,13 +29,15 @@ abstract class AbstractPreDenormalizer implements DenormalizerInterface
      */
     public function denormalize($raw, $type, $format = null, array $context = [])
     {
-        if (null === $this->map) {
-            $this->map = $this->getMap();
+        $class = $this->extractClass($type);
+
+        if (!isset($this->maps[$class])) {
+            $this->maps[$class] = $this->getMap($class);
         }
 
         $data = [];
 
-        foreach ($this->map as $key => $config) {
+        foreach ($this->maps[$class] as $key => $config) {
             if (is_callable($config)) {
                 $exists = true;
                 $value = $config($raw, $exists);
@@ -66,19 +68,30 @@ abstract class AbstractPreDenormalizer implements DenormalizerInterface
             return false;
         }
 
-        $class = substr($type, self::PREFIX_LENGTH);
-        $supportedClass = $this->getSupportedClass();
-
-        return $class === $supportedClass || is_subclass_of($class, $supportedClass);
+        return $this->supportsClass($this->extractClass($type));
     }
 
     /**
-     * @return array
+     * @param string $class
+     *
+     * @return bool
      */
-    abstract protected function getMap();
+    abstract protected function supportsClass($class);
 
     /**
-     * @return string
+     * @param string $class
+     *
+     * @return array
      */
-    abstract protected function getSupportedClass();
+    abstract protected function getMap($class);
+
+    /**
+     * @param string $type
+     *
+     * @return null|string
+     */
+    private function extractClass($type)
+    {
+        return substr($type, self::PREFIX_LENGTH) ?: null;
+    }
 }

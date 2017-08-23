@@ -3,9 +3,10 @@
 namespace RunetId\ApiClient\Model\Event;
 
 use RunetId\ApiClient\Common\ClassTrait;
+use RunetId\ApiClient\Denormalizer\PreDenormalizableInterface;
 use RunetId\ApiClient\Model\ModelInterface;
 
-class Participation implements ModelInterface
+class Participation implements ModelInterface, PreDenormalizableInterface
 {
     use ClassTrait;
 
@@ -59,5 +60,27 @@ class Participation implements ModelInterface
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'ticketUrl' => 'TicketUrl',
+            'registered' => 'Registered',
+            'updatedAt' => 'UpdateTime',
+            'status' => function (array $raw, &$exists) {
+                if ($exists = isset($raw['RoleId']) && isset($raw['RoleName'])) {
+                    return [
+                        'RoleId' => $raw['RoleId'],
+                        'Name' => $raw['RoleName'],
+                    ];
+                }
+
+                return null;
+            },
+        ];
     }
 }

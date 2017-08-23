@@ -3,10 +3,11 @@
 namespace RunetId\ApiClient\Model\User;
 
 use RunetId\ApiClient\Common\ClassTrait;
+use RunetId\ApiClient\Denormalizer\PreDenormalizableInterface;
 use RunetId\ApiClient\Model\Event\Participation;
 use RunetId\ApiClient\Model\ModelInterface;
 
-class User implements ModelInterface, UserRunetIdInterface
+class User implements ModelInterface, UserRunetIdInterface, PreDenormalizableInterface
 {
     use ClassTrait;
 
@@ -209,5 +210,40 @@ class User implements ModelInterface, UserRunetIdInterface
     public function isMale()
     {
         return self::MALE === $this->gender;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'runetId' => 'RunetId',
+            'firstName' => 'FirstName',
+            'lastName' => 'LastName',
+            'fatherName' => 'FatherName',
+            'email' => 'Email',
+            'phone' => 'Phone',
+            'visible' => 'Visible',
+            'gender' => function (array $raw, &$exists) {
+                if ($exists = array_key_exists('Gender', $raw)) {
+                    return 'none' === $raw['Gender'] ? null : $raw['Gender'];
+                }
+
+                return null;
+            },
+            'verified' => 'Verified',
+            'createdAt' => 'CreationTime',
+            'attributes' => 'Attributes',
+            'work' => 'Work',
+            'participation' => 'Status',
+            'photo' => function (array $raw, &$exists) {
+                if ($exists = isset($raw['Photo']['Original'])) {
+                    return $raw['Photo']['Original'];
+                }
+
+                return null;
+            },
+        ];
     }
 }

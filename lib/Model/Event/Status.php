@@ -3,9 +3,10 @@
 namespace RunetId\ApiClient\Model\Event;
 
 use RunetId\ApiClient\Common\ClassTrait;
+use RunetId\ApiClient\Denormalizer\PreDenormalizableInterface;
 use RunetId\ApiClient\Model\ModelInterface;
 
-class Status implements ModelInterface, StatusIdInterface
+class Status implements ModelInterface, StatusIdInterface, PreDenormalizableInterface
 {
     use ClassTrait;
 
@@ -51,5 +52,17 @@ class Status implements ModelInterface, StatusIdInterface
     public function getPriority()
     {
         return $this->priority;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'id' => 'RoleId',
+            'title' => 'Name',
+            'priority' => 'Priority',
+        ];
     }
 }

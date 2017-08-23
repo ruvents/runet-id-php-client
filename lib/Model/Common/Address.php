@@ -3,9 +3,10 @@
 namespace RunetId\ApiClient\Model\Common;
 
 use RunetId\ApiClient\Common\ClassTrait;
+use RunetId\ApiClient\Denormalizer\PreDenormalizableInterface;
 use RunetId\ApiClient\Model\ModelInterface;
 
-class Address implements ModelInterface
+class Address implements ModelInterface, PreDenormalizableInterface
 {
     use ClassTrait;
 
@@ -137,5 +138,24 @@ class Address implements ModelInterface
     public function getPlace()
     {
         return $this->place;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'country' => 'Country',
+            'region' => 'Region',
+            'city' => 'City',
+            'postCode' => 'PostCode',
+            'street' => 'Street',
+            'house' => 'House',
+            'building' => 'Building',
+            'wing' => 'Wing',
+            'apartment' => 'Apartment',
+            'place' => 'Place',
+        ];
     }
 }

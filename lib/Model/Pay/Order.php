@@ -3,9 +3,10 @@
 namespace RunetId\ApiClient\Model\Pay;
 
 use RunetId\ApiClient\Common\ClassTrait;
+use RunetId\ApiClient\Denormalizer\PreDenormalizableInterface;
 use RunetId\ApiClient\Model\ModelInterface;
 
-class Order implements ModelInterface, OrderIdInterface, \IteratorAggregate
+class Order implements ModelInterface, OrderIdInterface, \IteratorAggregate, PreDenormalizableInterface
 {
     use ClassTrait;
 
@@ -95,5 +96,20 @@ class Order implements ModelInterface, OrderIdInterface, \IteratorAggregate
     public function getIterator()
     {
         return new \ArrayIterator($this->items);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'id' => 'OrderId',
+            'createdAt' => 'CreationTime',
+            'number' => 'Number',
+            'paid' => 'Paid',
+            'url' => 'Url',
+            'items' => 'Items',
+        ];
     }
 }

@@ -10,7 +10,7 @@ class OrderAwareItemDenormalizer extends ModelDenormalizer
     /**
      * {@inheritdoc}
      */
-    protected function instantiateObject(array &$data, $class, $format = null, array &$context)
+    protected function instantiateObject(&$data, $class, $format = null, array &$context)
     {
         $order = null;
 

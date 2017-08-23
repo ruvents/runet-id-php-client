@@ -41,8 +41,6 @@ class ModelDenormalizer implements DenormalizerInterface, SerializerAwareInterfa
      */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
-        /** @var array $data */
-        $data = $this->serializer->denormalize((array)$data, AbstractPreDenormalizer::getType($class), $format, $context);
         $this->preDenormalize($data, $class, $format, $context);
 
         $object = $this->instantiateObject($data, $class, $format, $context);
@@ -71,8 +69,7 @@ class ModelDenormalizer implements DenormalizerInterface, SerializerAwareInterfa
      */
     public function supportsDenormalization($data, $type, $format = null, array $context = [])
     {
-        return is_subclass_of($type, 'RunetId\ApiClient\Model\ModelInterface')
-            && $this->serializer->supportsDenormalization($data, AbstractPreDenormalizer::getType($type), $format, $context);
+        return is_subclass_of($type, 'RunetId\ApiClient\Model\ModelInterface');
     }
 
     /**
@@ -88,13 +85,19 @@ class ModelDenormalizer implements DenormalizerInterface, SerializerAwareInterfa
     }
 
     /**
-     * @param array       $data
+     * @param mixed       $data
      * @param string      $class
      * @param null|string $format
      * @param array       $context
      */
-    protected function preDenormalize(array &$data, $class, $format = null, array &$context)
+    protected function preDenormalize(&$data, $class, $format = null, array &$context)
     {
+        $data = (array)$data;
+
+        try {
+            $this->serializer->denormalize($data, AbstractPreDenormalizer::getType($class), $format, $context);
+        } catch (Exception\UnexpectedValueException $exception) {
+        }
     }
 
     /**
@@ -105,7 +108,7 @@ class ModelDenormalizer implements DenormalizerInterface, SerializerAwareInterfa
      *
      * @return object
      */
-    protected function instantiateObject(array &$data, $class, $format = null, array &$context)
+    protected function instantiateObject(&$data, $class, $format = null, array &$context)
     {
         if (isset($context[self::OBJECT_TO_POPULATE]) && $context[self::OBJECT_TO_POPULATE] instanceof $class) {
             $object = $context[self::OBJECT_TO_POPULATE];

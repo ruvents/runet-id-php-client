@@ -3,10 +3,11 @@
 namespace RunetId\ApiClient\Model\Pay;
 
 use RunetId\ApiClient\Common\ClassTrait;
+use RunetId\ApiClient\Denormalizer\PreDenormalizableInterface;
 use RunetId\ApiClient\Model\ModelInterface;
 use RunetId\ApiClient\Model\User\User;
 
-class Item implements ModelInterface, ItemIdInterface
+class Item implements ModelInterface, ItemIdInterface, PreDenormalizableInterface
 {
     use ClassTrait;
 
@@ -203,5 +204,29 @@ class Item implements ModelInterface, ItemIdInterface
     public function isFree()
     {
         return 0 == $this->cost;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'id' => 'Id',
+            'product' => 'Product',
+            'payer' => 'Payer',
+            'owner' => 'Owner',
+            'cost' => 'PriceDiscount',
+            'paid' => 'Paid',
+            'paidAt' => 'PaidTime',
+            'booked' => function (array $raw) {
+                return isset($raw['Booked']) ? $raw['Booked'] : false;
+            },
+            'deleted' => 'Deleted',
+            'createdAt' => 'CreationTime',
+            'attributes' => 'Attributes',
+            'discount' => 'Discount',
+            'activatedPromoCode' => 'ActivatedPromoCode',
+        ];
     }
 }
