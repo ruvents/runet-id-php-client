@@ -6,6 +6,9 @@ use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\RequestFactory;
+use Ruvents\AbstractApiClient\ApiClientInterface;
+use Ruvents\AbstractApiClient\Event\Events;
+use Ruvents\AbstractApiClient\Event\PostDecodeEvent;
 use Ruvents\AbstractApiClient\Exception\ApiException;
 use Ruvents\AbstractApiClient\Service;
 use Symfony\Component\OptionsResolver\Options;
@@ -16,6 +19,15 @@ class RunetIdService implements Service\ServiceInterface
     use Service\HttpClientDiscoveryTrait;
     use Service\Response200Trait;
     use Service\JsonDecodeTrait;
+
+    /**
+     * @var string[]
+     */
+    private static $endpointDataPaths = [
+        '/event/search' => 'Users',
+        '/event/users' => 'Users',
+        '/pay/url' => 'Url',
+    ];
 
     /**
      * @var RequestFactory
@@ -29,9 +41,54 @@ class RunetIdService implements Service\ServiceInterface
     }
 
     /**
+     * @param string $endpoint
+     * @param mixed  $data
+     *
+     * @return mixed
+     */
+    public static function & extractEndpointData($endpoint, &$data)
+    {
+        if (isset(self::$endpointDataPaths[$endpoint]) && is_array($data)) {
+            return $data[self::$endpointDataPaths[$endpoint]];
+        }
+
+        return $data;
+    }
+
+    /**
      * {@inheritdoc}
      */
-    public function configureContext(OptionsResolver $resolver)
+    public function configureDefaultContext(OptionsResolver $resolver)
+    {
+        $resolver
+            ->setRequired([
+                'key',
+                'secret',
+            ])
+            ->setDefaults([
+                'denormalize' => false,
+                'extract_data' => false,
+                'host' => 'api.runet-id.com',
+                'iterator' => false,
+                'language' => 'ru',
+                'scheme' => 'http',
+            ])
+            ->setDefined('event_id')
+            ->setAllowedTypes('denormalize', 'bool')
+            ->setAllowedTypes('event_id', 'int')
+            ->setAllowedTypes('extract_data', 'bool')
+            ->setAllowedTypes('host', 'string')
+            ->setAllowedTypes('iterator', 'bool')
+            ->setAllowedTypes('key', 'string')
+            ->setAllowedTypes('scheme', 'string')
+            ->setAllowedTypes('secret', 'string')
+            ->setAllowedValues('language', ['ru', 'en']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureRequestContext(OptionsResolver $resolver)
     {
         /** @noinspection PhpUnusedParameterInspection */
         $endpointNormalizer = function (Options $context, $endpoint) {
@@ -41,37 +98,25 @@ class RunetIdService implements Service\ServiceInterface
         $resolver
             ->setRequired([
                 'endpoint',
-                'key',
-                'secret',
             ])
             ->setDefaults([
                 'body' => null,
                 'headers' => [],
-                'host' => 'api.runet-id.com',
-                'language' => 'ru',
                 'method' => 'GET',
                 'query' => [],
-                'scheme' => 'http',
             ])
-            ->setDefined('event_id')
-            ->setAllowedTypes('endpoint', 'string')
-            ->setAllowedTypes('key', 'string')
-            ->setAllowedTypes('secret', 'string')
             ->setAllowedTypes('body', ['null', 'string', 'array', 'Psr\Http\Message\StreamInterface'])
-            ->setAllowedTypes('event_id', 'int')
+            ->setAllowedTypes('endpoint', 'string')
             ->setAllowedTypes('headers', 'array')
-            ->setAllowedTypes('host', 'string')
-            ->setAllowedValues('language', ['ru', 'en'])
             ->setAllowedTypes('method', 'string')
             ->setAllowedTypes('query', 'array')
-            ->setAllowedTypes('scheme', 'string')
             ->setNormalizer('endpoint', $endpointNormalizer);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function createRequest(array $context)
+    public function createRequest(array $context, ApiClientInterface $client)
     {
         $query = array_replace([
             'Language' => $context['language'],
@@ -117,6 +162,27 @@ class RunetIdService implements Service\ServiceInterface
         $code = isset($data['Error']['Code']) ? $data['Error']['Code'] : 0;
 
         throw new ApiException($context, $message, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            Events::POST_DECODE => ['onPostDecode', -2000],
+        ];
+    }
+
+    public function onPostDecode(PostDecodeEvent $event)
+    {
+        $context = $event->getContext();
+
+        if ($context['extract_data']) {
+            $data = $event->getData();
+            $data = self::extractEndpointData($context['endpoint'], $data);
+            $event->setData($data);
+        }
     }
 
     /**

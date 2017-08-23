@@ -21,42 +21,31 @@ class IteratorExtension implements ExtensionInterface
     ];
 
     /**
-     * @var string[]
+     * {@inheritdoc}
      */
-    private static $dataPaths = [
-        '/event/search' => 'Users',
-        '/event/users' => 'Users',
-    ];
+    public function configureDefaultContext(OptionsResolver $resolver)
+    {
+        $resolver
+            ->setDefaults([
+                'iterator' => true,
+            ]);
+    }
 
     /**
      * {@inheritdoc}
      */
-    public function configureContext(OptionsResolver $resolver)
+    public function configureRequestContext(OptionsResolver $resolver)
     {
         $resolver
             ->setDefaults([
-                'data_path' => function (Options $context) {
+                'iterator_class' => function (Options $context, $default) {
                     $endpoint = $context['endpoint'];
 
-                    return isset(self::$dataPaths[$endpoint]) ? self::$dataPaths[$endpoint] : null;
-                },
-                'iterator' => true,
-                'iterator_class' => function (Options $context) {
-                    $endpoint = $context['endpoint'];
-
-                    return isset(self::$iteratorClasses[$endpoint]) ? self::$iteratorClasses[$endpoint] : null;
+                    return isset(self::$iteratorClasses[$endpoint]) ? self::$iteratorClasses[$endpoint] : $default;
                 },
             ])
-            ->setAllowedTypes('data_path', ['null', 'string'])
-            ->setAllowedTypes('iterator', 'bool')
             ->setAllowedValues('iterator_class', function ($class) {
-                if (null === $class) {
-                    return true;
-                }
-
-                if (is_string($class) && class_exists($class)
-                    && isset(class_implements($class)['RunetId\ApiClient\Iterator\IteratorInterface'])
-                ) {
+                if (null === $class || is_subclass_of($class, 'RunetId\ApiClient\Iterator\IteratorInterface')) {
                     return true;
                 }
 
@@ -78,7 +67,7 @@ class IteratorExtension implements ExtensionInterface
     {
         $context = $event->getContext();
 
-        if (false === $context['iterator'] || null === $context['iterator_class']) {
+        if (!$context['iterator'] || null === $context['iterator_class']) {
             return;
         }
 

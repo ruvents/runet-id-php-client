@@ -3,10 +3,9 @@
 namespace RunetId\ApiClient\Model\Common;
 
 use RunetId\ApiClient\Common\ClassTrait;
-use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use RunetId\ApiClient\Model\ModelInterface;
 
-class Address implements RunetIdDenormalizableInterface
+class Address implements ModelInterface
 {
     use ClassTrait;
 
@@ -138,22 +137,5 @@ class Address implements RunetIdDenormalizableInterface
     public function getPlace()
     {
         return $this->place;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function runetIdDenormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = [])
-    {
-        $this->country = $data['Country'] ?: null;
-        $this->region = $data['Region'] ?: null;
-        $this->city = $data['City'] ?: null;
-        $this->postCode = $data['PostCode'] ?: null;
-        $this->street = $data['Street'] ?: null;
-        $this->house = $data['House'] ?: null;
-        $this->building = $data['Building'] ?: null;
-        $this->wing = $data['Wing'] ?: null;
-        $this->apartment = $data['Apartment'] ?: null;
-        $this->place = $data['Place'] ?: null;
     }
 }

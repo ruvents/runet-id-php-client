@@ -3,10 +3,9 @@
 namespace RunetId\ApiClient\Model\Company;
 
 use RunetId\ApiClient\Common\ClassTrait;
-use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use RunetId\ApiClient\Model\ModelInterface;
 
-class Company implements CompanyIdInterface, RunetIdDenormalizableInterface
+class Company implements ModelInterface, CompanyIdInterface
 {
     use ClassTrait;
 
@@ -16,13 +15,13 @@ class Company implements CompanyIdInterface, RunetIdDenormalizableInterface
     protected $id;
 
     /**
-     * @var string
+     * @var null|string
      */
     protected $title;
 
     public function __toString()
     {
-        return $this->title;
+        return (string)$this->title;
     }
 
     /**
@@ -34,19 +33,10 @@ class Company implements CompanyIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getTitle()
     {
         return $this->title;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function runetIdDenormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = [])
-    {
-        $this->id = (int)$data['Id'];
-        $this->title = $data['Name'];
     }
 }

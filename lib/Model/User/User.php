@@ -3,22 +3,15 @@
 namespace RunetId\ApiClient\Model\User;
 
 use RunetId\ApiClient\Common\ClassTrait;
-use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
-use RunetId\ApiClient\Model\Common\Image;
 use RunetId\ApiClient\Model\Event\Participation;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use RunetId\ApiClient\Model\ModelInterface;
 
-class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
+class User implements ModelInterface, UserRunetIdInterface
 {
     use ClassTrait;
 
     const MALE = 'male';
     const FEMALE = 'female';
-
-    const PHOTO_SMALL = 'Small';
-    const PHOTO_MEDIUM = 'Medium';
-    const PHOTO_LARGE = 'Large';
-    const PHOTO_ORIGINAL = 'Original';
 
     /**
      * @var int
@@ -41,7 +34,7 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
     protected $fatherName;
 
     /**
-     * @var string
+     * @var null|string
      */
     protected $email;
 
@@ -56,12 +49,12 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
     protected $participation;
 
     /**
-     * @var bool
+     * @var null|bool
      */
     protected $visible;
 
     /**
-     * @var bool
+     * @var null|bool
      */
     protected $verified;
 
@@ -76,20 +69,23 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
     protected $work;
 
     /**
-     * @var Image[]
+     * @var null|string
      */
-    protected $photos = [];
+    protected $photo;
 
     /**
-     * @var \DateTimeImmutable
+     * @var null|\DateTimeImmutable
      */
     protected $createdAt;
 
     /**
-     * @var array
+     * @var null|array
      */
     protected $attributes;
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return trim($this->firstName.' '.$this->lastName);
@@ -128,7 +124,7 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getEmail()
     {
@@ -152,7 +148,7 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return bool
+     * @return null|bool
      */
     public function isVisible()
     {
@@ -160,7 +156,7 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return bool
+     * @return null|bool
      */
     public function isVerified()
     {
@@ -184,25 +180,15 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @param string $size
-     *
-     * @return null|Image
+     * @return null|string
      */
-    public function getPhoto($size = self::PHOTO_LARGE)
+    public function getPhoto()
     {
-        return isset($this->photos[$size]) ? $this->photos[$size] : null;
+        return $this->photo;
     }
 
     /**
-     * @return Image[]
-     */
-    public function getPhotos()
-    {
-        return $this->photos;
-    }
-
-    /**
-     * @return \DateTimeInterface
+     * @return null|\DateTimeImmutable
      */
     public function getCreatedAt()
     {
@@ -210,7 +196,7 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return array
+     * @return null|array
      */
     public function getAttributes()
     {
@@ -223,50 +209,5 @@ class User implements UserRunetIdInterface, RunetIdDenormalizableInterface
     public function isMale()
     {
         return self::MALE === $this->gender;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function runetIdDenormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = [])
-    {
-        $this->runetId = (int)$data['RunetId'];
-        $this->firstName = $data['FirstName'] ?: null;
-        $this->lastName = $data['LastName'] ?: null;
-        $this->fatherName = $data['FatherName'] ?: null;
-        $this->email = $data['Email'];
-        $this->phone = $data['Phone'] ?: null;
-        $this->visible = (bool)$data['Visible'];
-        $this->verified = (bool)$data['Verified'];
-
-        if ('none' !== $data['Gender']) {
-            $this->gender = $data['Gender'];
-        }
-
-        $this->createdAt = new \DateTimeImmutable($data['CreationTime']);
-        $this->attributes = (array)$data['Attributes'];
-
-        if (array_key_exists('Work', $data)) {
-            if (null === $data['Work']) {
-                $this->work = null;
-            } else {
-                $this->work = $denormalizer->denormalize($data['Work'], Work::className(), $format, $context);
-            }
-        }
-
-        foreach ($data['Photo'] as $size => $url) {
-            $filename = pathinfo($url, PATHINFO_FILENAME);
-            $width = null;
-
-            if (false !== $_pos = strrpos($filename, '_')) {
-                $width = (int)substr($filename, $_pos + 1);
-            }
-
-            $this->photos[$size] = new Image($url, $width, $width);
-        }
-        /*if (isset($data['Status'])) {
-            $this->participation = $denormalizer
-                ->denormalize($data['Status'], Participation::className(), $format, $context);
-        }*/
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace RunetId\ApiClient\Model\Event;
+namespace RunetId\ApiClient\Model\Pay;
 
-interface RoleIdInterface
+interface ItemIdInterface
 {
     /**
      * @return int

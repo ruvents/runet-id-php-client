@@ -3,16 +3,11 @@
 namespace RunetId\ApiClient\Model\Event;
 
 use RunetId\ApiClient\Common\ClassTrait;
-use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
 use RunetId\ApiClient\Model\Common\GeoPoint;
-use RunetId\ApiClient\Model\Common\Image;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use RunetId\ApiClient\Model\ModelInterface;
 
-class Event implements EventIdInterface, RunetIdDenormalizableInterface
+class Event implements ModelInterface, EventIdInterface
 {
-    const IMAGE_SMALL = 'Mini';
-    const IMAGE_MEDIUM = 'Normal';
-
     use ClassTrait;
 
     /**
@@ -21,12 +16,12 @@ class Event implements EventIdInterface, RunetIdDenormalizableInterface
     protected $id;
 
     /**
-     * @var string
+     * @var null|string
      */
     protected $alias;
 
     /**
-     * @var string
+     * @var null|string
      */
     protected $title;
 
@@ -46,7 +41,7 @@ class Event implements EventIdInterface, RunetIdDenormalizableInterface
     protected $place;
 
     /**
-     * @var string
+     * @var null|string
      */
     protected $url;
 
@@ -61,19 +56,14 @@ class Event implements EventIdInterface, RunetIdDenormalizableInterface
     protected $programUrl;
 
     /**
-     * @var \DateTimeImmutable
+     * @var null|\DateTimeImmutable
      */
     protected $start;
 
     /**
-     * @var \DateTimeImmutable
+     * @var null|\DateTimeImmutable
      */
     protected $end;
-
-    /**
-     * @var Image[]
-     */
-    protected $images = [];
 
     /**
      * @var null|GeoPoint
@@ -86,13 +76,13 @@ class Event implements EventIdInterface, RunetIdDenormalizableInterface
     protected $address;
 
     /**
-     * @var array
+     * @var null|array
      */
     protected $statistics;
 
     public function __toString()
     {
-        return $this->title;
+        return (string)$this->title;
     }
 
     /**
@@ -104,7 +94,7 @@ class Event implements EventIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getAlias()
     {
@@ -112,7 +102,7 @@ class Event implements EventIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getTitle()
     {
@@ -144,7 +134,7 @@ class Event implements EventIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getUrl()
     {
@@ -168,7 +158,7 @@ class Event implements EventIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return null|\DateTimeImmutable
      */
     public function getStart()
     {
@@ -176,29 +166,11 @@ class Event implements EventIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return null|\DateTimeImmutable
      */
     public function getEnd()
     {
         return $this->end;
-    }
-
-    /**
-     * @param string $size
-     *
-     * @return null|Image
-     */
-    public function getImage($size = self::IMAGE_MEDIUM)
-    {
-        return isset($this->images[$size]) ? $this->images[$size] : null;
-    }
-
-    /**
-     * @return Image[]
-     */
-    public function getImages()
-    {
-        return $this->images;
     }
 
     /**
@@ -218,46 +190,10 @@ class Event implements EventIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return array
+     * @return null|array
      */
     public function getStatistics()
     {
         return $this->statistics;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function runetIdDenormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = [])
-    {
-        $this->id = (int)$data['EventId'];
-        $this->alias = $data['IdName'];
-        $this->title = $data['Title'];
-        $this->info = $data['Info'] ?: null;
-        $this->fullInfo = $data['FullInfo'] ?: null;
-        $this->place = $data['Place'] ?: null;
-        $this->url = $data['Url'];
-        $this->registrationUrl = $data['UrlRegistration'] ?: null;
-        $this->programUrl = $data['UrlProgram'] ?: null;
-        $this->start = new \DateTimeImmutable($data['StartYear'].'-'.$data['StartMonth'].'-'.$data['StartDay']);
-        $this->end = new \DateTimeImmutable($data['EndYear'].'-'.$data['EndMonth'].'-'.$data['EndDay']);
-        $this->address = $data['Address'] ?: null;
-
-        // todo
-        $this->statistics = (array)$data['Statistics'];
-
-        foreach ($data['Image'] as $key => $value) {
-            if (is_string($value)) {
-                $this->images[$key] = new Image($value,
-                    (int)$data['Image'][$key.'Size']['Width'],
-                    (int)$data['Image'][$key.'Size']['Height']
-                );
-            }
-        }
-
-        if (!empty($data['GeoPoint'][0]) && !empty($data['GeoPoint'][1]) && !empty($data['GeoPoint'][2])) {
-            $this->geoPoint = $denormalizer
-                ->denormalize($data['GeoPoint'], GeoPoint::className(), $format, $context);
-        }
     }
 }

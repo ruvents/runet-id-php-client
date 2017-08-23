@@ -5,8 +5,8 @@ namespace RunetId\ApiClient\Facade;
 use RunetId\ApiClient\Common\ArgHelper;
 use RunetId\ApiClient\Iterator\PageTokenIterator;
 use RunetId\ApiClient\Model\Event\Event;
-use RunetId\ApiClient\Model\Event\Role;
-use RunetId\ApiClient\Model\Event\RoleIdInterface;
+use RunetId\ApiClient\Model\Event\Status;
+use RunetId\ApiClient\Model\Event\StatusIdInterface;
 use RunetId\ApiClient\Model\User\User;
 use RunetId\ApiClient\Model\User\UserRunetIdInterface;
 
@@ -14,16 +14,16 @@ class EventFacade extends AbstractFacade
 {
     /**
      * @param int|UserRunetIdInterface $runetId
-     * @param int|RoleIdInterface      $roleId
+     * @param int|StatusIdInterface    $statusId
      * @param array                    $context
      *
      * @return true|array
      */
-    public function changeRole($runetId, $roleId, array $context = [])
+    public function changeStatus($runetId, $statusId, array $context = [])
     {
         return $this->requestPost($context, '/event/changerole', [
             'RunetId' => ArgHelper::getUserRunetId($runetId),
-            'RoleId' => ArgHelper::getEventRoleId($roleId),
+            'RoleId' => ArgHelper::getEventStatusId($statusId),
         ]);
     }
 
@@ -39,25 +39,25 @@ class EventFacade extends AbstractFacade
 
     /**
      * @param int|UserRunetIdInterface $runetId
-     * @param int|RoleIdInterface      $roleId
+     * @param int|StatusIdInterface    $statusId
      * @param array                    $context
      *
      * @return true|array
      */
-    public function register($runetId, $roleId, array $context = [])
+    public function registerUser($runetId, $statusId, array $context = [])
     {
         return $this->requestPost($context, '/event/register', [
             'RunetId' => ArgHelper::getUserRunetId($runetId),
-            'RoleId' => ArgHelper::getEventRoleId($roleId),
+            'RoleId' => ArgHelper::getEventStatusId($statusId),
         ]);
     }
 
     /**
      * @param array $context
      *
-     * @return array|Role[]
+     * @return array|Status[]
      */
-    public function roles(array $context = [])
+    public function getStatuses(array $context = [])
     {
         return $this->requestGet($context, '/event/roles');
     }
@@ -68,7 +68,7 @@ class EventFacade extends AbstractFacade
      *
      * @return array|PageTokenIterator|User[]
      */
-    public function users($maxResults = null, array $context = [])
+    public function getUsers($maxResults = null, array $context = [])
     {
         return $this->requestGet($context, '/event/users', [
             'MaxResults' => $maxResults,

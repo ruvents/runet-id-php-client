@@ -3,43 +3,42 @@
 namespace RunetId\ApiClient\Model\Event;
 
 use RunetId\ApiClient\Common\ClassTrait;
-use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use RunetId\ApiClient\Model\ModelInterface;
 
-class Participation implements RunetIdDenormalizableInterface
+class Participation implements ModelInterface
 {
     use ClassTrait;
 
     /**
-     * @var Role
+     * @var null|Status
      */
-    protected $role;
+    protected $status;
 
     /**
-     * @var string
+     * @var null|string
      */
     protected $ticketUrl;
 
     /**
-     * @var bool
+     * @var null|bool
      */
     protected $registered;
 
     /**
-     * @var \DateTimeImmutable
+     * @var null|\DateTimeImmutable
      */
     protected $updatedAt;
 
     /**
-     * @return Role
+     * @return null|Status
      */
-    public function getRole()
+    public function getStatus()
     {
-        return $this->role;
+        return $this->status;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getTicketUrl()
     {
@@ -47,7 +46,7 @@ class Participation implements RunetIdDenormalizableInterface
     }
 
     /**
-     * @return bool
+     * @return null|bool
      */
     public function isRegistered()
     {
@@ -55,21 +54,10 @@ class Participation implements RunetIdDenormalizableInterface
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return null|\DateTimeImmutable
      */
     public function getUpdatedAt()
     {
         return $this->updatedAt;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function runetIdDenormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = [])
-    {
-        $this->ticketUrl = $data['TicketUrl'];
-        $this->registered = (bool)$data['Registered'];
-        $this->updatedAt = new \DateTimeImmutable($data['UpdateTime']);
-        $this->role = $denormalizer->denormalize($data['Role'], Role::className(), $format, $context);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace RunetId\ApiClient\Iterator;
 
+use RunetId\ApiClient\Service\RunetIdService;
 use Ruvents\AbstractApiClient\ApiClientInterface;
 
 class PageTokenIterator implements IteratorInterface, \Countable
@@ -36,6 +37,9 @@ class PageTokenIterator implements IteratorInterface, \Countable
      */
     private $loaded = false;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setContext(array $context)
     {
         $this->context = $context;
@@ -112,16 +116,20 @@ class PageTokenIterator implements IteratorInterface, \Countable
         $apiClient = $this->context['api_client'];
 
         // copy and modify context
-        $context = $this->context;
-        $context['iterator'] = false;
-        $context['query']['MaxResults'] = $this->nextMaxResults;
-        $context['query']['PageToken'] = $this->nextPageToken;
+        $context = array_replace_recursive($this->context, [
+            'extract_data' => false,
+            'iterator' => false,
+            'query' => [
+                'MaxResults' => $this->nextMaxResults,
+                'PageToken' => $this->nextPageToken,
+            ],
+        ]);
 
         // request raw data
-        $rawData = $apiClient->request($context);
+        $raw = $apiClient->request($context);
 
         // extract data
-        $data = $rawData[$context['data_path']];
+        $data = RunetIdService::extractEndpointData($context['endpoint'], $raw);
 
         $countData = count($data);
 
@@ -131,10 +139,10 @@ class PageTokenIterator implements IteratorInterface, \Countable
             $this->nextMaxResults -= $countData;
         }
 
-        if (0 === $countData || 0 === $this->nextMaxResults || !isset($rawData['NextPageToken'])) {
+        if (0 === $countData || 0 === $this->nextMaxResults || !isset($raw['NextPageToken'])) {
             $this->loaded = true;
         } else {
-            $this->nextPageToken = $rawData['NextPageToken'];
+            $this->nextPageToken = $raw['NextPageToken'];
         }
     }
 }

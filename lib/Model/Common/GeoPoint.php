@@ -3,30 +3,29 @@
 namespace RunetId\ApiClient\Model\Common;
 
 use RunetId\ApiClient\Common\ClassTrait;
-use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use RunetId\ApiClient\Model\ModelInterface;
 
-class GeoPoint implements RunetIdDenormalizableInterface
+class GeoPoint implements ModelInterface
 {
     use ClassTrait;
 
     /**
-     * @var float
+     * @var null|float
      */
     protected $latitude;
 
     /**
-     * @var float
+     * @var null|float
      */
     protected $longitude;
 
     /**
-     * @var float
+     * @var null|float
      */
     protected $scale;
 
     /**
-     * @return float
+     * @return null|float
      */
     public function getLatitude()
     {
@@ -34,7 +33,7 @@ class GeoPoint implements RunetIdDenormalizableInterface
     }
 
     /**
-     * @return float
+     * @return null|float
      */
     public function getLongitude()
     {
@@ -42,20 +41,10 @@ class GeoPoint implements RunetIdDenormalizableInterface
     }
 
     /**
-     * @return float
+     * @return null|float
      */
     public function getScale()
     {
         return $this->scale;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function runetIdDenormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = [])
-    {
-        $this->latitude = (float)$data[0];
-        $this->longitude = (float)$data[1];
-        $this->scale = (float)$data[2];
     }
 }

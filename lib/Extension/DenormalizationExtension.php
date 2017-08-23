@@ -2,12 +2,27 @@
 
 namespace RunetId\ApiClient\Extension;
 
-use RunetId\ApiClient\Denormalizer\RunetIdDenormalizer;
+use RunetId\ApiClient\Denormalizer\Common\AddressPreDenormalizer;
+use RunetId\ApiClient\Denormalizer\Common\GeoPointPreDenormalizer;
+use RunetId\ApiClient\Denormalizer\Company\CompanyPreDenormalizer;
+use RunetId\ApiClient\Denormalizer\DateTimeImmutableDenormalizer;
+use RunetId\ApiClient\Denormalizer\Event\EventPreDenormalizer;
+use RunetId\ApiClient\Denormalizer\Event\ParticipationPreDenormalizer;
+use RunetId\ApiClient\Denormalizer\Event\StatusPreDenormalizer;
+use RunetId\ApiClient\Denormalizer\ModelDenormalizer;
+use RunetId\ApiClient\Denormalizer\Pay\ItemListPreDenormalizer;
+use RunetId\ApiClient\Denormalizer\Pay\ItemPreDenormalizer;
+use RunetId\ApiClient\Denormalizer\Pay\OrderAwareItemDenormalizer;
+use RunetId\ApiClient\Denormalizer\Pay\OrderPreDenormalizer;
+use RunetId\ApiClient\Denormalizer\Pay\ProductPreDenormalizer;
+use RunetId\ApiClient\Denormalizer\User\UserPreDenormalizer;
+use RunetId\ApiClient\Denormalizer\User\WorkPreDenormalizer;
+use RunetId\ApiClient\Service\RunetIdService;
 use Ruvents\AbstractApiClient\Event\Events;
 use Ruvents\AbstractApiClient\Event\PostDecodeEvent;
 use Ruvents\AbstractApiClient\Extension\ExtensionInterface;
-use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Serializer;
@@ -17,24 +32,18 @@ class DenormalizationExtension implements ExtensionInterface
     /**
      * @var string[]
      */
-    private static $classes = [
+    private static $endpointClasses = [
         '/event/info' => 'RunetId\ApiClient\Model\Event\Event',
-        '/event/roles' => 'RunetId\ApiClient\Model\Event\Role[]',
+        '/event/roles' => 'RunetId\ApiClient\Model\Event\Status[]',
         '/event/search' => 'RunetId\ApiClient\Model\User\User[]',
         '/event/users' => 'RunetId\ApiClient\Model\User\User[]',
+        '/pay/list' => 'RunetId\ApiClient\Model\Pay\ItemList',
+        '/pay/products' => 'RunetId\ApiClient\Model\Pay\Product[]',
         '/user/address' => 'RunetId\ApiClient\Model\Common\Address',
         '/user/auth' => 'RunetId\ApiClient\Model\User\User',
         '/user/create' => 'RunetId\ApiClient\Model\User\User',
         '/user/edit' => 'RunetId\ApiClient\Model\User\User',
         '/user/get' => 'RunetId\ApiClient\Model\User\User',
-    ];
-
-    /**
-     * @var string[]
-     */
-    private static $dataPaths = [
-        '/event/search' => 'Users',
-        '/event/users' => 'Users',
     ];
 
     /**
@@ -44,33 +53,48 @@ class DenormalizationExtension implements ExtensionInterface
 
     public function __construct(DenormalizerInterface $denormalizer = null)
     {
-        $this->denormalizer = $denormalizer ?: new Serializer([new ArrayDenormalizer(), new RunetIdDenormalizer()]);
+        $this->denormalizer = $denormalizer
+            ?: new Serializer([
+                new ArrayDenormalizer(),
+                new DateTimeImmutableDenormalizer(),
+                new OrderAwareItemDenormalizer(),
+                new ModelDenormalizer(),
+                new UserPreDenormalizer(),
+                new ParticipationPreDenormalizer(),
+                new StatusPreDenormalizer(),
+                new WorkPreDenormalizer(),
+                new CompanyPreDenormalizer(),
+                new EventPreDenormalizer(),
+                new ItemListPreDenormalizer(),
+                new ItemPreDenormalizer(),
+                new ProductPreDenormalizer(),
+                new OrderPreDenormalizer(),
+                new AddressPreDenormalizer(),
+                new GeoPointPreDenormalizer(),
+            ]);
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     *
+     * @return void
+     */
+    public function configureDefaultContext(OptionsResolver $resolver)
+    {
+        $resolver
+            ->setDefaults([
+                'denormalization_context' => [],
+                'denormalize' => true,
+                'extract_data' => true,
+            ])
+            ->setAllowedTypes('denormalization_context', 'array');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function configureContext(OptionsResolver $resolver)
+    public function configureRequestContext(OptionsResolver $resolver)
     {
-        $resolver
-            ->setDefaults([
-                'class' => function (Options $context) {
-                    $endpoint = $context['endpoint'];
-
-                    return isset(self::$classes[$endpoint]) ? self::$classes[$endpoint] : null;
-                },
-                'data_path' => function (Options $context) {
-                    $endpoint = $context['endpoint'];
-
-                    return isset(self::$dataPaths[$endpoint]) ? self::$dataPaths[$endpoint] : null;
-                },
-                'denormalize' => true,
-                'denormalization_context' => [],
-            ])
-            ->setAllowedTypes('class', ['null', 'string'])
-            ->setAllowedTypes('data_path', ['null', 'string'])
-            ->setAllowedTypes('denormalize', 'bool')
-            ->setAllowedTypes('denormalization_context', 'array');
     }
 
     /**
@@ -87,41 +111,17 @@ class DenormalizationExtension implements ExtensionInterface
     {
         $context = $event->getContext();
 
-        if (false === $context['denormalize']) {
+        if (!$context['denormalize']) {
             return;
         }
 
-        $data = $event->getData();
+        if (isset(self::$endpointClasses[$endpoint = $context['endpoint']])) {
+            $data = $event->getData();
 
-        if (is_array($data) && isset($data['Success']) && true === $data['Success']) {
-            $event->setData(true);
+            $extractedData = &RunetIdService::extractEndpointData($endpoint, $data);
 
-            return;
-        }
+            $extractedData = $this->denormalizer->denormalize($extractedData, self::$endpointClasses[$endpoint], JsonEncoder::FORMAT, $context['denormalization_context']);
 
-        /**
-         * @var null|string $class
-         * @var null|string $dataPath
-         */
-        $class = $context['class'];
-        $dataPath = $context['data_path'];
-
-        if (null === $class) {
-            return;
-        }
-
-        if (null === $dataPath) {
-            $dataToDenormalize = &$data;
-        } else {
-            $dataToDenormalize = &$data[$dataPath];
-        }
-
-        $supports = $this->denormalizer
-            ->supportsDenormalization($dataToDenormalize, $class, null, $context['denormalization_context']);
-
-        if ($supports) {
-            $dataToDenormalize = $this->denormalizer
-                ->denormalize($dataToDenormalize, $class, null, $context['denormalization_context']);
             $event->setData($data);
         }
     }

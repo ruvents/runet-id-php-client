@@ -8,6 +8,7 @@ use Ruvents\AbstractApiClient\AbstractApiClient;
 
 /**
  * @method Facade\EventFacade event()
+ * @method Facade\PayFacade pay()
  * @method Facade\UserFacade user()
  */
 class RunetIdClient extends AbstractApiClient

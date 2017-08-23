@@ -3,10 +3,9 @@
 namespace RunetId\ApiClient\Model\Event;
 
 use RunetId\ApiClient\Common\ClassTrait;
-use RunetId\ApiClient\Denormalizer\RunetIdDenormalizableInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use RunetId\ApiClient\Model\ModelInterface;
 
-class Role implements RoleIdInterface, RunetIdDenormalizableInterface
+class Status implements ModelInterface, StatusIdInterface
 {
     use ClassTrait;
 
@@ -16,12 +15,12 @@ class Role implements RoleIdInterface, RunetIdDenormalizableInterface
     protected $id;
 
     /**
-     * @var string
+     * @var null|string
      */
     protected $title;
 
     /**
-     * @var int
+     * @var null|int
      */
     protected $priority;
 
@@ -39,7 +38,7 @@ class Role implements RoleIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getTitle()
     {
@@ -47,20 +46,10 @@ class Role implements RoleIdInterface, RunetIdDenormalizableInterface
     }
 
     /**
-     * @return int
+     * @return null|int
      */
     public function getPriority()
     {
         return $this->priority;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function runetIdDenormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = [])
-    {
-        $this->id = (int)$data['RoleId'];
-        $this->title = $data['Name'];
-        $this->priority = (int)$data['Priority'];
     }
 }
