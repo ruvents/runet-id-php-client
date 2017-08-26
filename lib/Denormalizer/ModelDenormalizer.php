@@ -95,7 +95,7 @@ class ModelDenormalizer implements DenormalizerInterface, SerializerAwareInterfa
         $data = (array)$data;
 
         try {
-            $this->serializer->denormalize($data, AbstractPreDenormalizer::getType($class), $format, $context);
+            $data = $this->serializer->denormalize($data, AbstractPreDenormalizer::getType($class), $format, $context);
         } catch (Exception\UnexpectedValueException $exception) {
         }
     }
