@@ -25,6 +25,18 @@ class Status implements ModelInterface, StatusIdInterface, PreDenormalizableInte
      */
     protected $priority;
 
+    /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'id' => 'RoleId',
+            'title' => 'Name',
+            'priority' => 'Priority',
+        ];
+    }
+
     public function __toString()
     {
         return $this->title;
@@ -52,17 +64,5 @@ class Status implements ModelInterface, StatusIdInterface, PreDenormalizableInte
     public function getPriority()
     {
         return $this->priority;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getRunetIdPreDenormalizationMap()
-    {
-        return [
-            'id' => 'RoleId',
-            'title' => 'Name',
-            'priority' => 'Priority',
-        ];
     }
 }

@@ -46,6 +46,22 @@ class Product implements ModelInterface, ProductIdInterface, PreDenormalizableIn
     protected $attributes = [];
 
     /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'id' => 'Id',
+            'title' => 'Title',
+            'manager' => 'Manager',
+            'price' => 'Price',
+            'priceStart' => 'PriceStartTime',
+            'priceEnd' => 'PriceEndTime',
+            'attributes' => 'Attributes',
+        ];
+    }
+
+    /**
      * @return string
      */
     public function __toString()
@@ -107,21 +123,5 @@ class Product implements ModelInterface, ProductIdInterface, PreDenormalizableIn
     public function getAttributes()
     {
         return $this->attributes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getRunetIdPreDenormalizationMap()
-    {
-        return [
-            'id' => 'Id',
-            'title' => 'Title',
-            'manager' => 'Manager',
-            'price' => 'Price',
-            'priceStart' => 'PriceStartTime',
-            'priceEnd' => 'PriceEndTime',
-            'attributes' => 'Attributes',
-        ];
     }
 }

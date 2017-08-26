@@ -26,6 +26,18 @@ class GeoPoint implements ModelInterface, PreDenormalizableInterface
     protected $scale;
 
     /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'latitude' => 0,
+            'longitude' => 1,
+            'scale' => 2,
+        ];
+    }
+
+    /**
      * @return null|float
      */
     public function getLatitude()
@@ -47,17 +59,5 @@ class GeoPoint implements ModelInterface, PreDenormalizableInterface
     public function getScale()
     {
         return $this->scale;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getRunetIdPreDenormalizationMap()
-    {
-        return [
-            'latitude' => 0,
-            'longitude' => 1,
-            'scale' => 2,
-        ];
     }
 }

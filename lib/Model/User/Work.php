@@ -32,6 +32,31 @@ class Work implements ModelInterface, PreDenormalizableInterface
     protected $end;
 
     /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'position' => 'Position',
+            'company' => 'Company',
+            'start' => function (array $raw, &$exists) {
+                if ($exists = isset($raw['StartYear'])) {
+                    return $raw['StartYear'].'-'.(isset($raw['StartMonth']) ? $raw['StartMonth'] : 1);
+                }
+
+                return null;
+            },
+            'end' => function (array $raw, &$exists) {
+                if ($exists = isset($raw['StartYear']) && isset($raw['EndYear'])) {
+                    return $raw['EndYear'].'-'.(isset($raw['EndMonth']) ? $raw['EndMonth'] : 1);
+                }
+
+                return null;
+            },
+        ];
+    }
+
+    /**
      * @return null|string
      */
     public function getPosition()
@@ -61,30 +86,5 @@ class Work implements ModelInterface, PreDenormalizableInterface
     public function getEnd()
     {
         return $this->end;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getRunetIdPreDenormalizationMap()
-    {
-        return [
-            'position' => 'Position',
-            'company' => 'Company',
-            'start' => function (array $raw, &$exists) {
-                if ($exists = isset($raw['StartYear'])) {
-                    return $raw['StartYear'].'-'.(isset($raw['StartMonth']) ? $raw['StartMonth'] : 1);
-                }
-
-                return null;
-            },
-            'end' => function (array $raw, &$exists) {
-                if ($exists = isset($raw['StartYear']) && isset($raw['EndYear'])) {
-                    return $raw['EndYear'].'-'.(isset($raw['EndMonth']) ? $raw['EndMonth'] : 1);
-                }
-
-                return null;
-            },
-        ];
     }
 }

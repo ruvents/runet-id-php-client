@@ -61,6 +61,25 @@ class Address implements ModelInterface, PreDenormalizableInterface
     protected $place;
 
     /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'country' => 'Country',
+            'region' => 'Region',
+            'city' => 'City',
+            'postCode' => 'PostCode',
+            'street' => 'Street',
+            'house' => 'House',
+            'building' => 'Building',
+            'wing' => 'Wing',
+            'apartment' => 'Apartment',
+            'place' => 'Place',
+        ];
+    }
+
+    /**
      * @return null|string
      */
     public function getCountry()
@@ -138,24 +157,5 @@ class Address implements ModelInterface, PreDenormalizableInterface
     public function getPlace()
     {
         return $this->place;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getRunetIdPreDenormalizationMap()
-    {
-        return [
-            'country' => 'Country',
-            'region' => 'Region',
-            'city' => 'City',
-            'postCode' => 'PostCode',
-            'street' => 'Street',
-            'house' => 'House',
-            'building' => 'Building',
-            'wing' => 'Wing',
-            'apartment' => 'Apartment',
-            'place' => 'Place',
-        ];
     }
 }

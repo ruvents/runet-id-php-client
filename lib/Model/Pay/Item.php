@@ -87,6 +87,30 @@ class Item implements ModelInterface, ItemIdInterface, PreDenormalizableInterfac
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'id' => 'Id',
+            'product' => 'Product',
+            'payer' => 'Payer',
+            'owner' => 'Owner',
+            'cost' => 'PriceDiscount',
+            'paid' => 'Paid',
+            'paidAt' => 'PaidTime',
+            'booked' => function (array $raw) {
+                return isset($raw['Booked']) ? $raw['Booked'] : false;
+            },
+            'deleted' => 'Deleted',
+            'createdAt' => 'CreationTime',
+            'attributes' => 'Attributes',
+            'discount' => 'Discount',
+            'activatedPromoCode' => 'ActivatedPromoCode',
+        ];
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -204,29 +228,5 @@ class Item implements ModelInterface, ItemIdInterface, PreDenormalizableInterfac
     public function isFree()
     {
         return 0 == $this->cost;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getRunetIdPreDenormalizationMap()
-    {
-        return [
-            'id' => 'Id',
-            'product' => 'Product',
-            'payer' => 'Payer',
-            'owner' => 'Owner',
-            'cost' => 'PriceDiscount',
-            'paid' => 'Paid',
-            'paidAt' => 'PaidTime',
-            'booked' => function (array $raw) {
-                return isset($raw['Booked']) ? $raw['Booked'] : false;
-            },
-            'deleted' => 'Deleted',
-            'createdAt' => 'CreationTime',
-            'attributes' => 'Attributes',
-            'discount' => 'Discount',
-            'activatedPromoCode' => 'ActivatedPromoCode',
-        ];
     }
 }

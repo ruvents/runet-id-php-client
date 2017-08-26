@@ -20,6 +20,17 @@ class Company implements ModelInterface, CompanyIdInterface, PreDenormalizableIn
      */
     protected $title;
 
+    /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'id' => 'Id',
+            'title' => 'Name',
+        ];
+    }
+
     public function __toString()
     {
         return (string)$this->title;
@@ -39,16 +50,5 @@ class Company implements ModelInterface, CompanyIdInterface, PreDenormalizableIn
     public function getTitle()
     {
         return $this->title;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getRunetIdPreDenormalizationMap()
-    {
-        return [
-            'id' => 'Id',
-            'title' => 'Name',
-        ];
     }
 }

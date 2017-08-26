@@ -81,6 +81,48 @@ class Event implements ModelInterface, EventIdInterface, PreDenormalizableInterf
      */
     protected $statistics;
 
+    /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'id' => 'EventId',
+            'alias' => 'IdName',
+            'title' => 'Title',
+            'info' => 'Info',
+            'fullInfo' => 'FullInfo',
+            'place' => 'Place',
+            'url' => 'Url',
+            'registrationUrl' => 'UrlRegistration',
+            'programUrl' => 'UrlProgram',
+            'address' => 'Address',
+            'geoPoint' => function (array $raw, &$exists) {
+                if ($exists = isset($raw['GeoPoint'])) {
+                    return '' !== ($raw['GeoPoint'][0]) && '' !== ($raw['GeoPoint'][1]) && '' !== ($raw['GeoPoint'][2])
+                        ? $raw['GeoPoint']
+                        : null;
+                }
+
+                return null;
+            },
+            'start' => function (array $raw, &$exists) {
+                if ($exists = isset($raw['StartYear']) && isset($raw['StartMonth']) && isset($raw['StartDay'])) {
+                    return $raw['StartYear'].'-'.$raw['StartMonth'].'-'.$raw['StartDay'];
+                }
+
+                return null;
+            },
+            'end' => function (array $raw, &$exists) {
+                if ($exists = isset($raw['EndYear']) && isset($raw['EndMonth']) && isset($raw['EndDay'])) {
+                    return $raw['EndYear'].'-'.$raw['EndMonth'].'-'.$raw['EndDay'];
+                }
+
+                return null;
+            },
+        ];
+    }
+
     public function __toString()
     {
         return (string)$this->title;
@@ -196,47 +238,5 @@ class Event implements ModelInterface, EventIdInterface, PreDenormalizableInterf
     public function getStatistics()
     {
         return $this->statistics;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getRunetIdPreDenormalizationMap()
-    {
-        return [
-            'id' => 'EventId',
-            'alias' => 'IdName',
-            'title' => 'Title',
-            'info' => 'Info',
-            'fullInfo' => 'FullInfo',
-            'place' => 'Place',
-            'url' => 'Url',
-            'registrationUrl' => 'UrlRegistration',
-            'programUrl' => 'UrlProgram',
-            'address' => 'Address',
-            'geoPoint' => function (array $raw, &$exists) {
-                if ($exists = isset($raw['GeoPoint'])) {
-                    return '' !== ($raw['GeoPoint'][0]) && '' !== ($raw['GeoPoint'][1]) && '' !== ($raw['GeoPoint'][2])
-                        ? $raw['GeoPoint']
-                        : null;
-                }
-
-                return null;
-            },
-            'start' => function (array $raw, &$exists) {
-                if ($exists = isset($raw['StartYear']) && isset($raw['StartMonth']) && isset($raw['StartDay'])) {
-                    return $raw['StartYear'].'-'.$raw['StartMonth'].'-'.$raw['StartDay'];
-                }
-
-                return null;
-            },
-            'end' => function (array $raw, &$exists) {
-                if ($exists = isset($raw['EndYear']) && isset($raw['EndMonth']) && isset($raw['EndDay'])) {
-                    return $raw['EndYear'].'-'.$raw['EndMonth'].'-'.$raw['EndDay'];
-                }
-
-                return null;
-            },
-        ];
     }
 }

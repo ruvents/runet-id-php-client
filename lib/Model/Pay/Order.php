@@ -41,6 +41,21 @@ class Order implements ModelInterface, OrderIdInterface, \IteratorAggregate, Pre
     protected $items;
 
     /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'id' => 'OrderId',
+            'createdAt' => 'CreationTime',
+            'number' => 'Number',
+            'paid' => 'Paid',
+            'url' => 'Url',
+            'items' => 'Items',
+        ];
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -96,20 +111,5 @@ class Order implements ModelInterface, OrderIdInterface, \IteratorAggregate, Pre
     public function getIterator()
     {
         return new \ArrayIterator($this->items);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getRunetIdPreDenormalizationMap()
-    {
-        return [
-            'id' => 'OrderId',
-            'createdAt' => 'CreationTime',
-            'number' => 'Number',
-            'paid' => 'Paid',
-            'url' => 'Url',
-            'items' => 'Items',
-        ];
     }
 }
