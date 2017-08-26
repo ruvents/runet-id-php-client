@@ -14,10 +14,6 @@
 
 ```json
 {
-    "require": {
-        "php-http/discovery": "dev-php54",
-        "php-http/guzzle5-adapter": "dev-php54"
-    },
     "repositories": [
         {
             "type": "vcs",
@@ -38,7 +34,7 @@
 
 И установите пакеты:
 
-`$ composer require guzzlehttp/psr7 runet-id/api-client:^3.0@alpha`
+`$ composer require php-http/discovery:dev-php54 php-http/guzzle5-adapter:dev-php54 guzzlehttp/psr7 runet-id/api-client:^3.0@alpha`
 
 ### Библиотеки для работы с HTTP-запросами
 
