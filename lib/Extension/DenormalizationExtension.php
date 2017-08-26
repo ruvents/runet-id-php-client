@@ -18,6 +18,8 @@ use Symfony\Component\Serializer\Serializer;
 
 class DenormalizationExtension implements ExtensionInterface
 {
+    const REQUEST_CONTEXT = 'request_context';
+
     /**
      * @var string[]
      */
@@ -95,8 +97,8 @@ class DenormalizationExtension implements ExtensionInterface
 
         if (isset(self::$endpointClasses[$endpoint = $context['endpoint']])) {
             $data = $event->getData();
-
             $extractedData = &RunetIdService::extractEndpointData($endpoint, $data);
+            $context['denormalization_context'][self::REQUEST_CONTEXT] = $context;
 
             $extractedData = $this->denormalizer->denormalize($extractedData, self::$endpointClasses[$endpoint], JsonEncoder::FORMAT, $context['denormalization_context']);
 
