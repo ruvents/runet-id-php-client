@@ -123,7 +123,7 @@ class ModelDenormalizer implements DenormalizerInterface, SerializerAwareInterfa
             return $context[self::DEFAULT_VALUE];
         }
 
-        return $this->instantiateObject($data, $class, $context);
+        return $this->instantiateObject($data, $class, $format, $context);
     }
 
     /**
