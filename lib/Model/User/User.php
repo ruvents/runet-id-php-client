@@ -4,6 +4,7 @@ namespace RunetId\ApiClient\Model\User;
 
 use RunetId\ApiClient\Common\ClassTrait;
 use RunetId\ApiClient\Denormalizer\PreDenormalizableInterface;
+use RunetId\ApiClient\Extension\DenormalizationExtension;
 use RunetId\ApiClient\Model\Event\Participation;
 use RunetId\ApiClient\Model\ModelInterface;
 
@@ -83,6 +84,49 @@ class User implements ModelInterface, UserRunetIdInterface, PreDenormalizableInt
      * @var null|array
      */
     protected $attributes;
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getRunetIdPreDenormalizationMap()
+    {
+        return [
+            'runetId' => 'RunetId',
+            'firstName' => 'FirstName',
+            'lastName' => 'LastName',
+            'fatherName' => 'FatherName',
+            'email' => 'Email',
+            'phone' => 'Phone',
+            'visible' => 'Visible',
+            'gender' => function (array $raw, &$exists) {
+                if ($exists = array_key_exists('Gender', $raw)) {
+                    return 'none' === $raw['Gender'] ? null : $raw['Gender'];
+                }
+
+                return null;
+            },
+            'verified' => 'Verified',
+            'createdAt' => 'CreationTime',
+            'attributes' => 'Attributes',
+            'work' => 'Work',
+            'participation' => function (array $raw, &$exists, array $context) {
+                if (array_key_exists('Status', $raw)) {
+                    return $raw['Status'];
+                }
+
+                $exists = isset($context[DenormalizationExtension::REQUEST_CONTEXT]['endpoint']) && '/user/get' === $context[DenormalizationExtension::REQUEST_CONTEXT]['endpoint'];
+
+                return null;
+            },
+            'photo' => function (array $raw, &$exists) {
+                if ($exists = isset($raw['Photo']['Original'])) {
+                    return $raw['Photo']['Original'];
+                }
+
+                return null;
+            },
+        ];
+    }
 
     /**
      * @return string
@@ -210,40 +254,5 @@ class User implements ModelInterface, UserRunetIdInterface, PreDenormalizableInt
     public function isMale()
     {
         return self::MALE === $this->gender;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getRunetIdPreDenormalizationMap()
-    {
-        return [
-            'runetId' => 'RunetId',
-            'firstName' => 'FirstName',
-            'lastName' => 'LastName',
-            'fatherName' => 'FatherName',
-            'email' => 'Email',
-            'phone' => 'Phone',
-            'visible' => 'Visible',
-            'gender' => function (array $raw, &$exists) {
-                if ($exists = array_key_exists('Gender', $raw)) {
-                    return 'none' === $raw['Gender'] ? null : $raw['Gender'];
-                }
-
-                return null;
-            },
-            'verified' => 'Verified',
-            'createdAt' => 'CreationTime',
-            'attributes' => 'Attributes',
-            'work' => 'Work',
-            'participation' => 'Status',
-            'photo' => function (array $raw, &$exists) {
-                if ($exists = isset($raw['Photo']['Original'])) {
-                    return $raw['Photo']['Original'];
-                }
-
-                return null;
-            },
-        ];
     }
 }
