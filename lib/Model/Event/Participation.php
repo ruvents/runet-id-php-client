@@ -11,7 +11,7 @@ class Participation implements ModelInterface, PreDenormalizableInterface
     use ClassTrait;
 
     /**
-     * @var null|Status
+     * @var Status
      */
     protected $status;
 
@@ -31,7 +31,7 @@ class Participation implements ModelInterface, PreDenormalizableInterface
     protected $updatedAt;
 
     /**
-     * @return null|Status
+     * @return Status
      */
     public function getStatus()
     {
@@ -49,7 +49,7 @@ class Participation implements ModelInterface, PreDenormalizableInterface
     /**
      * @return null|bool
      */
-    public function isRegistered()
+    public function getRegistered()
     {
         return $this->registered;
     }

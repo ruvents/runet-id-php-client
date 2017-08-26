@@ -37,7 +37,7 @@ class Item implements ModelInterface, ItemIdInterface, PreDenormalizableInterfac
     protected $cost;
 
     /**
-     * @var null|bool
+     * @var bool
      */
     protected $paid;
 
@@ -47,12 +47,12 @@ class Item implements ModelInterface, ItemIdInterface, PreDenormalizableInterfac
     protected $paidAt;
 
     /**
-     * @var null|bool
+     * @var null|string
      */
     protected $booked;
 
     /**
-     * @var null|bool
+     * @var bool
      */
     protected $deleted;
 
@@ -127,7 +127,7 @@ class Item implements ModelInterface, ItemIdInterface, PreDenormalizableInterfac
     }
 
     /**
-     * @return null|bool
+     * @return bool
      */
     public function isPaid()
     {
@@ -143,15 +143,15 @@ class Item implements ModelInterface, ItemIdInterface, PreDenormalizableInterfac
     }
 
     /**
-     * @return null|bool
+     * @return null|string
      */
-    public function isBooked()
+    public function getBooked()
     {
         return $this->booked;
     }
 
     /**
-     * @return null|bool
+     * @return bool
      */
     public function isDeleted()
     {

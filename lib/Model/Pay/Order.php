@@ -26,7 +26,7 @@ class Order implements ModelInterface, OrderIdInterface, \IteratorAggregate, Pre
     protected $number;
 
     /**
-     * @var null|bool
+     * @var bool
      */
     protected $paid;
 
@@ -65,7 +65,7 @@ class Order implements ModelInterface, OrderIdInterface, \IteratorAggregate, Pre
     }
 
     /**
-     * @return null|bool
+     * @return bool
      */
     public function isPaid()
     {

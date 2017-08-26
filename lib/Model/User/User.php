@@ -110,7 +110,7 @@ class User implements ModelInterface, UserRunetIdInterface, PreDenormalizableInt
             'attributes' => 'Attributes',
             'work' => 'Work',
             'participation' => function (array $raw, &$exists, array $context) {
-                if (array_key_exists('Status', $raw)) {
+                if (isset($raw['Status']['RoleId'])) {
                     return $raw['Status'];
                 }
 
@@ -195,7 +195,7 @@ class User implements ModelInterface, UserRunetIdInterface, PreDenormalizableInt
     /**
      * @return null|bool
      */
-    public function isVisible()
+    public function getVisible()
     {
         return $this->visible;
     }
@@ -203,7 +203,7 @@ class User implements ModelInterface, UserRunetIdInterface, PreDenormalizableInt
     /**
      * @return null|bool
      */
-    public function isVerified()
+    public function getVerified()
     {
         return $this->verified;
     }
