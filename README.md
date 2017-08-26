@@ -77,7 +77,7 @@ $client = new RunetIdClient([
     'secret' => 'secret',
 ]);
 
-$users = $client->event()->users(/** $maxResults */1000);
+$users = $client->event()->getUsers(/** $maxResults */1000);
 
 // $users = ["Users" => [...], "NextPageToken" => "ZXZlMQ==", ...]
 // Результирующий массив будет содержать только 200 результатов
@@ -96,7 +96,7 @@ $client = new RunetIdClient(['key' => 'key', 'secret' => 'secret'], [
     new IteratorExtension(),
 ]);
 
-$userIterator = $client->event()->users(1000);
+$userIterator = $client->event()->getUsers(1000);
 
 foreach ($userIterator as $user) {
     var_dump($user['Email']);
@@ -118,7 +118,6 @@ $users = $userIterator->toArray();
 
 use RunetId\ApiClient\RunetIdClient;
 use RunetId\ApiClient\Extension\DenormalizationExtension;
-use RunetId\ApiClient\Model\User\User;
 
 $client = new RunetIdClient(['key' => 'key', 'secret' => 'secret'], [
     new DenormalizationExtension(),
@@ -127,7 +126,7 @@ $client = new RunetIdClient(['key' => 'key', 'secret' => 'secret'], [
 $user = $client->user()->get(1);
 
 var_dump($user->getEmail());
-var_dump($user->getPhoto(User::PHOTO_LARGE)->getHeight());
+var_dump($user->getWork()->getCompany());
 ```
 
 ## Свободные запросы
