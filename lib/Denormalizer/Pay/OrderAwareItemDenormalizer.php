@@ -12,11 +12,9 @@ class OrderAwareItemDenormalizer extends ModelDenormalizer
      */
     protected function instantiateObject(&$data, $class, $format = null, array &$context)
     {
-        $order = null;
-
-        if (isset($context[self::PARENT_OBJECT]) && $context[self::PARENT_OBJECT] instanceof Order) {
-            $order = $context[self::PARENT_OBJECT];
-        }
+        $order = isset($context[self::PARENT_OBJECT]) && $context[self::PARENT_OBJECT] instanceof Order
+            ? $context[self::PARENT_OBJECT]
+            : null;
 
         return new $class($order);
     }

@@ -43,7 +43,7 @@ class ModelDenormalizer implements DenormalizerInterface, SerializerAwareInterfa
     {
         $this->preDenormalize($data, $class, $format, $context);
 
-        $object = $this->instantiateObject($data, $class, $format, $context);
+        $object = $this->getObject($data, $class, $format, $context);
 
         $getter = \Closure::bind(function ($property) {
             return $this->$property;
@@ -108,7 +108,7 @@ class ModelDenormalizer implements DenormalizerInterface, SerializerAwareInterfa
      *
      * @return object
      */
-    protected function instantiateObject(&$data, $class, $format = null, array &$context)
+    protected function getObject(&$data, $class, $format = null, array &$context)
     {
         if (isset($context[self::OBJECT_TO_POPULATE]) && $context[self::OBJECT_TO_POPULATE] instanceof $class) {
             $object = $context[self::OBJECT_TO_POPULATE];
@@ -121,6 +121,19 @@ class ModelDenormalizer implements DenormalizerInterface, SerializerAwareInterfa
             return $context[self::DEFAULT_VALUE];
         }
 
+        return $this->instantiateObject($data, $class, $context);
+    }
+
+    /**
+     * @param mixed       $data
+     * @param string      $class
+     * @param null|string $format
+     * @param array       $context
+     *
+     * @return object
+     */
+    protected function instantiateObject(&$data, $class, $format = null, array &$context)
+    {
         return new $class();
     }
 
