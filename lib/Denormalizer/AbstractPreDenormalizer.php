@@ -40,7 +40,7 @@ abstract class AbstractPreDenormalizer implements DenormalizerInterface
         foreach ($this->maps[$class] as $key => $config) {
             if (is_callable($config)) {
                 $exists = true;
-                $value = $config($raw, $exists);
+                $value = $config($raw, $exists, $context);
 
                 if (!$exists) {
                     continue;
