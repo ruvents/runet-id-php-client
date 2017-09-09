@@ -2,7 +2,7 @@
 
 namespace RunetId\ApiClient\Model\Event;
 
-interface StatusIdInterface
+interface RoleIdInterface
 {
     /**
      * @return int

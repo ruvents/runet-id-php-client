@@ -6,29 +6,14 @@ use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\RequestFactory;
+use RunetId\ApiClient\Exception\RunetIdException;
 use Ruvents\AbstractApiClient\ApiClientInterface;
-use Ruvents\AbstractApiClient\Event\Events;
-use Ruvents\AbstractApiClient\Event\PostDecodeEvent;
-use Ruvents\AbstractApiClient\Exception\ApiException;
-use Ruvents\AbstractApiClient\Service;
+use Ruvents\AbstractApiClient\Service\AbstractApiService;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RunetIdService implements Service\ServiceInterface
+class RunetIdService extends AbstractApiService
 {
-    use Service\HttpClientDiscoveryTrait;
-    use Service\Response200Trait;
-    use Service\JsonDecodeTrait;
-
-    /**
-     * @var string[]
-     */
-    private static $endpointDataPaths = [
-        '/event/search' => 'Users',
-        '/event/users' => 'Users',
-        '/pay/url' => 'Url',
-    ];
-
     /**
      * @var RequestFactory
      */
@@ -38,21 +23,6 @@ class RunetIdService implements Service\ServiceInterface
     {
         $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
         $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
-    }
-
-    /**
-     * @param string $endpoint
-     * @param mixed  $data
-     *
-     * @return mixed
-     */
-    public static function & extractEndpointData($endpoint, &$data)
-    {
-        if (isset(self::$endpointDataPaths[$endpoint]) && is_array($data)) {
-            return $data[self::$endpointDataPaths[$endpoint]];
-        }
-
-        return $data;
     }
 
     /**
@@ -66,19 +36,13 @@ class RunetIdService implements Service\ServiceInterface
                 'secret',
             ])
             ->setDefaults([
-                'denormalize' => false,
-                'extract_data' => false,
                 'host' => 'api.runet-id.com',
-                'iterator' => false,
                 'language' => 'ru',
                 'scheme' => 'http',
             ])
             ->setDefined('event_id')
-            ->setAllowedTypes('denormalize', 'bool')
             ->setAllowedTypes('event_id', 'int')
-            ->setAllowedTypes('extract_data', 'bool')
             ->setAllowedTypes('host', 'string')
-            ->setAllowedTypes('iterator', 'bool')
             ->setAllowedTypes('key', 'string')
             ->setAllowedTypes('scheme', 'string')
             ->setAllowedTypes('secret', 'string')
@@ -90,9 +54,20 @@ class RunetIdService implements Service\ServiceInterface
      */
     public function configureRequestContext(OptionsResolver $resolver)
     {
-        /** @noinspection PhpUnusedParameterInspection */
-        $endpointNormalizer = function (Options $context, $endpoint) {
+        $endpointNormalizer = function (
+            /** @noinspection PhpUnusedParameterInspection */
+            Options $context,
+            $endpoint
+        ) {
             return '/'.ltrim($endpoint, '/');
+        };
+
+        $methodNormalizer = function (
+            /** @noinspection PhpUnusedParameterInspection */
+            Options $context,
+            $method
+        ) {
+            return strtoupper($method);
         };
 
         $resolver
@@ -105,12 +80,16 @@ class RunetIdService implements Service\ServiceInterface
                 'method' => 'GET',
                 'query' => [],
             ])
-            ->setAllowedTypes('body', ['null', 'string', 'array', 'Psr\Http\Message\StreamInterface'])
+            ->setDefined('data')
+            ->setAllowedTypes('body', ['null', 'string', 'Psr\Http\Message\StreamInterface'])
+            ->setAllowedTypes('data', ['null', 'array'])
             ->setAllowedTypes('endpoint', 'string')
             ->setAllowedTypes('headers', 'array')
             ->setAllowedTypes('method', 'string')
             ->setAllowedTypes('query', 'array')
-            ->setNormalizer('endpoint', $endpointNormalizer);
+            ->setNormalizer('endpoint', $endpointNormalizer)
+            ->setNormalizer('method', $methodNormalizer);
+        // todo: check that either body or data is set
     }
 
     /**
@@ -120,13 +99,8 @@ class RunetIdService implements Service\ServiceInterface
     {
         $query = array_replace([
             'Language' => $context['language'],
+            'EventId' => isset($context['event_id']) ? $context['event_id'] : null,
         ], $context['query']);
-
-        if (isset($context['event_id'])) {
-            $query['EventId'] = $context['event_id'];
-        }
-
-        $query = $this->httpBuildQuery($query);
 
         $headers = array_replace([
             'Apikey' => $context['key'],
@@ -136,10 +110,16 @@ class RunetIdService implements Service\ServiceInterface
 
         $body = $context['body'];
 
-        if (is_array($body)) {
-            $body = $this->httpBuildQuery($context['body']);
-            $headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        if (isset($context['data'])) {
+            if ('POST' === $context['method'] || 'PUT' === $context['method']) {
+                $body = $this->httpBuildQuery($context['data']);
+                $headers['Content-Type'] = 'application/x-www-form-urlencoded';
+            } else {
+                $query = array_replace($query, $context['data']);
+            }
         }
+
+        $query = $this->httpBuildQuery($query);
 
         return $this->requestFactory->createRequest(
             $context['method'],
@@ -161,28 +141,7 @@ class RunetIdService implements Service\ServiceInterface
         $message = isset($data['Error']['Message']) ? $data['Error']['Message'] : 'Ошибка';
         $code = isset($data['Error']['Code']) ? $data['Error']['Code'] : 0;
 
-        throw new ApiException($context, $message, $code);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents()
-    {
-        return [
-            Events::POST_DECODE => ['onPostDecode', -2000],
-        ];
-    }
-
-    public function onPostDecode(PostDecodeEvent $event)
-    {
-        $context = $event->getContext();
-
-        if ($context['extract_data']) {
-            $data = $event->getData();
-            $data = self::extractEndpointData($context['endpoint'], $data);
-            $event->setData($data);
-        }
+        throw new RunetIdException($context, $message, $code);
     }
 
     /**

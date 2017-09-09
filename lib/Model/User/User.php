@@ -2,257 +2,52 @@
 
 namespace RunetId\ApiClient\Model\User;
 
-use RunetId\ApiClient\Common\ClassTrait;
-use RunetId\ApiClient\Denormalizer\PreDenormalizableInterface;
-use RunetId\ApiClient\Extension\DenormalizationExtension;
-use RunetId\ApiClient\Model\Event\Participation;
-use RunetId\ApiClient\Model\ModelInterface;
+use RunetId\ApiClient\Model\AbstractModel;
 
-class User implements ModelInterface, UserRunetIdInterface, PreDenormalizableInterface
+/**
+ * @property int         $RunetId
+ * @property null|string $CreationTime
+ * @property null|bool   $Visible
+ * @property null|bool   $Verified
+ * @property null|string $Gender
+ * @property null|string $LastName
+ * @property null|string $FirstName
+ * @property null|string $FatherName
+ * @property null|Photo  $Photo
+ * @property null|array  $Attributes
+ * @property null|Work   $Work
+ * @property null|Status $Status
+ * @property null|string $Email
+ * @property null|string $Phone
+ * @property null|string $PhoneFormatted
+ * @property null|array  $Phones
+ */
+class User extends AbstractModel implements UserRunetIdInterface
 {
-    use ClassTrait;
-
-    const MALE = 'male';
-    const FEMALE = 'female';
-
-    /**
-     * @var int
-     */
-    protected $runetId;
-
-    /**
-     * @var null|string
-     */
-    protected $firstName;
-
-    /**
-     * @var null|string
-     */
-    protected $lastName;
-
-    /**
-     * @var null|string
-     */
-    protected $fatherName;
-
-    /**
-     * @var null|string
-     */
-    protected $email;
-
-    /**
-     * @var null|string
-     */
-    protected $phone;
-
-    /**
-     * @var null|Participation
-     */
-    protected $participation;
-
-    /**
-     * @var null|bool
-     */
-    protected $visible;
-
-    /**
-     * @var null|bool
-     */
-    protected $verified;
-
-    /**
-     * @var null|string
-     */
-    protected $gender;
-
-    /**
-     * @var null|Work
-     */
-    protected $work;
-
-    /**
-     * @var null|string
-     */
-    protected $photo;
-
-    /**
-     * @var null|\DateTimeImmutable
-     */
-    protected $createdAt;
-
-    /**
-     * @var null|array
-     */
-    protected $attributes;
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getRunetIdPreDenormalizationMap()
-    {
-        return [
-            'runetId' => 'RunetId',
-            'firstName' => 'FirstName',
-            'lastName' => 'LastName',
-            'fatherName' => 'FatherName',
-            'email' => 'Email',
-            'phone' => 'Phone',
-            'visible' => 'Visible',
-            'gender' => function (array $raw, &$exists) {
-                if ($exists = array_key_exists('Gender', $raw)) {
-                    return 'none' === $raw['Gender'] ? null : $raw['Gender'];
-                }
-
-                return null;
-            },
-            'verified' => 'Verified',
-            'createdAt' => 'CreationTime',
-            'attributes' => 'Attributes',
-            'work' => 'Work',
-            'participation' => function (array $raw, &$exists, array $context) {
-                if (isset($raw['Status']['RoleId'])) {
-                    return $raw['Status'];
-                }
-
-                $exists = isset($context[DenormalizationExtension::REQUEST_CONTEXT]['endpoint']) && '/user/get' === $context[DenormalizationExtension::REQUEST_CONTEXT]['endpoint'];
-
-                return null;
-            },
-            'photo' => function (array $raw, &$exists) {
-                if ($exists = isset($raw['Photo']['Original'])) {
-                    return $raw['Photo']['Original'];
-                }
-
-                return null;
-            },
-        ];
-    }
-
     /**
      * @return string
      */
     public function __toString()
     {
-        return trim($this->firstName.' '.$this->lastName);
+        return trim($this->FirstName.' '.$this->LastName);
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getRunetId()
     {
-        return $this->runetId;
+        return $this->RunetId;
     }
 
     /**
-     * @return null|string
+     * {@inheritdoc}
      */
-    public function getFirstName()
+    protected function getMap()
     {
-        return $this->firstName;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getFatherName()
-    {
-        return $this->fatherName;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getPhone()
-    {
-        return $this->phone;
-    }
-
-    /**
-     * @return null|Participation
-     */
-    public function getParticipation()
-    {
-        return $this->participation;
-    }
-
-    /**
-     * @return null|bool
-     */
-    public function getVisible()
-    {
-        return $this->visible;
-    }
-
-    /**
-     * @return null|bool
-     */
-    public function getVerified()
-    {
-        return $this->verified;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getGender()
-    {
-        return $this->gender;
-    }
-
-    /**
-     * @return null|Work
-     */
-    public function getWork()
-    {
-        return $this->work;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getPhoto()
-    {
-        return $this->photo;
-    }
-
-    /**
-     * @return null|\DateTimeImmutable
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @return null|array
-     */
-    public function getAttributes()
-    {
-        return $this->attributes;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isMale()
-    {
-        return self::MALE === $this->gender;
+        return [
+            'Work' => 'RunetId\ApiClient\Model\User\Work',
+            'Photo' => 'RunetId\ApiClient\Model\User\Photo',
+        ];
     }
 }

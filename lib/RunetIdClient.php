@@ -2,22 +2,17 @@
 
 namespace RunetId\ApiClient;
 
-use RunetId\ApiClient\Facade;
 use RunetId\ApiClient\Service\RunetIdService;
 use Ruvents\AbstractApiClient\AbstractApiClient;
 
 /**
- * @method Facade\EventFacade event()
- * @method Facade\PayFacade pay()
- * @method Facade\UserFacade user()
+ * @method Builder\UserAddressBuilder userAddress()
+ * @method Builder\UserAuthBuilder userAuth()
+ * @method Builder\UserCreateBuilder userCreate()
+ * @method Builder\UserGetBuilder userGet()
  */
 class RunetIdClient extends AbstractApiClient
 {
-    /**
-     * @var array
-     */
-    protected $facades = [];
-
     /**
      * {@inheritdoc}
      */
@@ -30,16 +25,13 @@ class RunetIdClient extends AbstractApiClient
      * @param string $name
      * @param array  $arguments
      *
-     * @return Facade\AbstractFacade
+     * @return Builder\AbstractEndpointBuilder
+     * @throws \BadMethodCallException
      */
-    public function __call($name, array $arguments = [])
+    public function __call($name, array $arguments)
     {
-        $class = __NAMESPACE__.'\\Facade\\'.ucfirst($name).'Facade';
+        $class = __NAMESPACE__.'\Builder\\'.ucfirst($name).'Builder';
 
-        if (!isset($this->facades[$class])) {
-            $this->facades[$class] = new $class($this);
-        }
-
-        return $this->facades[$class];
+        return new $class($this);
     }
 }

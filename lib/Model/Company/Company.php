@@ -2,53 +2,27 @@
 
 namespace RunetId\ApiClient\Model\Company;
 
-use RunetId\ApiClient\Common\ClassTrait;
-use RunetId\ApiClient\Denormalizer\PreDenormalizableInterface;
-use RunetId\ApiClient\Model\ModelInterface;
+use RunetId\ApiClient\Model\AbstractModel;
 
-class Company implements ModelInterface, CompanyIdInterface, PreDenormalizableInterface
+/**
+ * @property int         $Id
+ * @property null|string $Name
+ */
+class Company extends AbstractModel implements CompanyIdInterface
 {
-    use ClassTrait;
-
     /**
-     * @var int
+     * @return string
      */
-    protected $id;
-
-    /**
-     * @var null|string
-     */
-    protected $title;
+    public function __toString()
+    {
+        return (string)$this->Name;
+    }
 
     /**
      * {@inheritdoc}
      */
-    public static function getRunetIdPreDenormalizationMap()
-    {
-        return [
-            'id' => 'Id',
-            'title' => 'Name',
-        ];
-    }
-
-    public function __toString()
-    {
-        return (string)$this->title;
-    }
-
-    /**
-     * @return int
-     */
     public function getId()
     {
-        return $this->id;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getTitle()
-    {
-        return $this->title;
+        return $this->Id;
     }
 }

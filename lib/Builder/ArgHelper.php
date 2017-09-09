@@ -1,10 +1,10 @@
 <?php
 
-namespace RunetId\ApiClient\Common;
+namespace RunetId\ApiClient\Builder;
 
 use RunetId\ApiClient\Model\Company\CompanyIdInterface;
 use RunetId\ApiClient\Model\Event\EventIdInterface;
-use RunetId\ApiClient\Model\Event\StatusIdInterface;
+use RunetId\ApiClient\Model\Event\RoleIdInterface;
 use RunetId\ApiClient\Model\Pay\ItemIdInterface;
 use RunetId\ApiClient\Model\Pay\OrderIdInterface;
 use RunetId\ApiClient\Model\Pay\ProductIdInterface;
@@ -12,6 +12,10 @@ use RunetId\ApiClient\Model\User\UserRunetIdInterface;
 
 final class ArgHelper
 {
+    private function __construct()
+    {
+    }
+
     /**
      * @param int|CompanyIdInterface $id
      *
@@ -47,20 +51,20 @@ final class ArgHelper
     }
 
     /**
-     * @param int|StatusIdInterface $id
+     * @param int|RoleIdInterface $id
      *
      * @return int
      * @throws \InvalidArgumentException
      */
-    public static function getEventStatusId($id)
+    public static function getEventRoleId($id)
     {
         if (is_numeric($id)) {
             return (int)$id;
-        } elseif ($id instanceof StatusIdInterface) {
+        } elseif ($id instanceof RoleIdInterface) {
             return $id->getId();
         }
 
-        throw new \InvalidArgumentException('Argument must be numeric or implement StatusIdInterface.');
+        throw new \InvalidArgumentException('Argument must be numeric or implement RoleIdInterface.');
     }
 
     /**

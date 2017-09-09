@@ -2,15 +2,24 @@
 
 namespace RunetId\ApiClient\Iterator;
 
-use RunetId\ApiClient\Service\RunetIdService;
-use Ruvents\AbstractApiClient\ApiClientInterface;
+use RunetId\ApiClient\RunetIdClient;
 
-class PageTokenIterator implements IteratorInterface, \Countable
+class PageTokenIterator implements \Iterator, \Countable
 {
+    /**
+     * @var RunetIdClient
+     */
+    private $client;
+
     /**
      * @var array
      */
     private $context;
+
+    /**
+     * @var callable
+     */
+    private $dataExtractor;
 
     /**
      * @var int
@@ -37,13 +46,11 @@ class PageTokenIterator implements IteratorInterface, \Countable
      */
     private $loaded = false;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setContext(array $context)
+    public function __construct(RunetIdClient $client, array $context, callable $dataExtractor)
     {
+        $this->client = $client;
         $this->context = $context;
-        $this->nextMaxResults = isset($context['query']['MaxResults']) ? $context['query']['MaxResults'] : null;
+        $this->dataExtractor = $dataExtractor;
     }
 
     /**
@@ -112,13 +119,8 @@ class PageTokenIterator implements IteratorInterface, \Countable
             return;
         }
 
-        /** @var ApiClientInterface $apiClient */
-        $apiClient = $this->context['api_client'];
-
         // copy and modify context
         $context = array_replace_recursive($this->context, [
-            'extract_data' => false,
-            'iterator' => false,
             'query' => [
                 'MaxResults' => $this->nextMaxResults,
                 'PageToken' => $this->nextPageToken,
@@ -126,11 +128,10 @@ class PageTokenIterator implements IteratorInterface, \Countable
         ]);
 
         // request raw data
-        $raw = $apiClient->request($context);
+        $raw = $this->client->request($context);
 
         // extract data
-        $data = RunetIdService::extractEndpointData($context['endpoint'], $raw);
-
+        $data = call_user_func($this->dataExtractor, $raw, $context);
         $countData = count($data);
 
         $this->data = array_merge($this->data, array_values($data));
