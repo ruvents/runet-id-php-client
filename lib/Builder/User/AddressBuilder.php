@@ -4,9 +4,8 @@ namespace RunetId\ApiClient\Builder\User;
 
 use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
 use RunetId\ApiClient\Builder\ObjectResultTrait;
-use RunetId\ApiClient\Common\ArgHelper;
+use RunetId\ApiClient\Builder\SetRunetIdTrait;
 use RunetId\ApiClient\Result\User\Address;
-use RunetId\ApiClient\Result\User\UserRunetIdInterface;
 
 /**
  * @method Address getResult()
@@ -14,6 +13,7 @@ use RunetId\ApiClient\Result\User\UserRunetIdInterface;
 class AddressBuilder extends AbstractEndpointBuilder
 {
     use ObjectResultTrait;
+    use SetRunetIdTrait;
 
     /**
      * @var array
@@ -24,20 +24,10 @@ class AddressBuilder extends AbstractEndpointBuilder
     ];
 
     /**
-     * @param int|UserRunetIdInterface $runetId
-     *
-     * @return $this
-     */
-    public function setRunetId($runetId)
-    {
-        return $this->setQueryParam('RunetId', ArgHelper::getUserRunetId($runetId));
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function getResultClass()
     {
-        return 'RunetId\ApiClient\Model\User\Address';
+        return Address::className();
     }
 }

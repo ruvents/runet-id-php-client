@@ -2,6 +2,8 @@
 
 namespace RunetId\ApiClient\Builder;
 
+use RunetId\ApiClient\Result\Success;
+
 trait SuccessResultTrait
 {
     use ObjectResultTrait;
@@ -11,6 +13,6 @@ trait SuccessResultTrait
      */
     protected function getResultClass()
     {
-        return 'RunetId\ApiClient\Result\Success';
+        return Success::className();
     }
 }

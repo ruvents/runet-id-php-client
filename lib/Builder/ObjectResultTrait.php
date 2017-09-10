@@ -14,11 +14,20 @@ trait ObjectResultTrait
     protected function processResult($result)
     {
         if (null === $result) {
-            $class = $this->getResultClass();
-            $result = new $class($result);
+            return null;
         }
 
-        return $result;
+        $class = $this->getResultClass();
+
+        if ('[]' === substr($class, -2)) {
+            $class = substr($class, 0, -2);
+
+            return array_map(function ($result) use ($class) {
+                return new $class($result);
+            }, $result);
+        }
+
+        return new $class($result);
     }
 
     /**

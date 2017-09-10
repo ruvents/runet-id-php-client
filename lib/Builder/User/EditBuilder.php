@@ -34,6 +34,6 @@ class EditBuilder extends AbstractEndpointBuilder
      */
     protected function getResultClass()
     {
-        return 'RunetId\ApiClient\Model\User\User';
+        return User::className();
     }
 }
