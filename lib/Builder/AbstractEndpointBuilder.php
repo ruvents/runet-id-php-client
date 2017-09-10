@@ -48,6 +48,18 @@ abstract class AbstractEndpointBuilder
     }
 
     /**
+     * @param array $params
+     *
+     * @return $this
+     */
+    final public function setParams(array $params)
+    {
+        $this->context['data'] = array_replace($this->context['data'], $params);
+
+        return $this;
+    }
+
+    /**
      * @param int $eventId
      *
      * @return $this
