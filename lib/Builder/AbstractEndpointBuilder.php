@@ -89,7 +89,7 @@ abstract class AbstractEndpointBuilder
      */
     public function getResult()
     {
-        return $this->denormalizeResult($this->client->request($this->context));
+        return $this->processResult($this->client->request($this->context));
     }
 
     /**
@@ -97,5 +97,8 @@ abstract class AbstractEndpointBuilder
      *
      * @return mixed
      */
-    abstract protected function denormalizeResult($result);
+    protected function processResult($result)
+    {
+        return $result;
+    }
 }

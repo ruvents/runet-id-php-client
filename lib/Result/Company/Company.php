@@ -1,14 +1,14 @@
 <?php
 
-namespace RunetId\ApiClient\Model\Company;
+namespace RunetId\ApiClient\Result\Company;
 
-use RunetId\ApiClient\Model\AbstractModel;
+use RunetId\ApiClient\Result\AbstractResult;
 
 /**
  * @property int         $Id
  * @property null|string $Name
  */
-class Company extends AbstractModel implements CompanyIdInterface
+class Company extends AbstractResult implements CompanyIdInterface
 {
     /**
      * @return string

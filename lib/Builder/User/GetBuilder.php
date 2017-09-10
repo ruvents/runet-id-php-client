@@ -3,10 +3,10 @@
 namespace RunetId\ApiClient\Builder\User;
 
 use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
-use RunetId\ApiClient\Builder\ModelResultTrait;
+use RunetId\ApiClient\Builder\ObjectResultTrait;
 use RunetId\ApiClient\Common\ArgHelper;
-use RunetId\ApiClient\Model\User\User;
-use RunetId\ApiClient\Model\User\UserRunetIdInterface;
+use RunetId\ApiClient\Result\User\User;
+use RunetId\ApiClient\Result\User\UserRunetIdInterface;
 
 /**
  * @method $this setEmail(string $email)
@@ -15,7 +15,7 @@ use RunetId\ApiClient\Model\User\UserRunetIdInterface;
  */
 class GetBuilder extends AbstractEndpointBuilder
 {
-    use ModelResultTrait;
+    use ObjectResultTrait;
 
     /**
      * @var array

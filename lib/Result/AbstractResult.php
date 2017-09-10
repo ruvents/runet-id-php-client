@@ -1,33 +1,33 @@
 <?php
 
-namespace RunetId\ApiClient\Model;
+namespace RunetId\ApiClient\Result;
 
-abstract class AbstractModel
+abstract class AbstractResult
 {
     /**
      * @var array
      */
-    private $data;
+    private $result;
 
     /**
      * @var array
      */
-    private $denormalizedData = [];
+    private $processedResult = [];
 
     /**
-     * @param array $data
+     * @param array $result
      */
-    final public function __construct(array $data)
+    final public function __construct(array $result)
     {
-        $this->data = $data;
+        $this->result = $result;
     }
 
     /**
      * @return array
      */
-    final public function getData()
+    final public function getResult()
     {
-        return $this->data;
+        return $this->result;
     }
 
     /**
@@ -37,7 +37,7 @@ abstract class AbstractModel
      */
     final public function __isset($offset)
     {
-        return isset($this->data[$offset]);
+        return isset($this->result[$offset]);
     }
 
     /**
@@ -47,18 +47,18 @@ abstract class AbstractModel
      */
     final public function __get($offset)
     {
-        if (!array_key_exists($offset, $this->denormalizedData)) {
-            $value = $this->data[$offset];
+        if (!array_key_exists($offset, $this->processedResult)) {
+            $value = $this->result[$offset];
 
             if (isset($this->getMap()[$offset]) && null !== $value) {
                 $class = $this->getMap()[$offset];
                 $value = new $class($value);
             }
 
-            $this->denormalizedData[$offset] = $value;
+            $this->processedResult[$offset] = $value;
         }
 
-        return $this->denormalizedData[$offset];
+        return $this->processedResult[$offset];
     }
 
     /**
@@ -79,7 +79,7 @@ abstract class AbstractModel
      */
     final public function exists($key)
     {
-        return array_key_exists($key, $this->data);
+        return array_key_exists($key, $this->result);
     }
 
     /**

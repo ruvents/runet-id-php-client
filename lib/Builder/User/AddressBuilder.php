@@ -3,17 +3,17 @@
 namespace RunetId\ApiClient\Builder\User;
 
 use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
-use RunetId\ApiClient\Builder\ModelResultTrait;
+use RunetId\ApiClient\Builder\ObjectResultTrait;
 use RunetId\ApiClient\Common\ArgHelper;
-use RunetId\ApiClient\Model\Common\Address;
-use RunetId\ApiClient\Model\User\UserRunetIdInterface;
+use RunetId\ApiClient\Result\User\Address;
+use RunetId\ApiClient\Result\User\UserRunetIdInterface;
 
 /**
  * @method Address getResult()
  */
 class AddressBuilder extends AbstractEndpointBuilder
 {
-    use ModelResultTrait;
+    use ObjectResultTrait;
 
     /**
      * @var array
@@ -38,6 +38,6 @@ class AddressBuilder extends AbstractEndpointBuilder
      */
     protected function getResultClass()
     {
-        return 'RunetId\ApiClient\Model\Common\Address';
+        return 'RunetId\ApiClient\Model\User\Address';
     }
 }

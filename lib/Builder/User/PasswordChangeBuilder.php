@@ -4,6 +4,7 @@ namespace RunetId\ApiClient\Builder\User;
 
 use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
 use RunetId\ApiClient\Builder\SuccessResultTrait;
+use RunetId\ApiClient\Result\Success;
 
 /**
  * @method $this setEmail(string $email)
@@ -11,7 +12,7 @@ use RunetId\ApiClient\Builder\SuccessResultTrait;
  * @method $this setDeviceType(string $deviceType) iOS|Android
  * @method $this setDeviceToken(string $deviceToken)
  *
- * @method bool getResult()
+ * @method Success getResult()
  */
 class PasswordChangeBuilder extends AbstractEndpointBuilder
 {

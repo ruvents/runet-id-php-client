@@ -1,9 +1,9 @@
 <?php
 
-namespace RunetId\ApiClient\Model\User;
+namespace RunetId\ApiClient\Result\User;
 
-use RunetId\ApiClient\Model\Event\RoleIdInterface;
-use RunetId\ApiClient\Model\AbstractModel;
+use RunetId\ApiClient\Result\Event\RoleIdInterface;
+use RunetId\ApiClient\Result\AbstractResult;
 
 /**
  * @property int         $RoleId
@@ -12,7 +12,7 @@ use RunetId\ApiClient\Model\AbstractModel;
  * @property null|string $TicketUrl
  * @property null|bool   $Registered
  */
-class Status extends AbstractModel implements RoleIdInterface
+class Status extends AbstractResult implements RoleIdInterface
 {
     /**
      * @return string

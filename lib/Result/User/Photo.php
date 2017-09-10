@@ -1,8 +1,8 @@
 <?php
 
-namespace RunetId\ApiClient\Model\User;
+namespace RunetId\ApiClient\Result\User;
 
-use RunetId\ApiClient\Model\AbstractModel;
+use RunetId\ApiClient\Result\AbstractResult;
 
 /**
  * @property string $Small
@@ -10,7 +10,7 @@ use RunetId\ApiClient\Model\AbstractModel;
  * @property string $Large
  * @property string $Original
  */
-class Photo extends AbstractModel
+class Photo extends AbstractResult
 {
     /**
      * @return string

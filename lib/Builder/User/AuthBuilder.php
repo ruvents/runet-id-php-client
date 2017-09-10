@@ -3,15 +3,15 @@
 namespace RunetId\ApiClient\Builder\User;
 
 use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
-use RunetId\ApiClient\Builder\ModelResultTrait;
-use RunetId\ApiClient\Model\User\User;
+use RunetId\ApiClient\Builder\ObjectResultTrait;
+use RunetId\ApiClient\Result\User\User;
 
 /**
  * @method User getResult()
  */
 class AuthBuilder extends AbstractEndpointBuilder
 {
-    use ModelResultTrait;
+    use ObjectResultTrait;
 
     /**
      * @var array

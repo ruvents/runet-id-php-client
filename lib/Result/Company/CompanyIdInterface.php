@@ -1,8 +1,8 @@
 <?php
 
-namespace RunetId\ApiClient\Model\Pay;
+namespace RunetId\ApiClient\Result\Company;
 
-interface OrderIdInterface
+interface CompanyIdInterface
 {
     /**
      * @return int

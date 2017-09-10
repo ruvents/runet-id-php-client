@@ -2,13 +2,13 @@
 
 namespace RunetId\ApiClient\Common;
 
-use RunetId\ApiClient\Model\Company\CompanyIdInterface;
-use RunetId\ApiClient\Model\Event\EventIdInterface;
-use RunetId\ApiClient\Model\Event\RoleIdInterface;
-use RunetId\ApiClient\Model\Pay\ItemIdInterface;
-use RunetId\ApiClient\Model\Pay\OrderIdInterface;
-use RunetId\ApiClient\Model\Pay\ProductIdInterface;
-use RunetId\ApiClient\Model\User\UserRunetIdInterface;
+use RunetId\ApiClient\Result\Company\CompanyIdInterface;
+use RunetId\ApiClient\Result\Event\EventIdInterface;
+use RunetId\ApiClient\Result\Event\RoleIdInterface;
+use RunetId\ApiClient\Result\Pay\ItemIdInterface;
+use RunetId\ApiClient\Result\Pay\OrderIdInterface;
+use RunetId\ApiClient\Result\Pay\ProductIdInterface;
+use RunetId\ApiClient\Result\User\UserRunetIdInterface;
 
 final class ArgHelper
 {

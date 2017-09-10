@@ -2,16 +2,16 @@
 
 namespace RunetId\ApiClient\Builder;
 
-trait ModelResultTrait
+trait ObjectResultTrait
 {
     /**
-     * @see AbstractEndpointBuilder::denormalizeResult()
+     * @see AbstractEndpointBuilder::processResult()
      *
      * @param mixed $result
      *
      * @return null|object
      */
-    public function denormalizeResult($result)
+    protected function processResult($result)
     {
         if (null === $result) {
             $class = $this->getResultClass();

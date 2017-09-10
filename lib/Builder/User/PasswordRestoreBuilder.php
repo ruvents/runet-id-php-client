@@ -4,11 +4,12 @@ namespace RunetId\ApiClient\Builder\User;
 
 use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
 use RunetId\ApiClient\Builder\SuccessResultTrait;
+use RunetId\ApiClient\Result\Success;
 
 /**
  * @method $this setCredential(string $credential) Email|Phone|RunetId
  *
- * @method bool getResult()
+ * @method Success getResult()
  */
 class PasswordRestoreBuilder extends AbstractEndpointBuilder
 {

@@ -4,15 +4,13 @@ namespace RunetId\ApiClient\Builder;
 
 trait SuccessResultTrait
 {
+    use ObjectResultTrait;
+
     /**
-     * @see AbstractEndpointBuilder::denormalizeResult()
-     *
-     * @param mixed $result
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function denormalizeResult($result)
+    protected function getResultClass()
     {
-        return is_array($result) && isset($result['Success']) && true === $result['Success'];
+        return 'RunetId\ApiClient\Result\Success';
     }
 }

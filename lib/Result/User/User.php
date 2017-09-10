@@ -1,8 +1,8 @@
 <?php
 
-namespace RunetId\ApiClient\Model\User;
+namespace RunetId\ApiClient\Result\User;
 
-use RunetId\ApiClient\Model\AbstractModel;
+use RunetId\ApiClient\Result\AbstractResult;
 
 /**
  * @property int         $RunetId
@@ -22,7 +22,7 @@ use RunetId\ApiClient\Model\AbstractModel;
  * @property null|string $PhoneFormatted
  * @property null|array  $Phones
  */
-class User extends AbstractModel implements UserRunetIdInterface
+class User extends AbstractResult implements UserRunetIdInterface
 {
     /**
      * @return string

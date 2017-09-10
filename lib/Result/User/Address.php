@@ -1,8 +1,8 @@
 <?php
 
-namespace RunetId\ApiClient\Model\Common;
+namespace RunetId\ApiClient\Result\User;
 
-use RunetId\ApiClient\Model\AbstractModel;
+use RunetId\ApiClient\Result\AbstractResult;
 
 /**
  * @property null|string $Country
@@ -16,6 +16,6 @@ use RunetId\ApiClient\Model\AbstractModel;
  * @property null|string $Apartment
  * @property null|string $Place
  */
-class Address extends AbstractModel
+class Address extends AbstractResult
 {
 }
