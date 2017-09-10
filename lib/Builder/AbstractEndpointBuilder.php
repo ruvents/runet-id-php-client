@@ -40,19 +40,6 @@ abstract class AbstractEndpointBuilder
      *
      * @return $this
      */
-    final public function setQueryParam($name, $value)
-    {
-        $this->context['query'][$name] = $value;
-
-        return $this;
-    }
-
-    /**
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return $this
-     */
     final public function setParam($name, $value)
     {
         $this->context['data'][$name] = $value;

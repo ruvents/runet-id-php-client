@@ -36,7 +36,7 @@ class GetBuilder extends AbstractEndpointBuilder
             $builders = implode(',', $builders);
         }
 
-        return $this->setQueryParam('Builders', $builders);
+        return $this->setParam('Builders', $builders);
     }
 
     /**

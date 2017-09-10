@@ -14,7 +14,7 @@ trait SetRunetIdTrait
      */
     public function setRunetId($runetId)
     {
-        return $this->setQueryParam('RunetId', ArgHelper::getUserRunetId($runetId));
+        return $this->setParam('RunetId', ArgHelper::getUserRunetId($runetId));
     }
 
     /**
@@ -23,5 +23,5 @@ trait SetRunetIdTrait
      *
      * @return $this
      */
-    abstract public function setQueryParam($name, $value);
+    abstract protected function setParam($name, $value);
 }

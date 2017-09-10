@@ -28,7 +28,7 @@ class AuthBuilder extends AbstractEndpointBuilder
      */
     public function setToken($token)
     {
-        return $this->setQueryParam('token', $token);
+        return $this->setParam('token', $token);
     }
 
     /**
