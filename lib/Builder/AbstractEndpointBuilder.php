@@ -31,7 +31,7 @@ abstract class AbstractEndpointBuilder
             throw new \BadMethodCallException('This method requires one argument.');
         }
 
-        $this->setParam(substr($name, 3), $args[0]);
+        return $this->setParam(substr($name, 3), $args[0]);
     }
 
     /**
@@ -89,20 +89,13 @@ abstract class AbstractEndpointBuilder
      */
     public function getResult()
     {
-        $result = $this->client->request($this->context);
-
-        if (null !== $class = $this->getResultClass() && null !== $result) {
-            $result = new $class($result);
-        }
-
-        return $result;
+        return $this->denormalizeResult($this->client->request($this->context));
     }
 
     /**
-     * @return null|string
+     * @param mixed $result
+     *
+     * @return mixed
      */
-    protected function getResultClass()
-    {
-        return null;
-    }
+    abstract protected function denormalizeResult($result);
 }

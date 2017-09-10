@@ -1,6 +1,6 @@
 <?php
 
-namespace RunetId\ApiClient\Builder;
+namespace RunetId\ApiClient\Common;
 
 use RunetId\ApiClient\Model\Company\CompanyIdInterface;
 use RunetId\ApiClient\Model\Event\EventIdInterface;

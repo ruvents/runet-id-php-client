@@ -1,7 +1,10 @@
 <?php
 
-namespace RunetId\ApiClient\Builder;
+namespace RunetId\ApiClient\Builder\User;
 
+use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
+use RunetId\ApiClient\Builder\ModelResultTrait;
+use RunetId\ApiClient\Common\ArgHelper;
 use RunetId\ApiClient\Model\User\User;
 use RunetId\ApiClient\Model\User\UserRunetIdInterface;
 
@@ -10,8 +13,10 @@ use RunetId\ApiClient\Model\User\UserRunetIdInterface;
  *
  * @method User getResult()
  */
-class UserGetBuilder extends AbstractEndpointBuilder
+class GetBuilder extends AbstractEndpointBuilder
 {
+    use ModelResultTrait;
+
     /**
      * @var array
      */

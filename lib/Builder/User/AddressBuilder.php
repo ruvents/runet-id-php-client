@@ -1,15 +1,20 @@
 <?php
 
-namespace RunetId\ApiClient\Builder;
+namespace RunetId\ApiClient\Builder\User;
 
+use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
+use RunetId\ApiClient\Builder\ModelResultTrait;
+use RunetId\ApiClient\Common\ArgHelper;
 use RunetId\ApiClient\Model\Common\Address;
 use RunetId\ApiClient\Model\User\UserRunetIdInterface;
 
 /**
  * @method Address getResult()
  */
-class UserAddressBuilder extends AbstractEndpointBuilder
+class AddressBuilder extends AbstractEndpointBuilder
 {
+    use ModelResultTrait;
+
     /**
      * @var array
      */

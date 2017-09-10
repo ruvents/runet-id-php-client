@@ -6,10 +6,13 @@ use RunetId\ApiClient\Service\RunetIdService;
 use Ruvents\AbstractApiClient\AbstractApiClient;
 
 /**
- * @method Builder\UserAddressBuilder userAddress()
- * @method Builder\UserAuthBuilder userAuth()
- * @method Builder\UserCreateBuilder userCreate()
- * @method Builder\UserGetBuilder userGet()
+ * @method Builder\User\AddressBuilder userAddress()
+ * @method Builder\User\AuthBuilder userAuth()
+ * @method Builder\User\CreateBuilder userCreate()
+ * @method Builder\User\EditBuilder userEdit()
+ * @method Builder\User\GetBuilder userGet()
+ * @method Builder\User\LoginBuilder userLogin()
+ * @method Builder\User\PasswordChangeBuilder userPasswordChange()
  */
 class RunetIdClient extends AbstractApiClient
 {
@@ -30,7 +33,11 @@ class RunetIdClient extends AbstractApiClient
      */
     public function __call($name, array $arguments)
     {
-        $class = __NAMESPACE__.'\Builder\\'.ucfirst($name).'Builder';
+        if (1 !== preg_match('/^(\w+?)([A-Z].*)$/', $name, $matches)) {
+            throw new \BadMethodCallException(sprintf('Method RunetId\ApiClient\RunetIdClient::%s is not defined.', $name));
+        }
+
+        $class = __NAMESPACE__.'\Builder\\'.ucfirst($matches[1]).'\\'.$matches[2].'Builder';
 
         return new $class($this);
     }

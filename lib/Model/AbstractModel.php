@@ -10,9 +10,9 @@ abstract class AbstractModel
     private $data;
 
     /**
-     * @var null|array
+     * @var array
      */
-    private $denormalizedData;
+    private $denormalizedData = [];
 
     /**
      * @param array $data
@@ -52,7 +52,7 @@ abstract class AbstractModel
 
             if (isset($this->getMap()[$offset]) && null !== $value) {
                 $class = $this->getMap()[$offset];
-                $value = $class($value);
+                $value = new $class($value);
             }
 
             $this->denormalizedData[$offset] = $value;
