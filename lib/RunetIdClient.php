@@ -13,6 +13,7 @@ use Ruvents\AbstractApiClient\AbstractApiClient;
  * @method Builder\User\GetBuilder userGet()
  * @method Builder\User\LoginBuilder userLogin()
  * @method Builder\User\PasswordChangeBuilder userPasswordChange()
+ * @method Builder\User\ProfessionalinterestsBuilder userProfessionalinterests()
  */
 class RunetIdClient extends AbstractApiClient
 {
