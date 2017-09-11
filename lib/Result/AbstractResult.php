@@ -26,7 +26,7 @@ abstract class AbstractResult
      * @param string $class
      * @param mixed  $data
      *
-     * @return null|object|object[]
+     * @return null|array|object
      */
     final public static function create($class, $data)
     {
