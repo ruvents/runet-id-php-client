@@ -7,6 +7,7 @@ use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\RequestFactory;
 use RunetId\ApiClient\Exception\RunetIdException;
+use RunetId\ApiClient\Result\AbstractResult;
 use Ruvents\AbstractApiClient\ApiClientInterface;
 use Ruvents\AbstractApiClient\Event\ApiEvents;
 use Ruvents\AbstractApiClient\Event\PostDecodeEvent;
@@ -84,8 +85,14 @@ class RunetIdService extends AbstractApiService
                 'query' => [],
                 'request_paginated_data' => true,
             ])
-            ->setDefined(['data', 'max_results', 'paginated_data_offset'])
+            ->setDefined([
+                'class',
+                'data',
+                'max_results',
+                'paginated_data_offset',
+            ])
             ->setAllowedTypes('body', ['null', 'string', 'Psr\Http\Message\StreamInterface'])
+            ->setAllowedTypes('class', 'string')
             ->setAllowedTypes('data', 'array')
             ->setAllowedTypes('endpoint', 'string')
             ->setAllowedTypes('headers', 'array')
@@ -160,8 +167,9 @@ class RunetIdService extends AbstractApiService
     {
         return [
             ApiEvents::POST_DECODE => [
-                ['requestPaginatedData', 950],
                 ['preventDecode', 1000],
+                ['requestPaginatedData', 950],
+                ['denormalize', -100],
             ],
         ];
     }
@@ -171,9 +179,7 @@ class RunetIdService extends AbstractApiService
      */
     public function preventDecode(PostDecodeEvent $event)
     {
-        $context = $event->getContext();
-
-        if ($context['prevent_decode']) {
+        if ($event->getContext()['prevent_decode']) {
             $event->stopPropagation();
         }
     }
@@ -201,6 +207,21 @@ class RunetIdService extends AbstractApiService
         }
 
         $event->setResponseData($resultData);
+    }
+
+    /**
+     * @param PostDecodeEvent $event
+     */
+    public function denormalize(PostDecodeEvent $event)
+    {
+        $context = $event->getContext();
+
+        if (!isset($context['class'])) {
+            return;
+        }
+
+        $data = AbstractResult::create($context['class'], $event->getResponseData());
+        $event->setResponseData($data);
     }
 
     /**

@@ -3,8 +3,6 @@
 namespace RunetId\ApiClient\Builder\User;
 
 use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
-use RunetId\ApiClient\Builder\ObjectResultTrait;
-use RunetId\ApiClient\Result\User\User;
 
 /**
  * @method $this setEmail(string $email)
@@ -19,25 +17,16 @@ use RunetId\ApiClient\Result\User\User;
  * @method $this setAttributes(string $attributes)
  * @method $this setSubscribedForMailings(string $subscribedForMailings)
  *
- * @method User getResult()
+ * @method \RunetId\ApiClient\Result\User\User getResult()
  */
 class CreateBuilder extends AbstractEndpointBuilder
 {
-    use ObjectResultTrait;
-
     /**
      * @var array
      */
     public $context = [
+        'class' => 'RunetId\ApiClient\Result\User\User',
         'endpoint' => '/user/create',
         'method' => 'POST',
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getResultClass()
-    {
-        return User::className();
-    }
 }

@@ -3,20 +3,17 @@
 namespace RunetId\ApiClient\Builder\User;
 
 use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
-use RunetId\ApiClient\Builder\ObjectResultTrait;
-use RunetId\ApiClient\Result\User\User;
 
 /**
- * @method User getResult()
+ * @method \RunetId\ApiClient\Result\User\User getResult()
  */
 class AuthBuilder extends AbstractEndpointBuilder
 {
-    use ObjectResultTrait;
-
     /**
      * @var array
      */
     public $context = [
+        'class' => 'RunetId\ApiClient\Result\User\User',
         'endpoint' => '/user/auth',
         'method' => 'GET',
     ];
@@ -29,13 +26,5 @@ class AuthBuilder extends AbstractEndpointBuilder
     public function setToken($token)
     {
         return $this->setParam('token', $token);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getResultClass()
-    {
-        return User::className();
     }
 }

@@ -46,8 +46,8 @@ class User extends AbstractResult implements UserRunetIdInterface
     protected function getMap()
     {
         return [
-            'Work' => 'RunetId\ApiClient\Model\User\Work',
-            'Photo' => 'RunetId\ApiClient\Model\User\Photo',
+            'Work' => 'RunetId\ApiClient\Result\User\Work',
+            'Photo' => 'RunetId\ApiClient\Result\User\Photo',
         ];
     }
 }

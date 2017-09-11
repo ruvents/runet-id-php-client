@@ -3,8 +3,6 @@
 namespace RunetId\ApiClient\Builder\User;
 
 use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
-use RunetId\ApiClient\Builder\ObjectResultTrait;
-use RunetId\ApiClient\Result\User\User;
 
 /**
  * @method $this setEmail(string $email)
@@ -15,25 +13,16 @@ use RunetId\ApiClient\Result\User\User;
  * @method $this setPrimaryPhone(string $primaryPhone)
  * @method $this setAttributes(string $attributes)
  *
- * @method User getResult()
+ * @method \RunetId\ApiClient\Result\User\User getResult()
  */
 class EditBuilder extends AbstractEndpointBuilder
 {
-    use ObjectResultTrait;
-
     /**
      * @var array
      */
     public $context = [
+        'class' => 'RunetId\ApiClient\Result\User\User',
         'endpoint' => '/user/edit',
         'method' => 'POST',
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getResultClass()
-    {
-        return User::className();
-    }
 }

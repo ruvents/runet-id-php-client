@@ -23,6 +23,27 @@ abstract class AbstractResult
     }
 
     /**
+     * @param string $class
+     * @param mixed  $data
+     *
+     * @return null|object|object[]
+     */
+    final public static function create($class, $data)
+    {
+        if ('[]' === substr($class, -2)) {
+            $class = substr($class, 0, -2);
+
+            return array_map(function ($data) use ($class) {
+                return self::create($class, $data);
+            }, $data);
+        } elseif (null === $data) {
+            return null;
+        }
+
+        return new $class($data);
+    }
+
+    /**
      * @return string
      */
     public static function className()

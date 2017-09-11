@@ -3,8 +3,6 @@
 namespace RunetId\ApiClient\Builder\User;
 
 use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
-use RunetId\ApiClient\Builder\SuccessResultTrait;
-use RunetId\ApiClient\Result\Success;
 
 /**
  * @method $this setEmail(string $email)
@@ -12,16 +10,15 @@ use RunetId\ApiClient\Result\Success;
  * @method $this setDeviceType(string $deviceType) iOS|Android
  * @method $this setDeviceToken(string $deviceToken)
  *
- * @method Success getResult()
+ * @method \RunetId\ApiClient\Result\Success getResult()
  */
 class PasswordChangeBuilder extends AbstractEndpointBuilder
 {
-    use SuccessResultTrait;
-
     /**
      * @var array
      */
     public $context = [
+        'class' => 'RunetId\ApiClient\Result\Success',
         'endpoint' => '/user/login',
         'method' => 'POST',
     ];

@@ -21,7 +21,7 @@ class Work extends AbstractResult
     protected function getMap()
     {
         return [
-            'Company' => 'RunetId\ApiClient\Model\Company\Company',
+            'Company' => 'RunetId\ApiClient\Result\Company\Company',
         ];
     }
 }

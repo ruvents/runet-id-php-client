@@ -88,16 +88,6 @@ abstract class AbstractEndpointBuilder
      */
     public function getResult()
     {
-        return $this->processResult($this->client->request($this->context));
-    }
-
-    /**
-     * @param mixed $result
-     *
-     * @return mixed
-     */
-    protected function processResult($result)
-    {
-        return $result;
+        return $this->client->request($this->context);
     }
 }
