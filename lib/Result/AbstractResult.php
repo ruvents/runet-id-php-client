@@ -78,10 +78,10 @@ abstract class AbstractResult
     {
         if (!array_key_exists($offset, $this->processedResult)) {
             $value = $this->result[$offset];
+            $map = $this->getMap();
 
-            if (isset($this->getMap()[$offset]) && null !== $value) {
-                $class = $this->getMap()[$offset];
-                $value = new $class($value);
+            if (isset($map[$offset])) {
+                $value = self::create($map[$offset], $value);
             }
 
             $this->processedResult[$offset] = $value;
