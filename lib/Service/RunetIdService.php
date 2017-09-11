@@ -232,7 +232,7 @@ class RunetIdService extends AbstractApiService
      */
     private function prepareNextPageContext(array $previousData, array &$context)
     {
-        if (!isset($context['max_results']) || !isset($previousData['NextPageToken'])) {
+        if (!isset($context['max_results']) || !isset($context['paginated_data_offset']) || !isset($previousData['NextPageToken'])) {
             return false;
         }
 
