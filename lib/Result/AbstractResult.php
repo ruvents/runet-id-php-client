@@ -36,7 +36,9 @@ abstract class AbstractResult
             return array_map(function ($data) use ($class) {
                 return self::create($class, $data);
             }, $data);
-        } elseif (null === $data) {
+        }
+
+        if (null === $data) {
             return null;
         }
 
