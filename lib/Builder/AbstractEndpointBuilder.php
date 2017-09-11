@@ -16,7 +16,7 @@ abstract class AbstractEndpointBuilder
      */
     private $client;
 
-    final public function __construct(RunetIdClient $client)
+    public function __construct(RunetIdClient $client)
     {
         $this->client = $client;
     }
@@ -27,7 +27,7 @@ abstract class AbstractEndpointBuilder
             throw new \BadMethodCallException('Only setter methods are supported.');
         }
 
-        if (1 > count($args)) {
+        if (count($args) < 1) {
             throw new \BadMethodCallException('This method requires one argument.');
         }
 
