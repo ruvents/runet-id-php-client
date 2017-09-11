@@ -8,6 +8,8 @@ use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\RequestFactory;
 use RunetId\ApiClient\Exception\RunetIdException;
 use Ruvents\AbstractApiClient\ApiClientInterface;
+use Ruvents\AbstractApiClient\Event\ApiEvents;
+use Ruvents\AbstractApiClient\Event\PostDecodeEvent;
 use Ruvents\AbstractApiClient\Service\AbstractApiService;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -78,15 +80,21 @@ class RunetIdService extends AbstractApiService
                 'body' => null,
                 'headers' => [],
                 'method' => 'GET',
+                'prevent_decode' => false,
                 'query' => [],
+                'request_paginated_data' => true,
             ])
-            ->setDefined('data')
+            ->setDefined(['data', 'max_results', 'paginated_data_offset'])
             ->setAllowedTypes('body', ['null', 'string', 'Psr\Http\Message\StreamInterface'])
-            ->setAllowedTypes('data', ['null', 'array'])
+            ->setAllowedTypes('data', 'array')
             ->setAllowedTypes('endpoint', 'string')
             ->setAllowedTypes('headers', 'array')
+            ->setAllowedTypes('max_results', 'int')
             ->setAllowedTypes('method', 'string')
+            ->setAllowedTypes('paginated_data_offset', 'string')
+            ->setAllowedTypes('prevent_decode', 'bool')
             ->setAllowedTypes('query', 'array')
+            ->setAllowedTypes('request_paginated_data', 'bool')
             ->setNormalizer('endpoint', $endpointNormalizer)
             ->setNormalizer('method', $methodNormalizer);
         // todo: check that either body or data is set
@@ -98,8 +106,9 @@ class RunetIdService extends AbstractApiService
     public function createRequest(array $context, ApiClientInterface $client)
     {
         $query = array_replace([
-            'Language' => $context['language'],
             'EventId' => isset($context['event_id']) ? $context['event_id'] : null,
+            'Language' => $context['language'],
+            'MaxResults' => isset($context['max_results']) ? $context['max_results'] : null,
         ], $context['query']);
 
         $headers = array_replace([
@@ -142,6 +151,80 @@ class RunetIdService extends AbstractApiService
         $code = isset($data['Error']['Code']) ? $data['Error']['Code'] : 0;
 
         throw new RunetIdException($context, $message, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            ApiEvents::POST_DECODE => [
+                ['requestPaginatedData', 950],
+                ['preventDecode', 1000],
+            ],
+        ];
+    }
+
+    /**
+     * @param PostDecodeEvent $event
+     */
+    public function preventDecode(PostDecodeEvent $event)
+    {
+        $context = $event->getContext();
+
+        if ($context['prevent_decode']) {
+            $event->stopPropagation();
+        }
+    }
+
+    /**
+     * @param PostDecodeEvent $event
+     */
+    public function requestPaginatedData(PostDecodeEvent $event)
+    {
+        $context = $event->getContext();
+        $data = $event->getResponseData();
+
+        if (!$context['request_paginated_data'] || !is_array($data)) {
+            return;
+        }
+
+        $resultData = $data;
+
+        while (false !== $this->prepareNextPageContext($data, $context)) {
+            $data = $event->getClient()->request($context);
+            $resultData[$context['paginated_data_offset']] = array_merge(
+                $resultData[$context['paginated_data_offset']],
+                $data[$context['paginated_data_offset']]
+            );
+        }
+
+        $event->setResponseData($resultData);
+    }
+
+    /**
+     * @param array $previousData
+     * @param array $context
+     *
+     * @return bool
+     */
+    private function prepareNextPageContext(array $previousData, array &$context)
+    {
+        if (!isset($context['max_results']) || !isset($previousData['NextPageToken'])) {
+            return false;
+        }
+
+        $context['max_results'] -= count($previousData[$context['paginated_data_offset']]);
+
+        if ($context['max_results'] <= 0) {
+            return false;
+        }
+
+        $context['prevent_decode'] = true;
+        $context['query']['PageToken'] = $previousData['NextPageToken'];
+
+        return true;
     }
 
     /**
