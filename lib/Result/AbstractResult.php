@@ -44,14 +44,6 @@ abstract class AbstractResult
     }
 
     /**
-     * @return string
-     */
-    public static function className()
-    {
-        return get_called_class();
-    }
-
-    /**
      * @return array
      */
     final public function getResult()
