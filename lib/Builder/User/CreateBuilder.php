@@ -13,9 +13,9 @@ use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
  * @method $this setPhone(string $phone)
  * @method $this setCompany(string $company)
  * @method $this setPosition(string $position)
- * @method $this setVisible(string $visible)
- * @method $this setAttributes(string $attributes)
- * @method $this setSubscribedForMailings(string $subscribedForMailings)
+ * @method $this setVisible(bool $visible)
+ * @method $this setAttributes(array $attributes)
+ * @method $this setSubscribedForMailings(bool $subscribedForMailings)
  *
  * @method \RunetId\ApiClient\Result\User\User getResult()
  */

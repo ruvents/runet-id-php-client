@@ -11,7 +11,7 @@ use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
  * @method $this setFatherName(string $fatherName)
  * @method $this setPhoto(string $photo)
  * @method $this setPrimaryPhone(string $primaryPhone)
- * @method $this setAttributes(string $attributes)
+ * @method $this setAttributes(array $attributes)
  *
  * @method \RunetId\ApiClient\Result\User\User getResult()
  */
