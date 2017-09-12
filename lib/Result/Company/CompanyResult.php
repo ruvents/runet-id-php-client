@@ -2,7 +2,7 @@
 
 namespace RunetId\ApiClient\Result\Company;
 
-use RunetId\ApiClient\Common\CompanyIdInterface;
+use RunetId\ApiClient\ArgumentHelper\CompanyIdInterface;
 use RunetId\ApiClient\Result\AbstractResult;
 
 /**

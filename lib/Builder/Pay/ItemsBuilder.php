@@ -3,8 +3,8 @@
 namespace RunetId\ApiClient\Builder\Pay;
 
 use RunetId\ApiClient\Builder\AbstractBuilder;
-use RunetId\ApiClient\Common\ArgHelper;
-use RunetId\ApiClient\Common\UserRunetIdInterface;
+use RunetId\ApiClient\ArgumentHelper\ArgumentHelper;
+use RunetId\ApiClient\ArgumentHelper\UserRunetIdInterface;
 
 /**
  * @method \RunetId\ApiClient\Result\Pay\ItemsResult getResult()
@@ -27,6 +27,6 @@ class ItemsBuilder extends AbstractBuilder
      */
     public function setOwnerRunetId($ownerRunetId)
     {
-        return $this->setParam('OwnerRunetId', ArgHelper::getUserRunetId($ownerRunetId));
+        return $this->setParam('OwnerRunetId', ArgumentHelper::getUserRunetId($ownerRunetId));
     }
 }

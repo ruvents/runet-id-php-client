@@ -2,7 +2,7 @@
 
 namespace RunetId\ApiClient\Result\Pay;
 
-use RunetId\ApiClient\Common\PayItemIdInterface;
+use RunetId\ApiClient\ArgumentHelper\PayItemIdInterface;
 use RunetId\ApiClient\Result\AbstractResult;
 use RunetId\ApiClient\Result\User\UserResult;
 

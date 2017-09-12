@@ -1,8 +1,8 @@
 <?php
 
-namespace RunetId\ApiClient\Common;
+namespace RunetId\ApiClient\ArgumentHelper;
 
-interface EventIdInterface
+interface PayOrderIdInterface
 {
     /**
      * @return int

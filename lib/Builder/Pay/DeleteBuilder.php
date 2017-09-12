@@ -3,9 +3,9 @@
 namespace RunetId\ApiClient\Builder\Pay;
 
 use RunetId\ApiClient\Builder\AbstractBuilder;
-use RunetId\ApiClient\Common\ArgHelper;
-use RunetId\ApiClient\Common\PayItemIdInterface;
-use RunetId\ApiClient\Common\UserRunetIdInterface;
+use RunetId\ApiClient\ArgumentHelper\ArgumentHelper;
+use RunetId\ApiClient\ArgumentHelper\PayItemIdInterface;
+use RunetId\ApiClient\ArgumentHelper\UserRunetIdInterface;
 
 /**
  * @method \RunetId\ApiClient\Result\SuccessResult getResult()
@@ -28,7 +28,7 @@ class DeleteBuilder extends AbstractBuilder
      */
     public function setOrderItemId($orderItemId)
     {
-        $this->context['data']['OrderItemId'] = ArgHelper::getPayItemId($orderItemId);
+        $this->context['data']['OrderItemId'] = ArgumentHelper::getPayItemId($orderItemId);
 
         return $this;
     }
@@ -40,6 +40,6 @@ class DeleteBuilder extends AbstractBuilder
      */
     public function setPayerRunetId($payerRunetId)
     {
-        return $this->setParam('PayerRunetId', ArgHelper::getUserRunetId($payerRunetId));
+        return $this->setParam('PayerRunetId', ArgumentHelper::getUserRunetId($payerRunetId));
     }
 }

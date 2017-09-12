@@ -3,9 +3,9 @@
 namespace RunetId\ApiClient\Builder\Pay;
 
 use RunetId\ApiClient\Builder\AbstractBuilder;
-use RunetId\ApiClient\Common\ArgHelper;
-use RunetId\ApiClient\Common\PayProductIdInterface;
-use RunetId\ApiClient\Common\UserRunetIdInterface;
+use RunetId\ApiClient\ArgumentHelper\ArgumentHelper;
+use RunetId\ApiClient\ArgumentHelper\PayProductIdInterface;
+use RunetId\ApiClient\ArgumentHelper\UserRunetIdInterface;
 
 /**
  * @method $this setAttributes(array $attributes)
@@ -30,7 +30,7 @@ class EditBuilder extends AbstractBuilder
      */
     public function setPayerRunetId($payerRunetId)
     {
-        return $this->setParam('PayerRunetId', ArgHelper::getUserRunetId($payerRunetId));
+        return $this->setParam('PayerRunetId', ArgumentHelper::getUserRunetId($payerRunetId));
     }
 
     /**
@@ -40,7 +40,7 @@ class EditBuilder extends AbstractBuilder
      */
     public function setOwnerRunetId($ownerRunetId)
     {
-        return $this->setParam('OwnerRunetId', ArgHelper::getUserRunetId($ownerRunetId));
+        return $this->setParam('OwnerRunetId', ArgumentHelper::getUserRunetId($ownerRunetId));
     }
 
     /**
@@ -50,6 +50,6 @@ class EditBuilder extends AbstractBuilder
      */
     public function setProductId($productId)
     {
-        return $this->setParam('ProductId', ArgHelper::getPayProductId($productId));
+        return $this->setParam('ProductId', ArgumentHelper::getPayProductId($productId));
     }
 }

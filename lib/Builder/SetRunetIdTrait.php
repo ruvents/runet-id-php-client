@@ -2,12 +2,9 @@
 
 namespace RunetId\ApiClient\Builder;
 
-use RunetId\ApiClient\Common\ArgHelper;
-use RunetId\ApiClient\Common\UserRunetIdInterface;
+use RunetId\ApiClient\ArgumentHelper\ArgumentHelper;
+use RunetId\ApiClient\ArgumentHelper\UserRunetIdInterface;
 
-/**
- * @property array $context
- */
 trait SetRunetIdTrait
 {
     /**
@@ -17,7 +14,7 @@ trait SetRunetIdTrait
      */
     public function setRunetId($runetId)
     {
-        return $this->setParam('RunetId', ArgHelper::getUserRunetId($runetId));
+        return $this->setParam('RunetId', ArgumentHelper::getUserRunetId($runetId));
     }
 
     /**
