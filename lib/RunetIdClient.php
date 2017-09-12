@@ -16,6 +16,7 @@ use Ruvents\AbstractApiClient\AbstractApiClient;
  * @method Builder\User\ProfessionalinterestsBuilder userProfessionalinterests()
  * @method Builder\User\SearchBuilder userSearch()
  * @method Builder\User\SectionsBuilder userSections()
+ * @method Builder\Event\RolesBuilder eventRoles()
  * @method Builder\Event\UsersBuilder eventUsers()
  */
 class RunetIdClient extends AbstractApiClient
