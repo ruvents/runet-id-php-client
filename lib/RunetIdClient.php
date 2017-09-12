@@ -6,6 +6,7 @@ use RunetId\ApiClient\Service\RunetIdService;
 use Ruvents\AbstractApiClient\AbstractApiClient;
 
 /**
+ * @method Builder\Event\RegisterBuilder eventRegister()
  * @method Builder\Event\RolesBuilder eventRoles()
  * @method Builder\Event\UsersBuilder eventUsers()
  * @method Builder\Pay\AddBuilder payAdd()
