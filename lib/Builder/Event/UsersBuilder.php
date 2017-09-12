@@ -2,13 +2,13 @@
 
 namespace RunetId\ApiClient\Builder\Event;
 
-use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
+use RunetId\ApiClient\Builder\AbstractBuilder;
 use RunetId\ApiClient\Builder\SetMaxResultsTrait;
 
 /**
- * @method \RunetId\ApiClient\Result\Event\Users getResult()
+ * @method \RunetId\ApiClient\Result\Event\UsersResult getResult()
  */
-class UsersBuilder extends AbstractEndpointBuilder
+class UsersBuilder extends AbstractBuilder
 {
     use SetMaxResultsTrait;
 
@@ -16,7 +16,7 @@ class UsersBuilder extends AbstractEndpointBuilder
      * @var array
      */
     public $context = [
-        'class' => 'RunetId\ApiClient\Result\Event\Users',
+        'class' => 'RunetId\ApiClient\Result\Event\UsersResult',
         'endpoint' => '/event/users',
         'method' => 'GET',
         'paginated_data_offset' => 'Users',

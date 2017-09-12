@@ -6,6 +6,16 @@ use RunetId\ApiClient\Service\RunetIdService;
 use Ruvents\AbstractApiClient\AbstractApiClient;
 
 /**
+ * @method Builder\Event\RolesBuilder eventRoles()
+ * @method Builder\Event\UsersBuilder eventUsers()
+ * @method Builder\Pay\AddBuilder payAdd()
+ * @method Builder\Pay\CouponBuilder payCoupon()
+ * @method Builder\Pay\DeleteBuilder payDelete()
+ * @method Builder\Pay\EditBuilder payEdit()
+ * @method Builder\Pay\ItemsBuilder payItems()
+ * @method Builder\Pay\ListBuilder payList()
+ * @method Builder\Pay\ProductsBuilder payProducts()
+ * @method Builder\Pay\UrlBuilder payUrl()
  * @method Builder\User\AddressBuilder userAddress()
  * @method Builder\User\AuthBuilder userAuth()
  * @method Builder\User\CreateBuilder userCreate()
@@ -16,8 +26,6 @@ use Ruvents\AbstractApiClient\AbstractApiClient;
  * @method Builder\User\ProfessionalinterestsBuilder userProfessionalinterests()
  * @method Builder\User\SearchBuilder userSearch()
  * @method Builder\User\SectionsBuilder userSections()
- * @method Builder\Event\RolesBuilder eventRoles()
- * @method Builder\Event\UsersBuilder eventUsers()
  */
 class RunetIdClient extends AbstractApiClient
 {
@@ -33,7 +41,7 @@ class RunetIdClient extends AbstractApiClient
      * @param string $name
      * @param array  $arguments
      *
-     * @return Builder\AbstractEndpointBuilder
+     * @return Builder\AbstractBuilder
      * @throws \BadMethodCallException
      */
     public function __call($name, array $arguments)

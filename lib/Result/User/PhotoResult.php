@@ -10,7 +10,7 @@ use RunetId\ApiClient\Result\AbstractResult;
  * @property string $Large
  * @property string $Original
  */
-class Photo extends AbstractResult
+class PhotoResult extends AbstractResult
 {
     /**
      * @return string

@@ -16,6 +16,6 @@ use RunetId\ApiClient\Result\AbstractResult;
  * @property null|string $Apartment
  * @property null|string $Place
  */
-class Address extends AbstractResult
+class AddressResult extends AbstractResult
 {
 }

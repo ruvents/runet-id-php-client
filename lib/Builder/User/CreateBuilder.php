@@ -2,7 +2,7 @@
 
 namespace RunetId\ApiClient\Builder\User;
 
-use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
+use RunetId\ApiClient\Builder\AbstractBuilder;
 
 /**
  * @method $this setEmail(string $email)
@@ -17,15 +17,15 @@ use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
  * @method $this setAttributes(array $attributes)
  * @method $this setSubscribedForMailings(bool $subscribedForMailings)
  *
- * @method \RunetId\ApiClient\Result\User\User getResult()
+ * @method \RunetId\ApiClient\Result\User\UserResult getResult()
  */
-class CreateBuilder extends AbstractEndpointBuilder
+class CreateBuilder extends AbstractBuilder
 {
     /**
      * @var array
      */
     public $context = [
-        'class' => 'RunetId\ApiClient\Result\User\User',
+        'class' => 'RunetId\ApiClient\Result\User\UserResult',
         'endpoint' => '/user/create',
         'method' => 'POST',
     ];

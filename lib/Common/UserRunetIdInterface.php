@@ -1,6 +1,6 @@
 <?php
 
-namespace RunetId\ApiClient\Result\User;
+namespace RunetId\ApiClient\Common;
 
 interface UserRunetIdInterface
 {

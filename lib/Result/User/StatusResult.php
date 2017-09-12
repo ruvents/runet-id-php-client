@@ -2,8 +2,8 @@
 
 namespace RunetId\ApiClient\Result\User;
 
+use RunetId\ApiClient\Common\EventRoleIdInterface;
 use RunetId\ApiClient\Result\AbstractResult;
-use RunetId\ApiClient\Result\Event\RoleIdInterface;
 
 /**
  * @property int         $RoleId
@@ -13,7 +13,7 @@ use RunetId\ApiClient\Result\Event\RoleIdInterface;
  * @property null|string $TicketUrl
  * @property null|bool   $Registered
  */
-class Status extends AbstractResult implements RoleIdInterface
+class StatusResult extends AbstractResult implements EventRoleIdInterface
 {
     /**
      * @return string

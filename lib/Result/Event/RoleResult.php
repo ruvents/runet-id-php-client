@@ -2,6 +2,7 @@
 
 namespace RunetId\ApiClient\Result\Event;
 
+use RunetId\ApiClient\Common\EventRoleIdInterface;
 use RunetId\ApiClient\Result\AbstractResult;
 
 /**
@@ -9,7 +10,7 @@ use RunetId\ApiClient\Result\AbstractResult;
  * @property null|string $Name
  * @property null|int    $Priority
  */
-class Role extends AbstractResult implements RoleIdInterface
+class RoleResult extends AbstractResult implements EventRoleIdInterface
 {
     /**
      * {@inheritdoc}

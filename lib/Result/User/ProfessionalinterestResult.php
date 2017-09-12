@@ -8,7 +8,7 @@ use RunetId\ApiClient\Result\AbstractResult;
  * @property int         $Id
  * @property null|string $Title
  */
-class Professionalinterest extends AbstractResult
+class ProfessionalinterestResult extends AbstractResult
 {
     /**
      * @return string

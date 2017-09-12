@@ -2,15 +2,15 @@
 
 namespace RunetId\ApiClient\Builder\User;
 
-use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
+use RunetId\ApiClient\Builder\AbstractBuilder;
 use RunetId\ApiClient\Builder\SetMaxResultsTrait;
 
 /**
  * @method $this setQuery(string $query)
  *
- * @method \RunetId\ApiClient\Result\User\Search getResult()
+ * @method \RunetId\ApiClient\Result\User\SearchResult getResult()
  */
-class SearchBuilder extends AbstractEndpointBuilder
+class SearchBuilder extends AbstractBuilder
 {
     use SetMaxResultsTrait;
 
@@ -18,7 +18,7 @@ class SearchBuilder extends AbstractEndpointBuilder
      * @var array
      */
     public $context = [
-        'class' => 'RunetId\ApiClient\Result\User\Search',
+        'class' => 'RunetId\ApiClient\Result\User\SearchResult',
         'endpoint' => '/user/search',
         'method' => 'GET',
         'paginated_data_offset' => 'Users',

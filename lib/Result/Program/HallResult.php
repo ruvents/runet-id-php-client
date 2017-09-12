@@ -9,6 +9,6 @@ namespace RunetId\ApiClient\Result\Program;
  * @property null|int    $Order
  * @property null|bool   $Deleted
  */
-class Hall
+class HallResult
 {
 }

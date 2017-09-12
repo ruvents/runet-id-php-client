@@ -5,9 +5,9 @@ namespace RunetId\ApiClient\Result\User;
 use RunetId\ApiClient\Result\AbstractResult;
 
 /**
- * @property User[] $Users
+ * @property UserResult[] $Users
  */
-class Search extends AbstractResult
+class SearchResult extends AbstractResult
 {
     /**
      * {@inheritdoc}
@@ -15,7 +15,7 @@ class Search extends AbstractResult
     protected function getMap()
     {
         return [
-            'Users' => 'RunetId\ApiClient\Result\User\User[]',
+            'Users' => 'RunetId\ApiClient\Result\User\UserResult[]',
         ];
     }
 }

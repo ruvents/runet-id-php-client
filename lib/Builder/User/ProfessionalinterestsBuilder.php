@@ -2,13 +2,13 @@
 
 namespace RunetId\ApiClient\Builder\User;
 
-use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
+use RunetId\ApiClient\Builder\AbstractBuilder;
 use RunetId\ApiClient\Builder\SetRunetIdTrait;
 
 /**
- * @method \RunetId\ApiClient\Result\User\Professionalinterest[] getResult()
+ * @method \RunetId\ApiClient\Result\User\ProfessionalinterestResult[] getResult()
  */
-class ProfessionalinterestsBuilder extends AbstractEndpointBuilder
+class ProfessionalinterestsBuilder extends AbstractBuilder
 {
     use SetRunetIdTrait;
 
@@ -16,7 +16,7 @@ class ProfessionalinterestsBuilder extends AbstractEndpointBuilder
      * @var array
      */
     public $context = [
-        'class' => 'RunetId\ApiClient\Result\User\Professionalinterest[]',
+        'class' => 'RunetId\ApiClient\Result\User\ProfessionalinterestResult[]',
         'endpoint' => '/user/professionalinterests',
         'method' => 'GET',
     ];

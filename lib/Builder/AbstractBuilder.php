@@ -4,7 +4,7 @@ namespace RunetId\ApiClient\Builder;
 
 use RunetId\ApiClient\RunetIdClient;
 
-abstract class AbstractEndpointBuilder
+abstract class AbstractBuilder
 {
     /**
      * @var array

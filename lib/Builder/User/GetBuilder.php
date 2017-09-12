@@ -2,15 +2,15 @@
 
 namespace RunetId\ApiClient\Builder\User;
 
-use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
+use RunetId\ApiClient\Builder\AbstractBuilder;
 use RunetId\ApiClient\Builder\SetRunetIdTrait;
 
 /**
  * @method $this setEmail(string $email)
  *
- * @method \RunetId\ApiClient\Result\User\User getResult()
+ * @method \RunetId\ApiClient\Result\User\UserResult getResult()
  */
-class GetBuilder extends AbstractEndpointBuilder
+class GetBuilder extends AbstractBuilder
 {
     use SetRunetIdTrait;
 
@@ -18,7 +18,7 @@ class GetBuilder extends AbstractEndpointBuilder
      * @var array
      */
     public $context = [
-        'class' => 'RunetId\ApiClient\Result\User\User',
+        'class' => 'RunetId\ApiClient\Result\User\UserResult',
         'endpoint' => '/user/get',
         'method' => 'GET',
     ];

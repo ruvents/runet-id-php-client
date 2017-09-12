@@ -3,7 +3,7 @@
 namespace RunetId\ApiClient\Builder;
 
 use RunetId\ApiClient\Common\ArgHelper;
-use RunetId\ApiClient\Result\User\UserRunetIdInterface;
+use RunetId\ApiClient\Common\UserRunetIdInterface;
 
 /**
  * @property array $context
@@ -17,8 +17,14 @@ trait SetRunetIdTrait
      */
     public function setRunetId($runetId)
     {
-        $this->context['query']['RunetId'] = ArgHelper::getUserRunetId($runetId);
-
-        return $this;
+        return $this->setParam('RunetId', ArgHelper::getUserRunetId($runetId));
     }
+
+    /**
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return $this
+     */
+    abstract protected function setParam($name, $value);
 }

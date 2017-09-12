@@ -1,8 +1,8 @@
 <?php
 
-namespace RunetId\ApiClient\Result\Event;
+namespace RunetId\ApiClient\Common;
 
-interface EventIdInterface
+interface EventRoleIdInterface
 {
     /**
      * @return int

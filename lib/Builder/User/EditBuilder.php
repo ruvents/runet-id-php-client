@@ -2,7 +2,7 @@
 
 namespace RunetId\ApiClient\Builder\User;
 
-use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
+use RunetId\ApiClient\Builder\AbstractBuilder;
 
 /**
  * @method $this setEmail(string $email)
@@ -13,15 +13,15 @@ use RunetId\ApiClient\Builder\AbstractEndpointBuilder;
  * @method $this setPrimaryPhone(string $primaryPhone)
  * @method $this setAttributes(array $attributes)
  *
- * @method \RunetId\ApiClient\Result\User\User getResult()
+ * @method \RunetId\ApiClient\Result\User\UserResult getResult()
  */
-class EditBuilder extends AbstractEndpointBuilder
+class EditBuilder extends AbstractBuilder
 {
     /**
      * @var array
      */
     public $context = [
-        'class' => 'RunetId\ApiClient\Result\User\User',
+        'class' => 'RunetId\ApiClient\Result\User\UserResult',
         'endpoint' => '/user/edit',
         'method' => 'POST',
     ];

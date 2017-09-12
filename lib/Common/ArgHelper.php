@@ -2,14 +2,6 @@
 
 namespace RunetId\ApiClient\Common;
 
-use RunetId\ApiClient\Result\Company\CompanyIdInterface;
-use RunetId\ApiClient\Result\Event\EventIdInterface;
-use RunetId\ApiClient\Result\Event\RoleIdInterface;
-use RunetId\ApiClient\Result\Pay\ItemIdInterface;
-use RunetId\ApiClient\Result\Pay\OrderIdInterface;
-use RunetId\ApiClient\Result\Pay\ProductIdInterface;
-use RunetId\ApiClient\Result\User\UserRunetIdInterface;
-
 final class ArgHelper
 {
     private function __construct()
@@ -51,7 +43,7 @@ final class ArgHelper
     }
 
     /**
-     * @param int|RoleIdInterface $id
+     * @param int|EventRoleIdInterface $id
      *
      * @return int
      * @throws \InvalidArgumentException
@@ -60,15 +52,15 @@ final class ArgHelper
     {
         if (is_numeric($id)) {
             return (int)$id;
-        } elseif ($id instanceof RoleIdInterface) {
+        } elseif ($id instanceof EventRoleIdInterface) {
             return $id->getId();
         }
 
-        throw new \InvalidArgumentException('Argument must be numeric or implement RoleIdInterface.');
+        throw new \InvalidArgumentException('Argument must be numeric or implement EventRoleIdInterface.');
     }
 
     /**
-     * @param int|ItemIdInterface $id
+     * @param int|PayItemIdInterface $id
      *
      * @return int
      * @throws \InvalidArgumentException
@@ -77,15 +69,15 @@ final class ArgHelper
     {
         if (is_numeric($id)) {
             return (int)$id;
-        } elseif ($id instanceof ItemIdInterface) {
+        } elseif ($id instanceof PayItemIdInterface) {
             return $id->getId();
         }
 
-        throw new \InvalidArgumentException('Argument must be numeric or implement ItemIdInterface.');
+        throw new \InvalidArgumentException('Argument must be numeric or implement PayItemIdInterface.');
     }
 
     /**
-     * @param int|OrderIdInterface $id
+     * @param int|PayOrderIdInterface $id
      *
      * @return int
      * @throws \InvalidArgumentException
@@ -94,28 +86,28 @@ final class ArgHelper
     {
         if (is_numeric($id)) {
             return (int)$id;
-        } elseif ($id instanceof OrderIdInterface) {
+        } elseif ($id instanceof PayOrderIdInterface) {
             return $id->getId();
         }
 
-        throw new \InvalidArgumentException('Argument must be numeric or implement OrderIdInterface.');
+        throw new \InvalidArgumentException('Argument must be numeric or implement PayOrderIdInterface.');
     }
 
     /**
-     * @param int|ProductIdInterface $id
+     * @param int|PayProductIdInterface $id
      *
      * @return int
      * @throws \InvalidArgumentException
      */
-    public static function getProductId($id)
+    public static function getPayProductId($id)
     {
         if (is_numeric($id)) {
             return (int)$id;
-        } elseif ($id instanceof ProductIdInterface) {
+        } elseif ($id instanceof PayProductIdInterface) {
             return $id->getId();
         }
 
-        throw new \InvalidArgumentException('Argument must be numeric or implement ProductIdInterface.');
+        throw new \InvalidArgumentException('Argument must be numeric or implement PayProductIdInterface.');
     }
 
     /**
