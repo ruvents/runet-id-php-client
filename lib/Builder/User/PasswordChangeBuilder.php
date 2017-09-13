@@ -19,7 +19,7 @@ class PasswordChangeBuilder extends AbstractBuilder
      */
     public $context = [
         'class' => 'RunetId\ApiClient\Result\SuccessResult',
-        'endpoint' => '/user/login',
+        'endpoint' => '/user/passwordChange',
         'method' => 'POST',
     ];
 }
