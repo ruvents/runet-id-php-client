@@ -67,7 +67,7 @@ abstract class AbstractResult
             return null;
         }
 
-        if (array_key_exists($offset, $this->map)) {
+        if (isset($this->map[$offset])) {
             $this->result[$offset] = self::create($this->map[$offset], $this->result[$offset]);
             unset($this->map[$offset]);
         }
