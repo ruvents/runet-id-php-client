@@ -60,11 +60,11 @@ abstract class AbstractBuilder
     }
 
     /**
-     * @param int $eventId
+     * @param null|int $eventId
      *
      * @return $this
      */
-    final public function setEventId($eventId)
+    final public function setEventId($eventId = null)
     {
         $this->context['event_id'] = $eventId;
 
