@@ -54,7 +54,11 @@ abstract class AbstractBuilder
      */
     final public function setParams(array $params)
     {
-        $this->context['data'] = array_replace($this->context['data'], $params);
+        if (isset($context['data']) && is_array($this->context['data'])) {
+            $this->context['data'] = array_replace($this->context['data'], $params);
+        } else {
+            $this->context['data'] = $params;
+        }
 
         return $this;
     }
