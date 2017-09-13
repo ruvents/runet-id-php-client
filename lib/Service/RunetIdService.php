@@ -80,6 +80,7 @@ class RunetIdService extends AbstractApiService
             ->setDefaults([
                 'body' => null,
                 'class' => null,
+                'data' => [],
                 'headers' => [],
                 'max_results' => null,
                 'method' => 'GET',
@@ -88,7 +89,6 @@ class RunetIdService extends AbstractApiService
                 'request_paginated_data' => true,
             ])
             ->setDefined([
-                'data',
                 'paginated_data_offset',
             ])
             ->setAllowedTypes('body', ['null', 'string', 'Psr\Http\Message\StreamInterface'])
@@ -125,7 +125,7 @@ class RunetIdService extends AbstractApiService
 
         $body = $context['body'];
 
-        if (null === $context['body'] && isset($context['data'])) {
+        if (null === $context['body'] && [] !== $context['data']) {
             if ('POST' === $context['method'] || 'PUT' === $context['method']) {
                 $body = $this->httpBuildQuery($context['data']);
                 $headers['Content-Type'] = 'application/x-www-form-urlencoded';
