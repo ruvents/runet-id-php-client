@@ -3,6 +3,7 @@
 namespace RunetId\ApiClient\Builder\User;
 
 use RunetId\ApiClient\Builder\AbstractBuilder;
+use RunetId\ApiClient\Builder\SetRunetIdTrait;
 
 /**
  * @method $this setEmail(string $email)
@@ -17,6 +18,8 @@ use RunetId\ApiClient\Builder\AbstractBuilder;
  */
 class EditBuilder extends AbstractBuilder
 {
+    use SetRunetIdTrait;
+
     /**
      * @var array
      */
