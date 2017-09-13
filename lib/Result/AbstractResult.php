@@ -67,10 +67,15 @@ abstract class AbstractResult
      * @param string $offset
      *
      * @return mixed
+     * @throws \OutOfRangeException
      */
     final public function __get($offset)
     {
         if (!array_key_exists($offset, $this->processedResult)) {
+            if (!$this->exists($offset)) {
+                throw new \OutOfRangeException(sprintf('Offset "%s" is not defined. You probably do not have permissions to access this data with current RUNET-ID API key.', $offset));
+            }
+
             $value = $this->result[$offset];
             $map = $this->getMap();
 
@@ -96,13 +101,13 @@ abstract class AbstractResult
     }
 
     /**
-     * @param string $key
+     * @param string $offset
      *
      * @return bool
      */
-    final public function exists($key)
+    final public function exists($offset)
     {
-        return array_key_exists($key, $this->result);
+        return array_key_exists($offset, $this->result);
     }
 
     /**
