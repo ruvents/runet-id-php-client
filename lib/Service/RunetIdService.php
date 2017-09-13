@@ -39,12 +39,12 @@ class RunetIdService extends AbstractApiService
                 'secret',
             ])
             ->setDefaults([
+                'event_id' => null,
                 'host' => 'api.runet-id.com',
                 'language' => 'ru',
                 'scheme' => 'http',
             ])
-            ->setDefined('event_id')
-            ->setAllowedTypes('event_id', 'int')
+            ->setAllowedTypes('event_id', ['null', 'int'])
             ->setAllowedTypes('host', 'string')
             ->setAllowedTypes('key', 'string')
             ->setAllowedTypes('scheme', 'string')
@@ -79,24 +79,24 @@ class RunetIdService extends AbstractApiService
             ])
             ->setDefaults([
                 'body' => null,
+                'class' => null,
                 'headers' => [],
+                'max_results' => null,
                 'method' => 'GET',
                 'prevent_decode' => false,
                 'query' => [],
                 'request_paginated_data' => true,
             ])
             ->setDefined([
-                'class',
                 'data',
-                'max_results',
                 'paginated_data_offset',
             ])
             ->setAllowedTypes('body', ['null', 'string', 'Psr\Http\Message\StreamInterface'])
-            ->setAllowedTypes('class', 'string')
+            ->setAllowedTypes('class', ['null', 'string'])
             ->setAllowedTypes('data', 'array')
             ->setAllowedTypes('endpoint', 'string')
             ->setAllowedTypes('headers', 'array')
-            ->setAllowedTypes('max_results', 'int')
+            ->setAllowedTypes('max_results', ['null', 'int'])
             ->setAllowedTypes('method', 'string')
             ->setAllowedTypes('paginated_data_offset', 'string')
             ->setAllowedTypes('prevent_decode', 'bool')
@@ -104,7 +104,6 @@ class RunetIdService extends AbstractApiService
             ->setAllowedTypes('request_paginated_data', 'bool')
             ->setNormalizer('endpoint', $endpointNormalizer)
             ->setNormalizer('method', $methodNormalizer);
-        // todo: check that either body or data is set
     }
 
     /**
@@ -113,9 +112,9 @@ class RunetIdService extends AbstractApiService
     public function createRequest(array $context, ApiClientInterface $client)
     {
         $query = array_replace([
-            'EventId' => isset($context['event_id']) ? $context['event_id'] : null,
+            'EventId' => $context['event_id'],
             'Language' => $context['language'],
-            'MaxResults' => isset($context['max_results']) ? $context['max_results'] : null,
+            'MaxResults' => $context['max_results'],
         ], $context['query']);
 
         $headers = array_replace([
@@ -126,7 +125,7 @@ class RunetIdService extends AbstractApiService
 
         $body = $context['body'];
 
-        if (isset($context['data'])) {
+        if (null === $context['body'] && isset($context['data'])) {
             if ('POST' === $context['method'] || 'PUT' === $context['method']) {
                 $body = $this->httpBuildQuery($context['data']);
                 $headers['Content-Type'] = 'application/x-www-form-urlencoded';
