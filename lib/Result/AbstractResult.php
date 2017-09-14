@@ -17,19 +17,19 @@ abstract class AbstractResult
     /**
      * @param array $result
      */
-    final public function __construct(array $result)
+    public function __construct(array $result)
     {
         $this->result = $result;
         $this->map = $this->getMap();
     }
 
     /**
-     * @param string $class
+     * @param string $class Namespace\Class or Namespace\Class[]
      * @param mixed  $data
      *
      * @return null|array|object
      */
-    final public static function create($class, $data)
+    public static function create($class, $data)
     {
         if ('[]' === substr($class, -2)) {
             $class = substr($class, 0, -2);
@@ -51,7 +51,7 @@ abstract class AbstractResult
      *
      * @return bool
      */
-    final public function __isset($offset)
+    public function __isset($offset)
     {
         return isset($this->result[$offset]);
     }
@@ -61,7 +61,7 @@ abstract class AbstractResult
      *
      * @return mixed
      */
-    final public function __get($offset)
+    public function __get($offset)
     {
         if (!$this->__isset($offset)) {
             return null;

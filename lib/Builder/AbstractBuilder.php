@@ -21,7 +21,7 @@ abstract class AbstractBuilder
         $this->client = $client;
     }
 
-    final public function __call($name, array $args)
+    public function __call($name, array $args)
     {
         if ('set' !== substr($name, 0, 3)) {
             throw new \BadMethodCallException('Only setter methods are supported.');
@@ -40,7 +40,7 @@ abstract class AbstractBuilder
      *
      * @return $this
      */
-    final public function setParam($name, $value)
+    public function setParam($name, $value)
     {
         $this->context['data'][$name] = $value;
 
@@ -52,7 +52,7 @@ abstract class AbstractBuilder
      *
      * @return $this
      */
-    final public function setParams(array $params)
+    public function setParams(array $params)
     {
         if (isset($context['data']) && is_array($this->context['data'])) {
             $this->context['data'] = array_replace($this->context['data'], $params);
@@ -68,7 +68,7 @@ abstract class AbstractBuilder
      *
      * @return $this
      */
-    final public function setEventId($eventId = null)
+    public function setEventId($eventId = null)
     {
         $this->context['event_id'] = $eventId;
 
@@ -80,9 +80,21 @@ abstract class AbstractBuilder
      *
      * @return $this
      */
-    final public function setLanguage($language)
+    public function setLanguage($language)
     {
         $this->context['language'] = $language;
+
+        return $this;
+    }
+
+    /**
+     * @param null|string $class
+     *
+     * @return $this
+     */
+    public function setClass($class = null)
+    {
+        $this->context['class'] = $class;
 
         return $this;
     }

@@ -2,7 +2,7 @@
 
 namespace RunetId\ApiClient\ArgumentHelper;
 
-final class ArgumentHelper
+class ArgumentHelper
 {
     private function __construct()
     {
