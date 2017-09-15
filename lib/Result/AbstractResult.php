@@ -24,29 +24,6 @@ abstract class AbstractResult
     }
 
     /**
-     * @param string $class Namespace\Class or Namespace\Class[]
-     * @param mixed  $data
-     *
-     * @return null|array|object
-     */
-    public static function create($class, $data)
-    {
-        if ('[]' === substr($class, -2)) {
-            $class = substr($class, 0, -2);
-
-            return array_map(function ($data) use ($class) {
-                return self::create($class, $data);
-            }, $data);
-        }
-
-        if (null === $data) {
-            return null;
-        }
-
-        return new $class($data);
-    }
-
-    /**
      * @param string $offset
      *
      * @return bool
@@ -63,12 +40,13 @@ abstract class AbstractResult
      */
     public function __get($offset)
     {
-        if (!$this->__isset($offset)) {
+        if (!isset($this->result[$offset])) {
             return null;
         }
 
         if (isset($this->map[$offset])) {
-            $this->result[$offset] = self::create($this->map[$offset], $this->result[$offset]);
+            $this->result[$offset] = ResultDenormalizer::denormalize($this->result[$offset], $this->map[$offset]);
+
             unset($this->map[$offset]);
         }
 

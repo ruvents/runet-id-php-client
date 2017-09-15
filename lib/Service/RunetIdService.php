@@ -7,7 +7,7 @@ use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\RequestFactory;
 use RunetId\ApiClient\Exception\RunetIdException;
-use RunetId\ApiClient\Result\AbstractResult;
+use RunetId\ApiClient\Result\ResultDenormalizer;
 use Ruvents\AbstractApiClient\ApiClientInterface;
 use Ruvents\AbstractApiClient\Event\ApiEvents;
 use Ruvents\AbstractApiClient\Event\PostDecodeEvent;
@@ -219,7 +219,7 @@ class RunetIdService extends AbstractApiService
             return;
         }
 
-        $data = AbstractResult::create($context['class'], $event->getResponseData());
+        $data = ResultDenormalizer::denormalize($event->getResponseData(), $context['class']);
         $event->setResponseData($data);
     }
 
