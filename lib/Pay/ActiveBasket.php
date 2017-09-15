@@ -75,7 +75,7 @@ class ActiveBasket
      * @param int|UserRunetIdInterface  $owner
      * @param int|PayProductIdInterface $product
      *
-     * @return $this
+     * @return ItemResult
      * @throws ApiExceptionInterface|RunetIdException
      */
     public function addItem($owner, $product)
@@ -87,15 +87,12 @@ class ActiveBasket
             ->setProductId($product)
             ->getResult();
 
-        $this->items[$item->Id] = $item;
-
-        return $this;
+        return $this->items[$item->Id] = $item;
     }
 
     /**
      * @param int|PayItemIdInterface $item
      *
-     * @return $this
      * @throws ApiExceptionInterface|RunetIdException
      */
     public function deleteItem($item)
@@ -111,8 +108,6 @@ class ActiveBasket
         if (isset($this->items[$item])) {
             unset($this->items[$item]);
         }
-
-        return $this;
     }
 
     /**
@@ -120,7 +115,7 @@ class ActiveBasket
      * @param int|UserRunetIdInterface|ItemResult $ownerOrItem
      * @param null|int|PayProductIdInterface      $product
      *
-     * @return $this
+     * @return string
      * @throws ApiExceptionInterface|RunetIdException
      */
     public function activateCoupon($coupon, $ownerOrItem, $product = null)
@@ -142,9 +137,7 @@ class ActiveBasket
             }
         }
 
-        $builder->getResult();
-
-        return $this;
+        return $builder->getResult()->Discount;
     }
 
     /**
