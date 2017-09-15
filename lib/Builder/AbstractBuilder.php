@@ -88,18 +88,6 @@ abstract class AbstractBuilder
     }
 
     /**
-     * @param null|string $class
-     *
-     * @return $this
-     */
-    public function setClass($class = null)
-    {
-        $this->context['class'] = $class;
-
-        return $this;
-    }
-
-    /**
      * @return mixed
      */
     public function getResult()
