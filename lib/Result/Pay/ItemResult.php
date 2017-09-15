@@ -25,6 +25,21 @@ use RunetId\ApiClient\Result\User\UserResult;
 class ItemResult extends AbstractResult implements PayItemIdInterface
 {
     /**
+     * @var null|OrderResult
+     */
+    private $order;
+
+    /**
+     * @param array            $result
+     * @param null|OrderResult $order
+     */
+    public function __construct(array $result, OrderResult $order = null)
+    {
+        parent::__construct($result);
+        $this->order = $order;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getMap()
@@ -42,5 +57,13 @@ class ItemResult extends AbstractResult implements PayItemIdInterface
     public function getId()
     {
         return $this->Id;
+    }
+
+    /**
+     * @return null|OrderResult
+     */
+    public function getOrder()
+    {
+        return $this->order;
     }
 }

@@ -15,14 +15,13 @@ use RunetId\ApiClient\Result\AbstractResult;
  */
 class OrderResult extends AbstractResult implements PayOrderIdInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getMap()
+    public function __construct(array $result)
     {
-        return [
-            'Items' => 'RunetId\ApiClient\Result\Pay\ItemResult[]',
-        ];
+        $result['Items'] = array_map(function (array $result) {
+            return new ItemResult($result, $this);
+        }, $result['Items']);
+
+        parent::__construct($result);
     }
 
     /**
