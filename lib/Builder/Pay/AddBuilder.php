@@ -2,15 +2,15 @@
 
 namespace RunetId\ApiClient\Builder\Pay;
 
-use RunetId\ApiClient\Builder\AbstractBuilder;
 use RunetId\ApiClient\ArgumentHelper\ArgumentHelper;
 use RunetId\ApiClient\ArgumentHelper\PayProductIdInterface;
 use RunetId\ApiClient\ArgumentHelper\UserRunetIdInterface;
+use RunetId\ApiClient\Builder\AbstractBuilder;
 
 /**
  * @method $this setAttributes(array $attributes)
  *
- * @method \RunetId\ApiClient\Result\Pay\ItemResult getResult()
+ * @method \RunetId\ApiClient\Result\Pay\OrderAwareItemResult getResult()
  */
 class AddBuilder extends AbstractBuilder
 {
@@ -18,7 +18,7 @@ class AddBuilder extends AbstractBuilder
      * @var array
      */
     public $context = [
-        'class' => 'RunetId\ApiClient\Result\Pay\ItemResult',
+        'class' => 'RunetId\ApiClient\Result\Pay\OrderAwareItemResult',
         'endpoint' => '/pay/add',
         'method' => 'POST',
     ];

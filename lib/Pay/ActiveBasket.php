@@ -8,6 +8,7 @@ use RunetId\ApiClient\ArgumentHelper\PayProductIdInterface;
 use RunetId\ApiClient\ArgumentHelper\UserRunetIdInterface;
 use RunetId\ApiClient\Exception\RunetIdException;
 use RunetId\ApiClient\Result\Pay\ItemResult;
+use RunetId\ApiClient\Result\Pay\OrderAwareItemResult;
 use RunetId\ApiClient\Result\Pay\OrderResult;
 use RunetId\ApiClient\RunetIdClient;
 use Ruvents\AbstractApiClient\Exception\ApiExceptionInterface;
@@ -25,7 +26,7 @@ class ActiveBasket
     private $payerRunetId;
 
     /**
-     * @var ItemResult[]
+     * @var OrderAwareItemResult[]
      */
     private $items = [];
 
@@ -56,7 +57,7 @@ class ActiveBasket
     }
 
     /**
-     * @return ItemResult[]
+     * @return OrderAwareItemResult[]
      */
     public function getItems()
     {
@@ -75,7 +76,7 @@ class ActiveBasket
      * @param int|UserRunetIdInterface  $owner
      * @param int|PayProductIdInterface $product
      *
-     * @return ItemResult
+     * @return OrderAwareItemResult
      * @throws ApiExceptionInterface|RunetIdException
      */
     public function addItem($owner, $product)

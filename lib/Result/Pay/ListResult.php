@@ -5,8 +5,8 @@ namespace RunetId\ApiClient\Result\Pay;
 use RunetId\ApiClient\Result\AbstractResult;
 
 /**
- * @property ItemResult[]  $Items
- * @property OrderResult[] $Orders
+ * @property OrderAwareItemResult[] $Items
+ * @property OrderResult[]          $Orders
  */
 class ListResult extends AbstractResult
 {
@@ -16,7 +16,7 @@ class ListResult extends AbstractResult
     protected function getMap()
     {
         return [
-            'Items' => 'RunetId\ApiClient\Result\Pay\ItemResult[]',
+            'Items' => 'RunetId\ApiClient\Result\Pay\OrderAwareItemResult[]',
             'Orders' => 'RunetId\ApiClient\Result\Pay\OrderResult[]',
         ];
     }
