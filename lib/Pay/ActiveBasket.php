@@ -13,7 +13,7 @@ use RunetId\ApiClient\Result\Pay\OrderResult;
 use RunetId\ApiClient\RunetIdClient;
 use Ruvents\AbstractApiClient\Exception\ApiExceptionInterface;
 
-class ActiveBasket
+class ActiveBasket implements \IteratorAggregate, \Countable
 {
     /**
      * @var RunetIdClient
@@ -168,6 +168,20 @@ class ActiveBasket
     }
 
     /**
+     * @return int
+     */
+    public function getTotal()
+    {
+        $total = 0;
+
+        foreach ($this->items as $item) {
+            $total += $item->PriceDiscount;
+        }
+
+        return $total;
+    }
+
+    /**
      * @return string
      *
      * @throws ApiExceptionInterface|RunetIdException
@@ -179,5 +193,23 @@ class ActiveBasket
             ->setPayerRunetId($this->payerRunetId)
             ->getResult()
             ->Url;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Traversable|\ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->items);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        return count($this->items);
     }
 }
