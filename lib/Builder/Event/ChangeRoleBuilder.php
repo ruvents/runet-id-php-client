@@ -19,7 +19,7 @@ class ChangeRoleBuilder extends AbstractBuilder
      */
     public $context = [
         'class' => 'RunetId\ApiClient\Result\SuccessResult',
-        'endpoint' => '/event/changeRole',
+        'endpoint' => '/event/changerole',
         'method' => 'POST',
     ];
 
