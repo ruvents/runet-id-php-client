@@ -43,4 +43,12 @@ class ItemResult extends AbstractResult implements PayItemIdInterface
     {
         return $this->Id;
     }
+
+    /**
+     * @return int
+     */
+    public function getDiscountPercent()
+    {
+        return round($this->Discount / $this->Product->Price * 100);
+    }
 }
