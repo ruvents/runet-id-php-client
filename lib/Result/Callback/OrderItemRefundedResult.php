@@ -5,10 +5,10 @@ namespace RunetId\ApiClient\Result\Callback;
 use RunetId\ApiClient\Result\AbstractResult;
 
 /**
- * @property int $PayerId
- * @property int $OrderId
  * @property int $OrderItemId
+ * @property int $PayerId
+ * @property int $OwnerId
  */
-class OrderItemRefundResult extends AbstractResult
+class OrderItemRefundedResult extends AbstractResult
 {
 }

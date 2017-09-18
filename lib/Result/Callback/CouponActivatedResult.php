@@ -6,9 +6,9 @@ use RunetId\ApiClient\Result\AbstractResult;
 
 /**
  * @property int      $PayerId
- * @property int      $OrderId
+ * @property int      $OwnerId
  * @property null|int $ProductId
  */
-class CouponActivateResult extends AbstractResult
+class CouponActivatedResult extends AbstractResult
 {
 }
