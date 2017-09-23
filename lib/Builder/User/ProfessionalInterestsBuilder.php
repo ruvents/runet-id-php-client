@@ -6,9 +6,9 @@ use RunetId\ApiClient\Builder\AbstractBuilder;
 use RunetId\ApiClient\Builder\SetRunetIdTrait;
 
 /**
- * @method \RunetId\ApiClient\Result\User\ProfessionalinterestResult[] getResult()
+ * @method \RunetId\ApiClient\Result\User\ProfessionalInterestResult[] getResult()
  */
-class ProfessionalinterestsBuilder extends AbstractBuilder
+class ProfessionalInterestsBuilder extends AbstractBuilder
 {
     use SetRunetIdTrait;
 

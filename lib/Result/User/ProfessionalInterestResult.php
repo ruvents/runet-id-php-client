@@ -8,7 +8,7 @@ use Ruvents\AbstractApiClient\Result\AbstractResult;
  * @property int         $Id
  * @property null|string $Title
  */
-class ProfessionalinterestResult extends AbstractResult
+class ProfessionalInterestResult extends AbstractResult
 {
     /**
      * @return string

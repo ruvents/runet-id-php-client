@@ -6,7 +6,12 @@ use RunetId\ApiClient\Service\RunetIdService;
 use Ruvents\AbstractApiClient\AbstractApiClient;
 
 /**
+ * @method Builder\Company\EditBuilder companyEdit()
+ * @method Builder\Company\GetBuilder companyGet()
+ * @method Builder\Company\ListBuilder companyList()
  * @method Builder\Event\ChangeRoleBuilder eventChangeRole()
+ * @method Builder\Event\CompaniesBuilder eventCompanies()
+ * @method Builder\Event\HallsBuilder eventHalls()
  * @method Builder\Event\RegisterBuilder eventRegister()
  * @method Builder\Event\RolesBuilder eventRoles()
  * @method Builder\Event\UsersBuilder eventUsers()
@@ -25,7 +30,7 @@ use Ruvents\AbstractApiClient\AbstractApiClient;
  * @method Builder\User\GetBuilder userGet()
  * @method Builder\User\LoginBuilder userLogin()
  * @method Builder\User\PasswordChangeBuilder userPasswordChange()
- * @method Builder\User\ProfessionalinterestsBuilder userProfessionalinterests()
+ * @method Builder\User\ProfessionalInterestsBuilder userProfessionalinterests()
  * @method Builder\User\SearchBuilder userSearch()
  * @method Builder\User\SectionsBuilder userSections()
  */

@@ -6,6 +6,7 @@ use Ruvents\AbstractApiClient\Result\AbstractResult;
 
 /**
  * @property UserResult[] $Users
+ * @property null|string  $NextPageToken
  */
 class SearchResult extends AbstractResult
 {

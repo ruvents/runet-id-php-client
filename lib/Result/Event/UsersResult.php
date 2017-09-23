@@ -2,12 +2,13 @@
 
 namespace RunetId\ApiClient\Result\Event;
 
-use Ruvents\AbstractApiClient\Result\AbstractResult;
 use RunetId\ApiClient\Result\User\UserResult;
+use Ruvents\AbstractApiClient\Result\AbstractResult;
 
 /**
  * @property UserResult[] $Users
  * @property int          $TotalCount
+ * @property null|string  $NextPageToken
  */
 class UsersResult extends AbstractResult
 {

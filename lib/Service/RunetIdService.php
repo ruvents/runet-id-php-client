@@ -150,7 +150,7 @@ class RunetIdService extends AbstractJsonApiService
             return;
         }
 
-        $message = isset($data['Error']['Message']) ? $data['Error']['Message'] : 'Ошибка';
+        $message = isset($data['Error']['Message']) ? $data['Error']['Message'] : '';
         $code = isset($data['Error']['Code']) ? $data['Error']['Code'] : 0;
 
         throw new RunetIdException($context, $message, $code);
