@@ -20,6 +20,14 @@ class OrderAwareItemResult extends ItemResult
     }
 
     /**
+     * @return bool
+     */
+    public function isOrdered()
+    {
+        return null !== $this->order;
+    }
+
+    /**
      * @return null|OrderResult
      */
     public function getOrder()
