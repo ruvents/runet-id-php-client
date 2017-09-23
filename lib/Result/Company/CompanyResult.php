@@ -3,7 +3,7 @@
 namespace RunetId\ApiClient\Result\Company;
 
 use RunetId\ApiClient\ArgumentHelper\CompanyIdInterface;
-use RunetId\ApiClient\Result\AbstractResult;
+use Ruvents\AbstractApiClient\Result\AbstractResult;
 
 /**
  * @property int         $Id

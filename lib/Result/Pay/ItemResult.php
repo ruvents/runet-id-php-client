@@ -3,7 +3,7 @@
 namespace RunetId\ApiClient\Result\Pay;
 
 use RunetId\ApiClient\ArgumentHelper\PayItemIdInterface;
-use RunetId\ApiClient\Result\AbstractResult;
+use Ruvents\AbstractApiClient\Result\AbstractResult;
 use RunetId\ApiClient\Result\User\UserResult;
 
 /**

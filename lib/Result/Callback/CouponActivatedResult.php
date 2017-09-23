@@ -2,7 +2,7 @@
 
 namespace RunetId\ApiClient\Result\Callback;
 
-use RunetId\ApiClient\Result\AbstractResult;
+use Ruvents\AbstractApiClient\Result\AbstractResult;
 
 /**
  * @property int      $PayerId

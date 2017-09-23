@@ -3,7 +3,7 @@
 namespace RunetId\ApiClient\Result\Pay;
 
 use RunetId\ApiClient\ArgumentHelper\PayOrderIdInterface;
-use RunetId\ApiClient\Result\AbstractResult;
+use Ruvents\AbstractApiClient\Result\AbstractResult;
 
 /**
  * @property int                    $OrderId

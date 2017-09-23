@@ -2,7 +2,7 @@
 
 namespace RunetId\ApiClient\Result\Program;
 
-use RunetId\ApiClient\Result\AbstractResult;
+use Ruvents\AbstractApiClient\Result\AbstractResult;
 
 /**
  * @property int          $Id

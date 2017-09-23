@@ -3,7 +3,7 @@
 namespace RunetId\ApiClient\Result\Event;
 
 use RunetId\ApiClient\ArgumentHelper\EventRoleIdInterface;
-use RunetId\ApiClient\Result\AbstractResult;
+use Ruvents\AbstractApiClient\Result\AbstractResult;
 
 /**
  * @property int         $RoleId

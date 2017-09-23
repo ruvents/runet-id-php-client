@@ -3,19 +3,18 @@
 namespace RunetId\ApiClient\Service;
 
 use Http\Client\HttpClient;
-use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\RequestFactory;
 use RunetId\ApiClient\Exception\RunetIdException;
-use RunetId\ApiClient\Result\ResultDenormalizer;
 use Ruvents\AbstractApiClient\ApiClientInterface;
 use Ruvents\AbstractApiClient\Event\ApiEvents;
 use Ruvents\AbstractApiClient\Event\PostDecodeEvent;
-use Ruvents\AbstractApiClient\Service\AbstractApiService;
+use Ruvents\AbstractApiClient\Result\ResultDenormalizer;
+use Ruvents\AbstractApiClient\Service\AbstractJsonApiService;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RunetIdService extends AbstractApiService
+class RunetIdService extends AbstractJsonApiService
 {
     /**
      * @var RequestFactory
@@ -24,7 +23,7 @@ class RunetIdService extends AbstractApiService
 
     public function __construct(HttpClient $httpClient = null, RequestFactory $requestFactory = null)
     {
-        $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
+        $this->httpClient = $httpClient;
         $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
     }
 

@@ -2,6 +2,8 @@
 
 namespace RunetId\ApiClient\Result;
 
+use Ruvents\AbstractApiClient\Result\AbstractResult;
+
 /**
  * @property bool $Success
  */
