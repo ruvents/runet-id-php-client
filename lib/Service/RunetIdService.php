@@ -33,6 +33,14 @@ class RunetIdService extends AbstractApiService
      */
     public function configureDefaultContext(OptionsResolver $resolver)
     {
+        $hostNormalizer = function (
+            /** @noinspection PhpUnusedParameterInspection */
+            Options $context,
+            $host
+        ) {
+            return rtrim($host, '/');
+        };
+
         $resolver
             ->setRequired([
                 'key',
@@ -40,16 +48,15 @@ class RunetIdService extends AbstractApiService
             ])
             ->setDefaults([
                 'event_id' => null,
-                'host' => 'api.runet-id.com',
+                'host' => 'http://api.runet-id.com',
                 'language' => 'ru',
-                'scheme' => 'http',
             ])
             ->setAllowedTypes('event_id', ['null', 'int'])
             ->setAllowedTypes('host', 'string')
             ->setAllowedTypes('key', 'string')
-            ->setAllowedTypes('scheme', 'string')
             ->setAllowedTypes('secret', 'string')
-            ->setAllowedValues('language', ['ru', 'en']);
+            ->setAllowedValues('language', ['ru', 'en'])
+            ->setNormalizer('host', $hostNormalizer);
     }
 
     /**
@@ -65,17 +72,10 @@ class RunetIdService extends AbstractApiService
             return '/'.ltrim($endpoint, '/');
         };
 
-        $methodNormalizer = function (
-            /** @noinspection PhpUnusedParameterInspection */
-            Options $context,
-            $method
-        ) {
-            return strtoupper($method);
-        };
-
         $resolver
             ->setRequired([
                 'endpoint',
+                'method',
             ])
             ->setDefaults([
                 'body' => null,
@@ -83,7 +83,6 @@ class RunetIdService extends AbstractApiService
                 'data' => [],
                 'headers' => [],
                 'max_results' => null,
-                'method' => 'GET',
                 'prevent_decode' => false,
                 'query' => [],
                 'request_paginated_data' => true,
@@ -97,13 +96,12 @@ class RunetIdService extends AbstractApiService
             ->setAllowedTypes('endpoint', 'string')
             ->setAllowedTypes('headers', 'array')
             ->setAllowedTypes('max_results', ['null', 'int'])
-            ->setAllowedTypes('method', 'string')
             ->setAllowedTypes('paginated_data_offset', 'string')
             ->setAllowedTypes('prevent_decode', 'bool')
             ->setAllowedTypes('query', 'array')
             ->setAllowedTypes('request_paginated_data', 'bool')
-            ->setNormalizer('endpoint', $endpointNormalizer)
-            ->setNormalizer('method', $methodNormalizer);
+            ->setAllowedValues('method', ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE'])
+            ->setNormalizer('endpoint', $endpointNormalizer);
     }
 
     /**
@@ -138,7 +136,7 @@ class RunetIdService extends AbstractApiService
 
         return $this->requestFactory->createRequest(
             $context['method'],
-            $context['scheme'].'://'.$context['host'].$context['endpoint'].'?'.$query,
+            $context['host'].$context['endpoint'].'?'.$query,
             $headers,
             $body
         );
