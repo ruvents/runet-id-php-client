@@ -11,7 +11,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "RunetId\\ApiClient\\": "lib/"
+            "RunetId\\ApiClient\\": "src/"
         }
     },
     "require": {
