@@ -10,12 +10,16 @@ use Ruvents\AbstractApiClient\ApiClientInterface;
 use Ruvents\AbstractApiClient\Event\ApiEvents;
 use Ruvents\AbstractApiClient\Event\PostDecodeEvent;
 use Ruvents\AbstractApiClient\Result\ResultDenormalizer;
-use Ruvents\AbstractApiClient\Service\AbstractJsonApiService;
+use Ruvents\AbstractApiClient\Service;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RunetIdService extends AbstractJsonApiService
+class RunetIdService implements Service\ApiServiceInterface
 {
+    use Service\HttpClientDiscoveryTrait;
+    use Service\Response200Trait;
+    use Service\JsonDecodeTrait;
+
     /**
      * @var RequestFactory
      */
