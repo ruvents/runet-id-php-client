@@ -84,18 +84,16 @@ final class RunetIdClientTest extends TestCase
 
     public function getRequestPaginatedParams()
     {
-        return [
-            [0, 0, 0, 1],
-            [10, 0, 0, 1],
-            [10, 3, 3, 1],
-            [10, 10, 10, 1],
-            [10, 1000, 10, 1],
-            [10, -1, 10, 1],
-            [1000, 1000, 1000, 5],
-            [1000, 1004, 1000, 5],
-            [1000, 201, 201, 2],
-            [1000, -1, 1000, 5],
-        ];
+        yield [0, 0, 0, 1];
+        yield [10, 0, 0, 1];
+        yield [10, 3, 3, 1];
+        yield [10, 10, 10, 1];
+        yield [10, 1000, 10, 1];
+        yield [10, -1, 10, 1];
+        yield [1000, 1000, 1000, 5];
+        yield [1000, 1004, 1000, 5];
+        yield [1000, 201, 201, 2];
+        yield [1000, -1, 1000, 5];
     }
 
     /**
@@ -112,11 +110,9 @@ final class RunetIdClientTest extends TestCase
 
     public function getEndpointMethods()
     {
-        return [
-            ['user', 'RunetId\Client\Endpoint\UserEndpoint'],
-            ['userGet', 'RunetId\Client\Endpoint\User\GetEndpoint'],
-            ['userGetPost', 'RunetId\Client\Endpoint\User\GetPostEndpoint'],
-        ];
+        yield ['user', 'RunetId\Client\Endpoint\UserEndpoint'];
+        yield ['userGet', 'RunetId\Client\Endpoint\User\GetEndpoint'];
+        yield ['userGetPost', 'RunetId\Client\Endpoint\User\GetPostEndpoint'];
     }
 
     public function testMagicCall()
