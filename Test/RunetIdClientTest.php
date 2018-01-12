@@ -2,7 +2,8 @@
 
 namespace RunetId\Client\Test;
 
-use Http\Discovery\MessageFactoryDiscovery;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\RunetIdClient;
@@ -13,14 +14,13 @@ class RunetIdClientTest extends TestCase
     public function testDecodeResponse()
     {
         $data = ['a' => 1, 'b' => ['x' => 'y']];
-        $response = MessageFactoryDiscovery::find()->createResponse(200, null, [], json_encode($data));
 
         $httpClient = new Client();
-        $httpClient->addResponse($response);
+        $httpClient->addResponse(new Response(200, [], json_encode($data)));
 
         $client = new RunetIdClient($httpClient);
 
-        $actual = $client->request(MessageFactoryDiscovery::find()->createRequest('GET', '/'));
+        $actual = $client->request(new Request('GET', '/'));
         $this->assertSame($data, $actual);
     }
 
@@ -31,14 +31,12 @@ class RunetIdClientTest extends TestCase
      */
     public function testDecodeResponseException()
     {
-        $response = MessageFactoryDiscovery::find()->createResponse(200, null, [], 'non-json');
-
         $httpClient = new Client();
-        $httpClient->addResponse($response);
+        $httpClient->addResponse(new Response(200, [], 'non-json'));
 
         $client = new RunetIdClient($httpClient);
 
-        $client->request(MessageFactoryDiscovery::find()->createRequest('GET', '/'));
+        $client->request(new Request('GET', '/'));
     }
 
     /**
@@ -46,14 +44,12 @@ class RunetIdClientTest extends TestCase
      */
     public function testDetectError()
     {
-        $response = MessageFactoryDiscovery::find()->createResponse(200, null, [], '{"Error":""}');
-
         $httpClient = new Client();
-        $httpClient->addResponse($response);
+        $httpClient->addResponse(new Response(200, [], '{"Error":""}'));
 
         $client = new RunetIdClient($httpClient);
 
-        $client->request(MessageFactoryDiscovery::find()->createRequest('GET', '/'));
+        $client->request(new Request('GET', '/'));
     }
 
     /**
@@ -64,9 +60,7 @@ class RunetIdClientTest extends TestCase
         $httpClient = new PaginatedHttpClient('Users', $total);
         $client = new RunetIdClient($httpClient);
 
-        $request = MessageFactoryDiscovery::find()->createRequest('GET', '/');
-
-        $data = $client->requestPaginated($request, 'Users', $limit);
+        $data = $client->requestPaginated(new Request('GET', '/'), 'Users', $limit);
 
         $this->assertCount($expectedRequestsCount, $httpClient->getRequests());
         $this->assertCount($expectedItemsCount, $data['Users']);

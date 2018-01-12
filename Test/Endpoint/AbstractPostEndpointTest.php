@@ -2,7 +2,7 @@
 
 namespace RunetId\Client\Test\Endpoint;
 
-use Http\Discovery\MessageFactoryDiscovery;
+use GuzzleHttp\Psr7\Response;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\Endpoint\AbstractPostEndpoint;
@@ -13,7 +13,7 @@ class AbstractPostEndpointTest extends TestCase
     public function testFormSetters()
     {
         $httpClient = new Client();
-        $httpClient->addResponse(MessageFactoryDiscovery::find()->createResponse(200, null, [], 'null'));
+        $httpClient->addResponse(new Response(200, [], 'null'));
 
         $client = new RunetIdClient($httpClient);
 

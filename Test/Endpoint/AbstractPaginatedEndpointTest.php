@@ -2,7 +2,7 @@
 
 namespace RunetId\Client\Test\Endpoint;
 
-use Http\Discovery\MessageFactoryDiscovery;
+use GuzzleHttp\Psr7\Response;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\Endpoint\AbstractPaginatedEndpoint;
@@ -16,8 +16,7 @@ class AbstractPaginatedEndpointTest extends TestCase
         $data = [$offset => [['Id' => 1]]];
 
         $httpClient = new Client();
-        $httpClient->addResponse(MessageFactoryDiscovery::find()
-            ->createResponse(200, null, [], json_encode($data)));
+        $httpClient->addResponse(new Response(200, [], json_encode($data)));
 
         $client = new RunetIdClient($httpClient);
 

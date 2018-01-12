@@ -2,7 +2,7 @@
 
 namespace RunetId\Client\Test\Endpoint;
 
-use Http\Discovery\MessageFactoryDiscovery;
+use GuzzleHttp\Psr7\Response;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\Endpoint\AbstractEndpoint;
@@ -14,7 +14,7 @@ class AbstractEndpointTest extends TestCase
     public function testQuerySetters()
     {
         $httpClient = new Client();
-        $httpClient->addResponse(MessageFactoryDiscovery::find()->createResponse(200, null, [], 'null'));
+        $httpClient->addResponse(new Response(200, [], 'null'));
 
         $client = new RunetIdClient($httpClient);
 
@@ -47,10 +47,8 @@ class AbstractEndpointTest extends TestCase
     {
         $data = ['Id' => 1];
 
-        $response = MessageFactoryDiscovery::find()->createResponse(200, null, [], json_encode($data));
-
         $httpClient = new Client();
-        $httpClient->addResponse($response);
+        $httpClient->addResponse(new Response(200, [], json_encode($data)));
 
         $client = new RunetIdClient($httpClient);
 

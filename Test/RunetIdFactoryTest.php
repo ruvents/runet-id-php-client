@@ -2,7 +2,8 @@
 
 namespace RunetId\Client\Test;
 
-use Http\Discovery\MessageFactoryDiscovery;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\RunetIdFactory;
@@ -12,11 +13,11 @@ class RunetIdFactoryTest extends TestCase
     public function testRequestPlugins()
     {
         $httpClient = new Client();
-        $httpClient->addResponse(MessageFactoryDiscovery::find()->createResponse(200, null, [], 'null'));
+        $httpClient->addResponse(new Response(200, [], 'null'));
 
         $client = RunetIdFactory::createClient('key', 'secret', 'https://host.com/test?a=1&b=2', [], $httpClient);
 
-        $client->request(MessageFactoryDiscovery::find()->createRequest('GET', '/method?a=2'));
+        $client->request(new Request('GET', '/method?a=2'));
 
         $request = $httpClient->getLastRequest();
 
@@ -33,10 +34,10 @@ class RunetIdFactoryTest extends TestCase
     public function testErrorPlugin()
     {
         $httpClient = new Client();
-        $httpClient->addResponse(MessageFactoryDiscovery::find()->createResponse(500));
+        $httpClient->addResponse(new Response(500));
 
         $client = RunetIdFactory::createClient('key', 'secret', 'http://host.com', [], $httpClient);
 
-        $client->request(MessageFactoryDiscovery::find()->createRequest('GET', '/'));
+        $client->request(new Request('GET', '/'));
     }
 }

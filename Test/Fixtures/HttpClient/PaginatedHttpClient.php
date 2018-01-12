@@ -2,8 +2,8 @@
 
 namespace RunetId\Client\Test\Fixtures\HttpClient;
 
+use GuzzleHttp\Psr7\Response;
 use Http\Client\HttpClient;
-use Http\Discovery\MessageFactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
 
 class PaginatedHttpClient implements HttpClient
@@ -41,8 +41,7 @@ class PaginatedHttpClient implements HttpClient
                 : 200)
             : 200;
 
-        return MessageFactoryDiscovery::find()
-            ->createResponse(200, null, [], json_encode($this->getData($pageToken, $maxResults)));
+        return new Response(200, [], json_encode($this->getData($pageToken, $maxResults)));
     }
 
     /**

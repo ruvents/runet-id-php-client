@@ -2,7 +2,7 @@
 
 namespace RunetId\Client\Test\Endpoint;
 
-use Http\Discovery\MessageFactoryDiscovery;
+use GuzzleHttp\Psr7\Response;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\RunetIdClient;
@@ -13,7 +13,7 @@ class SuccessTraitTest extends TestCase
     public function test()
     {
         $httpClient = new Client();
-        $httpClient->addResponse(MessageFactoryDiscovery::find()->createResponse(200, null, [], '{"Success":true}'));
+        $httpClient->addResponse(new Response(200, [], '{"Success":true}'));
 
         $client = new RunetIdClient($httpClient);
 

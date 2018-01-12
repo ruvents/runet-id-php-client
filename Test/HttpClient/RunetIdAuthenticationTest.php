@@ -2,7 +2,7 @@
 
 namespace RunetId\Client\Test\HttpClient;
 
-use Http\Discovery\MessageFactoryDiscovery;
+use GuzzleHttp\Psr7\Request;
 use phpmock\MockBuilder;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\HttpClient\RunetIdAuthentication;
@@ -24,12 +24,10 @@ class RunetIdAuthenticationTest extends TestCase
             ->build()
             ->enable();
 
-        $auth = new RunetIdAuthentication($key, $secret);
+        $request = new Request('GET', '/', ['Apikey' => 'apikey', 'Timestamp' => 0, 'Hash' => 'hash']);
 
-        $request = MessageFactoryDiscovery::find()
-            ->createRequest('GET', '/', ['Apikey' => 'apikey', 'Timestamp' => 0, 'Hash' => 'hash']);
-
-        $request = $auth->authenticate($request);
+        $request = (new RunetIdAuthentication($key, $secret))
+            ->authenticate($request);
 
         $this->assertSame($key, $request->getHeaderLine('Apikey'));
         $this->assertSame((string) $time, $request->getHeaderLine('Timestamp'));

@@ -2,7 +2,7 @@
 
 namespace RunetId\Client\Test\Endpoint;
 
-use Http\Discovery\MessageFactoryDiscovery;
+use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\Endpoint\QueryHelper;
 
@@ -22,7 +22,7 @@ class QueryHelperTest extends TestCase
                 'd' => 4,
             ]);
 
-        $request = $helper->apply(MessageFactoryDiscovery::find()->createRequest('GET', '/?x=1'));
+        $request = $helper->apply(new Request('GET', '/?x=1'));
 
         $this->assertSame($helper->getData(), ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4]);
         $this->assertSame('x=1&a=1&b=2&c=3&d=4', $request->getUri()->getQuery());

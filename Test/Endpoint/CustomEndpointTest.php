@@ -2,7 +2,7 @@
 
 namespace RunetId\Client\Test\Endpoint;
 
-use Http\Discovery\MessageFactoryDiscovery;
+use GuzzleHttp\Psr7\Response;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\RunetIdClient;
@@ -23,8 +23,7 @@ class CustomEndpointTest extends TestCase
     protected function setUp()
     {
         $this->httpClient = new Client();
-        $this->httpClient->setDefaultResponse(MessageFactoryDiscovery::find()
-            ->createResponse(200, null, [], '[]'));
+        $this->httpClient->setDefaultResponse(new Response(200, [], '[]'));
 
         $this->client = new RunetIdClient($this->httpClient);
     }
