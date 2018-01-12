@@ -50,3 +50,6 @@ install:
 script:
     - composer validate --strict --no-check-lock
     - vendor/bin/simple-phpunit $PHPUNIT_FLAGS
+
+after_success:
+    - if [[ $COVERAGE = true ]]; then bash <(curl -s https://codecov.io/bash); fi
