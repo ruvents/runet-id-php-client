@@ -10,7 +10,7 @@ use Http\Discovery\UriFactoryDiscovery;
 use Psr\Http\Message\UriInterface;
 use RunetId\Client\HttpClient\RunetIdAuthentication;
 
-final class RunetIdFactory
+final class RunetIdClientFactory
 {
     const DEFAULT_URI = 'http://api.runet-id.com';
 
@@ -30,7 +30,7 @@ final class RunetIdFactory
      *
      * @return RunetIdClient
      */
-    public static function createClient($key, $secret, $defaultUri = self::DEFAULT_URI, array $plugins = [], HttpClient $httpClient = null)
+    public static function create($key, $secret, $defaultUri = self::DEFAULT_URI, array $plugins = [], HttpClient $httpClient = null)
     {
         $defaultUri = UriFactoryDiscovery::find()->createUri($defaultUri);
         parse_str($defaultUri->getQuery(), $queryDefaults);

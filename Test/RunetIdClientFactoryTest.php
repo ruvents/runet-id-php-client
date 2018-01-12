@@ -6,16 +6,16 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
-use RunetId\Client\RunetIdFactory;
+use RunetId\Client\RunetIdClientFactory;
 
-final class RunetIdFactoryTest extends TestCase
+final class RunetIdClientFactoryTest extends TestCase
 {
     public function testRequestPlugins()
     {
         $httpClient = new Client();
         $httpClient->addResponse(new Response(200, [], 'null'));
 
-        $client = RunetIdFactory::createClient('key', 'secret', 'https://host.com/test?a=1&b=2', [], $httpClient);
+        $client = RunetIdClientFactory::create('key', 'secret', 'https://host.com/test?a=1&b=2', [], $httpClient);
 
         $client->request(new Request('GET', '/method?a=2'));
 
@@ -36,7 +36,7 @@ final class RunetIdFactoryTest extends TestCase
         $httpClient = new Client();
         $httpClient->addResponse(new Response(500));
 
-        $client = RunetIdFactory::createClient('key', 'secret', 'http://host.com', [], $httpClient);
+        $client = RunetIdClientFactory::create('key', 'secret', 'http://host.com', [], $httpClient);
 
         $client->request(new Request('GET', '/'));
     }
