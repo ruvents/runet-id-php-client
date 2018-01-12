@@ -26,10 +26,10 @@
 <?php
 
 use Http\Discovery\MessageFactoryDiscovery;
-use RunetId\Client\RunetIdFactory;
+use RunetId\Client\RunetIdClientFactory;
 use RunetId\Client\Result\SuccessResult;
 
-$client = RunetIdFactory::createClient('key', 'secret');
+$client = RunetIdClientFactory::create('key', 'secret');
 
 // запрос с использованием встроенных подсказок по endpoint-ам RUNET-ID
 $user = $client->userGet()
@@ -116,17 +116,17 @@ $resultArray = $client->request($request);
 ```php
 <?php
 
-use RunetId\Client\RunetIdFactory;
+use RunetId\Client\RunetIdClientFactory;
 
 // установка параметров query по умолчанию
-$client = RunetIdFactory::createClient(
+$client = RunetIdClientFactory::create(
     'key',
     'secret',
-    RunetIdFactory::DEFAULT_URI.'?Language=en&EventId=123'
+    RunetIdClientFactory::DEFAULT_URI.'?Language=en&EventId=123'
 );
 
 // использование другого базового url
-$client = RunetIdFactory::createClient(
+$client = RunetIdClientFactory::create(
     'key',
     'secret',
     'http://localhost:8000/endpoint-prefix/?Language=en'
@@ -141,17 +141,17 @@ $client = RunetIdFactory::createClient(
 <?php
 
 use Http\Client\Common\Plugin\LoggerPlugin;
-use RunetId\Client\RunetIdFactory;
+use RunetId\Client\RunetIdClientFactory;
 
 $loggerPlugin = new LoggerPlugin(
     // здесь может быть любая имплементация Psr\Log\LoggerInterface
     new \Monolog\Logger('http')
 );
 
-$client = RunetIdFactory::createClient(
+$client = RunetIdClientFactory::create(
     'key',
     'secret',
-    RunetIdFactory::DEFAULT_URI,
+    RunetIdClientFactory::DEFAULT_URI,
     // массив Http\Client\Common\Plugin[]
     [$loggerPlugin]
 );
