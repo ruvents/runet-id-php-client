@@ -9,7 +9,7 @@ use RunetId\Client\Result\AbstractResult;
  * @property string       $Name
  * @property TestResult[] $Collection
  */
-class TestResult extends AbstractResult
+final class TestResult extends AbstractResult
 {
     /**
      * {@inheritdoc}

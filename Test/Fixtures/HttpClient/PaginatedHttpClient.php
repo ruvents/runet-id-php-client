@@ -6,7 +6,7 @@ use GuzzleHttp\Psr7\Response;
 use Http\Client\HttpClient;
 use Psr\Http\Message\RequestInterface;
 
-class PaginatedHttpClient implements HttpClient
+final class PaginatedHttpClient implements HttpClient
 {
     private $offset;
     private $total;

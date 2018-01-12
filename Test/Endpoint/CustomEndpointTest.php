@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use RunetId\Client\RunetIdClient;
 use RunetId\Client\Test\Fixtures\Result\TestResult;
 
-class CustomEndpointTest extends TestCase
+final class CustomEndpointTest extends TestCase
 {
     /**
      * @var Client

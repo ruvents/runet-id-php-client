@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use RunetId\Client\RunetIdClient;
 use RunetId\Client\Test\Fixtures\HttpClient\PaginatedHttpClient;
 
-class RunetIdClientTest extends TestCase
+final class RunetIdClientTest extends TestCase
 {
     public function testDecodeResponse()
     {

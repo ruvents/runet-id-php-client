@@ -6,7 +6,7 @@ use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\Endpoint\FormUrlencodedBodyHelper;
 
-class FormUrlencodedBodyHelperTest extends TestCase
+final class FormUrlencodedBodyHelperTest extends TestCase
 {
     public function test()
     {

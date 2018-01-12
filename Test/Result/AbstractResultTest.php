@@ -5,7 +5,7 @@ namespace RunetId\Client\Test\Result;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\Test\Fixtures\Result\TestResult;
 
-class AbstractResultTest extends TestCase
+final class AbstractResultTest extends TestCase
 {
     public function test()
     {

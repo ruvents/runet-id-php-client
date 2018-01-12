@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use RunetId\Client\Result\ResultFactory;
 use RunetId\Client\Test\Fixtures\Result\TestResult;
 
-class ResultFactoryTest extends TestCase
+final class ResultFactoryTest extends TestCase
 {
     public function testCreate()
     {

@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use RunetId\Client\Endpoint\AbstractPaginatedEndpoint;
 use RunetId\Client\RunetIdClient;
 
-class AbstractPaginatedEndpointTest extends TestCase
+final class AbstractPaginatedEndpointTest extends TestCase
 {
     public function test()
     {

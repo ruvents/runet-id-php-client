@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use RunetId\Client\RunetIdClient;
 use RunetId\Client\Test\Fixtures\Endpoint\SuccessTestEndpoint;
 
-class SuccessTraitTest extends TestCase
+final class SuccessTraitTest extends TestCase
 {
     public function test()
     {

@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use RunetId\Client\Endpoint\AbstractPostEndpoint;
 use RunetId\Client\RunetIdClient;
 
-class AbstractPostEndpointTest extends TestCase
+final class AbstractPostEndpointTest extends TestCase
 {
     public function testFormSetters()
     {

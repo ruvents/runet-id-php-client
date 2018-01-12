@@ -7,7 +7,7 @@ use phpmock\MockBuilder;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\HttpClient\RunetIdAuthentication;
 
-class RunetIdAuthenticationTest extends TestCase
+final class RunetIdAuthenticationTest extends TestCase
 {
     public function test()
     {

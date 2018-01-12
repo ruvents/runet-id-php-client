@@ -9,7 +9,7 @@ use RunetId\Client\Endpoint\AbstractEndpoint;
 use RunetId\Client\RunetIdClient;
 use RunetId\Client\Test\Fixtures\Result\TestResult;
 
-class AbstractEndpointTest extends TestCase
+final class AbstractEndpointTest extends TestCase
 {
     public function testQuerySetters()
     {

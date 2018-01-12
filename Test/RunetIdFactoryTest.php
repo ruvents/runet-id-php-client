@@ -8,7 +8,7 @@ use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\RunetIdFactory;
 
-class RunetIdFactoryTest extends TestCase
+final class RunetIdFactoryTest extends TestCase
 {
     public function testRequestPlugins()
     {

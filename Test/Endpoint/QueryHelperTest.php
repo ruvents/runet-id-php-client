@@ -6,7 +6,7 @@ use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\Endpoint\QueryHelper;
 
-class QueryHelperTest extends TestCase
+final class QueryHelperTest extends TestCase
 {
     public function test()
     {
