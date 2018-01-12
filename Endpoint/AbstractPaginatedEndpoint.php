@@ -2,6 +2,9 @@
 
 namespace RunetId\Client\Endpoint;
 
+/**
+ * @internal
+ */
 abstract class AbstractPaginatedEndpoint extends AbstractEndpoint
 {
     private $limit = -1;

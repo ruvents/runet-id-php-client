@@ -2,6 +2,9 @@
 
 namespace RunetId\Client\Result;
 
+/**
+ * @internal
+ */
 abstract class AbstractResult
 {
     private $data;

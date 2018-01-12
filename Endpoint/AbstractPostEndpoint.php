@@ -4,6 +4,9 @@ namespace RunetId\Client\Endpoint;
 
 use RunetId\Client\RunetIdClient;
 
+/**
+ * @internal
+ */
 abstract class AbstractPostEndpoint extends AbstractEndpoint
 {
     protected $method = 'POST';

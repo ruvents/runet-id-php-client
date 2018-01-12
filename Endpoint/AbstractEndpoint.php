@@ -8,6 +8,9 @@ use RunetId\Client\Result\AbstractResult;
 use RunetId\Client\Result\ResultFactory;
 use RunetId\Client\RunetIdClient;
 
+/**
+ * @internal
+ */
 abstract class AbstractEndpoint
 {
     protected $client;

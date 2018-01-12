@@ -5,6 +5,8 @@ namespace RunetId\Client\Endpoint;
 use RunetId\Client\Result\SuccessResult;
 
 /**
+ * @internal
+ *
  * @method SuccessResult getResult()
  */
 trait SuccessResultTrait
