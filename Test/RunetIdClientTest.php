@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
+use RunetId\Client\Exception\RunetIdException;
 use RunetId\Client\RunetIdClient;
 use RunetId\Client\Test\Fixtures\HttpClient\PaginatedHttpClient;
 
@@ -40,16 +41,30 @@ final class RunetIdClientTest extends TestCase
     }
 
     /**
-     * @expectedException \RunetId\Client\Exception\ApiErrorException
+     * @dataProvider getErrorVariants
      */
-    public function testDetectError()
+    public function testDetectErrorNoErrorData(array $data, $expectedMessage, $expectedCode)
     {
         $httpClient = new Client();
-        $httpClient->addResponse(new Response(200, [], '{"Error":""}'));
+        $httpClient->addResponse(new Response(200, [], json_encode($data)));
 
-        $client = new RunetIdClient($httpClient);
+        try {
+            (new RunetIdClient($httpClient))
+                ->request(new Request('GET', '/'));
 
-        $client->request(new Request('GET', '/'));
+            $this->fail('No exception thrown.');
+        } catch (RunetIdException $exception) {
+            $this->assertSame($data, $exception->getData());
+            $this->assertSame($expectedMessage, $exception->getMessage());
+            $this->assertSame($expectedCode, $exception->getCode());
+        }
+    }
+
+    public function getErrorVariants()
+    {
+        yield [['Error' => [], 'SomeData' => 1], '', 0];
+        yield [['Error' => ['Code' => 1], 'SomeData' => 1], '', 1];
+        yield [['Error' => ['Message' => 'Fail']], 'Fail', 0];
     }
 
     /**

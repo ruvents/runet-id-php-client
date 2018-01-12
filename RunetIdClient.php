@@ -7,8 +7,8 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use RunetId\Client\Endpoint\AbstractEndpoint;
 use RunetId\Client\Endpoint\QueryHelper;
-use RunetId\Client\Exception\ApiErrorException;
 use RunetId\Client\Exception\JsonDecodeException;
+use RunetId\Client\Exception\RunetIdException;
 
 /**
  * @method Endpoint\Company\EditEndpoint               companyEdit()
@@ -134,14 +134,14 @@ final class RunetIdClient
     /**
      * @param mixed $data
      *
-     * @throws ApiErrorException
+     * @throws RunetIdException
      *
      * @return void
      */
     private function detectError($data)
     {
-        if (is_array($data) && isset($data['Error'])) {
-            throw new ApiErrorException();
+        if (isset($data['Error'])) {
+            throw new RunetIdException($data);
         }
     }
 
