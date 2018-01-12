@@ -2,6 +2,6 @@
 
 namespace RunetId\Client\Exception;
 
-class ApiErrorException extends \RuntimeException implements ExceptionInterface
+final class ApiErrorException extends \RuntimeException implements ExceptionInterface
 {
 }
