@@ -144,6 +144,7 @@ $client = RunetIdFactory::createClient(
     'key',
     'secret',
     RunetIdFactory::DEFAULT_URI,
+    // массив Http\Client\Common\Plugin[]
     [$loggerPlugin]
 );
 ```
