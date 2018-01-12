@@ -12,13 +12,21 @@ final class ResultFactory
     }
 
     /**
-     * @param array  $data
-     * @param string $class
+     * @param null|array $data
+     * @param string     $class
      *
      * @return null|AbstractResult|array
      */
-    public static function create(array $data, $class)
+    public static function create($data, $class)
     {
+        if (null === $data) {
+            return null;
+        }
+
+        if (!is_array($data)) {
+            throw new \InvalidArgumentException(sprintf('Data must be null or an array, %s given.', gettype($data)));
+        }
+
         if ('[]' === substr($class, -2)) {
             $class = substr($class, 0, -2);
             $result = [];

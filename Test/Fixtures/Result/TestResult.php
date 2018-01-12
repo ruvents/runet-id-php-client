@@ -5,9 +5,10 @@ namespace RunetId\Client\Test\Fixtures\Result;
 use RunetId\Client\Result\AbstractResult;
 
 /**
- * @property int          $Id
- * @property string       $Name
- * @property TestResult[] $Collection
+ * @property int             $Id
+ * @property string          $Name
+ * @property null|TestResult $Child
+ * @property TestResult[]    $Collection
  */
 final class TestResult extends AbstractResult
 {

@@ -36,7 +36,7 @@ abstract class AbstractEndpoint
         }
 
         if (count($args) < 1) {
-            throw new \BadMethodCallException('This method requires one argument.');
+            throw new \BadMethodCallException(sprintf('Method %s::%s() requires one argument.', static::class, $name));
         }
 
         $this->applyMagicSetter(substr($name, 3), $args[0]);

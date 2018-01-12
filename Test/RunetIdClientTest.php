@@ -127,6 +127,7 @@ final class RunetIdClientTest extends TestCase
 
     /**
      * @expectedException \BadMethodCallException
+     * @expectedExceptionMessage Method RunetId\Client\RunetIdClient::nonExistingMethod() is not defined.
      */
     public function testMagicCallException()
     {

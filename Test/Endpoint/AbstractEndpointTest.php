@@ -65,6 +65,7 @@ final class AbstractEndpointTest extends TestCase
 
     /**
      * @expectedException \BadMethodCallException
+     * @expectedExceptionMessage Only setter methods are supported, "nonSetterMethod" called.
      */
     public function testNonSetterException()
     {
@@ -74,6 +75,7 @@ final class AbstractEndpointTest extends TestCase
 
     /**
      * @expectedException \BadMethodCallException
+     * @expectedExceptionMessageRegExp /Method [\w\\]+::setSomething\(\) requires one argument./
      */
     public function testZeroArgumentsException()
     {

@@ -62,8 +62,17 @@ final class ResultFactoryTest extends TestCase
         $this->assertContainsOnlyInstancesOf(TestResult::class, $result->Collection);
     }
 
+    public function testNullability()
+    {
+        /** @var TestResult $result */
+        $result = ResultFactory::create(null, TestResult::class);
+
+        $this->assertNull($result);
+    }
+
     /**
      * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Class "NS\NonExistingClass" does not exist.
      */
     public function testNonExistingClass()
     {
@@ -72,9 +81,19 @@ final class ResultFactoryTest extends TestCase
 
     /**
      * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Class "PHPUnit\Framework\TestCase" must extend "RunetId\Client\Result\AbstractResult".
      */
     public function testInvalidClass()
     {
-        ResultFactory::create([], self::class);
+        ResultFactory::create([], TestCase::class);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Data must be null or an array, string given.
+     */
+    public function testInvalidDataType()
+    {
+        ResultFactory::create('', TestCase::class);
     }
 }
