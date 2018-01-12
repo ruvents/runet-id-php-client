@@ -45,18 +45,22 @@ class CustomEndpointTest extends TestCase
         $this->assertInstanceOf(TestResult::class, $result);
     }
 
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Endpoint was not set. Use setEndpoint().
+     */
     public function testNoEndpointException()
     {
-        $this->setExpectedException(\RuntimeException::class, 'Endpoint was not set. Use setEndpoint().');
-
         $this->client->custom()
             ->getResult();
     }
 
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Class was not set. Use setClass().
+     */
     public function testNoClassException()
     {
-        $this->setExpectedException(\RuntimeException::class, 'Class was not set. Use setClass().');
-
         $this->client->custom()
             ->setEndpoint('/test')
             ->getResult();

@@ -65,18 +65,20 @@ class AbstractEndpointTest extends TestCase
         $this->assertSame(1, $result->Id);
     }
 
+    /**
+     * @expectedException \BadMethodCallException
+     */
     public function testNonSetterException()
     {
-        $this->setExpectedException(\BadMethodCallException::class);
-
         $this->getMockForAbstractClass(AbstractEndpoint::class, [], '', false)
             ->nonSetterMethod();
     }
 
+    /**
+     * @expectedException \BadMethodCallException
+     */
     public function testZeroArgumentsException()
     {
-        $this->setExpectedException(\BadMethodCallException::class);
-
         $this->getMockForAbstractClass(AbstractEndpoint::class, [], '', false)
             ->setSomething();
     }

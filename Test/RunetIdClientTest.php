@@ -5,8 +5,6 @@ namespace RunetId\Client\Test;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
-use RunetId\Client\Exception\ApiErrorException;
-use RunetId\Client\Exception\JsonDecodeException;
 use RunetId\Client\RunetIdClient;
 use RunetId\Client\Test\Fixtures\HttpClient\PaginatedHttpClient;
 
@@ -26,10 +24,13 @@ class RunetIdClientTest extends TestCase
         $this->assertSame($data, $actual);
     }
 
+    /**
+     * @expectedException \RunetId\Client\Exception\JsonDecodeException
+     * @expectedExceptionMessage Syntax error
+     * @expectedExceptionCode    4
+     */
     public function testDecodeResponseException()
     {
-        $this->setExpectedException(JsonDecodeException::class, 'Syntax error', JSON_ERROR_SYNTAX);
-
         $response = MessageFactoryDiscovery::find()->createResponse(200, null, [], 'non-json');
 
         $httpClient = new Client();
@@ -40,10 +41,11 @@ class RunetIdClientTest extends TestCase
         $client->request(MessageFactoryDiscovery::find()->createRequest('GET', '/'));
     }
 
+    /**
+     * @expectedException \RunetId\Client\Exception\ApiErrorException
+     */
     public function testDetectError()
     {
-        $this->setExpectedException(ApiErrorException::class);
-
         $response = MessageFactoryDiscovery::find()->createResponse(200, null, [], '{"Error":""}');
 
         $httpClient = new Client();
@@ -118,10 +120,11 @@ class RunetIdClientTest extends TestCase
         $this->assertInstanceOf($class, $client->testGet());
     }
 
+    /**
+     * @expectedException \BadMethodCallException
+     */
     public function testMagicCallException()
     {
-        $this->setExpectedException(\BadMethodCallException::class);
-
         $client = new RunetIdClient(new Client());
         $client->nonExistingMethod();
     }

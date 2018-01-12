@@ -2,7 +2,6 @@
 
 namespace RunetId\Client\Test;
 
-use Http\Client\Common\Exception\ServerErrorException;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
@@ -28,10 +27,11 @@ class RunetIdFactoryTest extends TestCase
         $this->assertSame('key', $request->getHeaderLine('Apikey'));
     }
 
+    /**
+     * @expectedException \Http\Client\Common\Exception\ServerErrorException
+     */
     public function testErrorPlugin()
     {
-        $this->setExpectedException(ServerErrorException::class);
-
         $httpClient = new Client();
         $httpClient->addResponse(MessageFactoryDiscovery::find()->createResponse(500));
 

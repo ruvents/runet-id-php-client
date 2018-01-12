@@ -62,17 +62,19 @@ class ResultFactoryTest extends TestCase
         $this->assertContainsOnlyInstancesOf(TestResult::class, $result->Collection);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testNonExistingClass()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
-
         ResultFactory::create([], 'NS\NonExistingClass');
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testInvalidClass()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
-
         ResultFactory::create([], self::class);
     }
 }
