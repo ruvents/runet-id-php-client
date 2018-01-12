@@ -12,7 +12,7 @@
 
 Выполните установку пакетов:
 
-`$ composer require guzzlehttp/psr7 php-http/guzzle6-adapter runet-id/client:^3.0@dev`
+`$ composer require guzzlehttp/psr7 php-http/guzzle6-adapter runet-id/api-client:^3.0@dev`
 
 ### Библиотеки для работы с HTTP-запросами
 

@@ -1,8 +1,8 @@
 {
-    "name": "runet-id/client",
-    "description": "RUNET-ID Client",
+    "name": "runet-id/api-client",
+    "description": "RUNET-ID API Client",
     "type": "library",
-    "keywords": ["RUNET-ID"],
+    "keywords": ["RUNET-ID", "api-client", "psr7", "httplug"],
     "license": "MIT",
     "authors": [
         {"name": "Valentin Udaltsov", "email": "udaltsov@ruvents.com"}
