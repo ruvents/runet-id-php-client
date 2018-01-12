@@ -30,7 +30,7 @@ class RunetIdFactoryTest extends TestCase
 
     public function testErrorPlugin()
     {
-        $this->expectException(ServerErrorException::class);
+        $this->setExpectedException(ServerErrorException::class);
 
         $httpClient = new Client();
         $httpClient->addResponse(MessageFactoryDiscovery::find()->createResponse(500));

@@ -28,9 +28,7 @@ class RunetIdClientTest extends TestCase
 
     public function testDecodeResponseException()
     {
-        $this->expectException(JsonDecodeException::class);
-        $this->expectExceptionMessage('Syntax error');
-        $this->expectExceptionCode(JSON_ERROR_SYNTAX);
+        $this->setExpectedException(JsonDecodeException::class, 'Syntax error', JSON_ERROR_SYNTAX);
 
         $response = MessageFactoryDiscovery::find()->createResponse(200, null, [], 'non-json');
 
@@ -44,7 +42,7 @@ class RunetIdClientTest extends TestCase
 
     public function testDetectError()
     {
-        $this->expectException(ApiErrorException::class);
+        $this->setExpectedException(ApiErrorException::class);
 
         $response = MessageFactoryDiscovery::find()->createResponse(200, null, [], '{"Error":""}');
 
@@ -122,7 +120,7 @@ class RunetIdClientTest extends TestCase
 
     public function testMagicCallException()
     {
-        $this->expectException(\BadMethodCallException::class);
+        $this->setExpectedException(\BadMethodCallException::class);
 
         $client = new RunetIdClient(new Client());
         $client->nonExistingMethod();

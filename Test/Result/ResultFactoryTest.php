@@ -64,14 +64,14 @@ class ResultFactoryTest extends TestCase
 
     public function testNonExistingClass()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->setExpectedException(\InvalidArgumentException::class);
 
         ResultFactory::create([], 'NS\NonExistingClass');
     }
 
     public function testInvalidClass()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->setExpectedException(\InvalidArgumentException::class);
 
         ResultFactory::create([], self::class);
     }

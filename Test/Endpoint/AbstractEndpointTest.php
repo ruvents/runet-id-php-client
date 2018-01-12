@@ -67,7 +67,7 @@ class AbstractEndpointTest extends TestCase
 
     public function testNonSetterException()
     {
-        $this->expectException(\BadMethodCallException::class);
+        $this->setExpectedException(\BadMethodCallException::class);
 
         $this->getMockForAbstractClass(AbstractEndpoint::class, [], '', false)
             ->nonSetterMethod();
@@ -75,7 +75,7 @@ class AbstractEndpointTest extends TestCase
 
     public function testZeroArgumentsException()
     {
-        $this->expectException(\BadMethodCallException::class);
+        $this->setExpectedException(\BadMethodCallException::class);
 
         $this->getMockForAbstractClass(AbstractEndpoint::class, [], '', false)
             ->setSomething();
