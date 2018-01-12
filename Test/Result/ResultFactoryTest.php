@@ -71,7 +71,7 @@ final class ResultFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \RunetId\Client\Exception\ResultFactoryException
      * @expectedExceptionMessage Class "NS\NonExistingClass" does not exist.
      */
     public function testNonExistingClass()
@@ -80,7 +80,7 @@ final class ResultFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \RunetId\Client\Exception\ResultFactoryException
      * @expectedExceptionMessage Class "PHPUnit\Framework\TestCase" must extend "RunetId\Client\Result\AbstractResult".
      */
     public function testInvalidClass()
@@ -89,7 +89,7 @@ final class ResultFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \RunetId\Client\Exception\ResultFactoryException
      * @expectedExceptionMessage Data must be null or an array, string given.
      */
     public function testInvalidDataType()
