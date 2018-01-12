@@ -6,7 +6,7 @@ use RunetId\Client\Endpoint\AbstractEndpoint;
 use RunetId\Client\Result\User\SectionParticipationResult;
 
 /**
- * @method $this setRunetId(int $runetId)
+ * @method $this                        setRunetId(int $runetId)
  * @method SectionParticipationResult[] getResult()
  */
 final class SectionsEndpoint extends AbstractEndpoint

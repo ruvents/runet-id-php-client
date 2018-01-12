@@ -6,7 +6,7 @@ use RunetId\Client\Endpoint\AbstractEndpoint;
 use RunetId\Client\Result\Company\CompanyResult;
 
 /**
- * @method $this setCompanyId(int $companyId)
+ * @method $this         setCompanyId(int $companyId)
  * @method CompanyResult getResult()
  */
 final class GetEndpoint extends AbstractEndpoint

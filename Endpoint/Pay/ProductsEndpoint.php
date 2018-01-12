@@ -6,7 +6,7 @@ use RunetId\Client\Endpoint\AbstractEndpoint;
 use RunetId\Client\Result\Pay\ProductResult;
 
 /**
- * @method $this setOnlyPublic(bool $onlyPublic)
+ * @method $this           setOnlyPublic(bool $onlyPublic)
  * @method ProductResult[] getResult()
  */
 final class ProductsEndpoint extends AbstractEndpoint

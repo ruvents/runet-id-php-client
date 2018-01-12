@@ -6,8 +6,8 @@ use RunetId\Client\Endpoint\AbstractEndpoint;
 use RunetId\Client\Result\Program\HallResult;
 
 /**
- * @method $this setFromUpdateTime(string $fromUpdateTime)
- * @method $this setWithDeleted(bool $withDeleted)
+ * @method $this        setFromUpdateTime(string $fromUpdateTime)
+ * @method $this        setWithDeleted(bool $withDeleted)
  * @method HallResult[] getResult()
  */
 final class HallsEndpoint extends AbstractEndpoint

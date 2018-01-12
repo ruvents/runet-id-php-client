@@ -6,8 +6,8 @@ use RunetId\Client\Endpoint\AbstractPaginatedEndpoint;
 use RunetId\Client\Result\Company\ListResult;
 
 /**
- * @method $this setCode(string $code)
- * @method $this setQuery(string $query)
+ * @method $this      setCode(string $code)
+ * @method $this      setQuery(string $query)
  * @method ListResult getResult()
  */
 final class ListEndpoint extends AbstractPaginatedEndpoint

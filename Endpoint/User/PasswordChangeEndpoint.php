@@ -8,7 +8,7 @@ use RunetId\Client\Endpoint\SuccessResultTrait;
 /**
  * @method $this setEmail(string $email)
  * @method $this setPassword(string $password)
- * @method $this setDeviceType(string $deviceType) iOS|Android
+ * @method $this setDeviceType(string $deviceType)   iOS|Android
  * @method $this setDeviceToken(string $deviceToken)
  */
 final class PasswordChangeEndpoint extends AbstractPostEndpoint

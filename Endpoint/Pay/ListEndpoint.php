@@ -6,7 +6,7 @@ use RunetId\Client\Endpoint\AbstractEndpoint;
 use RunetId\Client\Result\Pay\ListResult;
 
 /**
- * @method $this setPayerRunetId(int $payerRunetId)
+ * @method $this      setPayerRunetId(int $payerRunetId)
  * @method ListResult getResult()
  */
 final class ListEndpoint extends AbstractEndpoint

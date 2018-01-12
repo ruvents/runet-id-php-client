@@ -6,8 +6,8 @@ use RunetId\Client\Endpoint\AbstractEndpoint;
 use RunetId\Client\Result\User\UserResult;
 
 /**
- * @method $this setEmail(string $email)
- * @method $this setRunetId(int $runetId)
+ * @method $this      setEmail(string $email)
+ * @method $this      setRunetId(int $runetId)
  * @method UserResult getResult()
  */
 final class GetEndpoint extends AbstractEndpoint

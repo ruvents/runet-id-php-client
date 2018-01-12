@@ -6,7 +6,7 @@ use RunetId\Client\Endpoint\AbstractEndpoint;
 use RunetId\Client\Result\User\AddressResult;
 
 /**
- * @method $this setRunetId(int $runetId)
+ * @method $this         setRunetId(int $runetId)
  * @method AddressResult getResult()
  */
 final class AddressEndpoint extends AbstractEndpoint
