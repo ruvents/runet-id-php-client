@@ -1,10 +1,12 @@
-# Официальный API клиент RUNET ID для PHP
+# Официальный API-клиент RUNET-ID для PHP
 
 [![GitHub license](https://img.shields.io/github/license/ruvents/runet-id-php-client.svg?style=flat-square)](https://github.com/ruvents/runet-id-php-client/blob/master/LICENSE)
 [![Travis branch](https://img.shields.io/travis/ruvents/runet-id-php-client/master.svg?style=flat-square)](https://travis-ci.org/ruvents/runet-id-php-client)
 [![Codecov branch](https://img.shields.io/codecov/c/github/ruvents/runet-id-php-client/master.svg?style=flat-square)](https://codecov.io/gh/ruvents/runet-id-php-client)
 [![Packagist](https://img.shields.io/packagist/v/runet-id/api-client.svg?style=flat-square)](https://packagist.org/packages/runet-id/api-client)
 [![Packagist Pre Release](https://img.shields.io/packagist/vpre/runet-id/api-client.svg?style=flat-square)](https://packagist.org/packages/runet-id/api-client)
+
+[Документация по API RUNET-ID.](https://runet-id.com/apidoc/)
 
 ## Установка
 
