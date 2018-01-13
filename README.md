@@ -20,7 +20,7 @@
 
 Вместо `guzzlehttp/psr7` вы можете использовать любую имплементацию PSR-7 сообщений, например, [zendframework/zend-diactoros](https://packagist.org/packages/zendframework/zend-diactoros) или [slim/slim](https://packagist.org/packages/slim/slim).
 
-## Базовое использование
+## Использование
 
 ```php
 <?php
@@ -111,7 +111,39 @@ $request = MessageFactoryDiscovery::find()
 $resultArray = $client->request($request);
 ```
 
-## Продвинутое использование
+### Выбрасываемые исключения
+
+```php
+<?php
+
+use RunetId\Client\RunetIdClientFactory;
+use RunetId\Client\Exception\JsonDecodeException;
+use RunetId\Client\Exception\RunetIdException;
+
+try {
+    RunetIdClientFactory::create('key', 'secret')
+        ->userGet()
+        ->setRunetId(1)
+        ->getResult();
+} catch (\Http\Client\Exception $exception) {
+    // выбрасывается при ошибке выполнения запроса
+    // http://docs.php-http.org/en/latest/httplug/exceptions.html
+} catch (JsonDecodeException $exception) {
+    // выбрасывается при ошибке парсинга JSON
+    $jsonErrorMsg = $exception->getMessage();
+    $jsonErrorCode = $exception->getCode();
+    $invalidString = $exception->getInvalidString();
+} catch (RunetIdException $exception) {
+     // выбрасывается при ошибке API RUNET-ID
+     $errorMessage = $exception->getMessage();
+     $errorCode = $exception->getCode();
+     // полный массив данных из ответа API
+     $data = $exception->getData();
+ }
+
+```
+
+### Конфигурация
 
 ```php
 <?php
