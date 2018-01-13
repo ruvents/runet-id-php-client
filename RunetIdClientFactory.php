@@ -5,6 +5,7 @@ namespace RunetId\Client;
 use Http\Client\Common\Plugin;
 use Http\Client\Common\PluginClient;
 use Http\Client\HttpClient;
+use Http\Discovery\Exception\NotFoundException;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\UriFactoryDiscovery;
 use Psr\Http\Message\UriInterface;
@@ -27,6 +28,9 @@ final class RunetIdClientFactory
      * @param string|UriInterface $defaultUri
      * @param Plugin[]            $plugins
      * @param null|HttpClient     $httpClient
+     *
+     * @throws NotFoundException When Discovery fails to find a factory
+     * @throws \LogicException   When invalid $defaultUri
      *
      * @return RunetIdClient
      */

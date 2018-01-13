@@ -46,6 +46,8 @@ final class CustomEndpoint extends AbstractPostEndpoint
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \RuntimeException When endpoint was not set
      */
     protected function getEndpoint()
     {
@@ -58,6 +60,8 @@ final class CustomEndpoint extends AbstractPostEndpoint
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \RuntimeException When class was not set
      */
     protected function getClass()
     {

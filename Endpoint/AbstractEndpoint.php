@@ -2,8 +2,12 @@
 
 namespace RunetId\Client\Endpoint;
 
+use Http\Discovery\Exception\NotFoundException;
 use Http\Discovery\MessageFactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
+use RunetId\Client\Exception\JsonDecodeException;
+use RunetId\Client\Exception\ResultFactoryException;
+use RunetId\Client\Exception\RunetIdException;
 use RunetId\Client\Result\AbstractResult;
 use RunetId\Client\Result\ResultFactory;
 use RunetId\Client\RunetIdClient;
@@ -26,6 +30,8 @@ abstract class AbstractEndpoint
     /**
      * @param string $name
      * @param array  $args
+     *
+     * @throws \BadMethodCallException
      *
      * @return $this
      */
@@ -92,6 +98,10 @@ abstract class AbstractEndpoint
     }
 
     /**
+     * @throws \Http\Client\Exception When an error happens during processing the request
+     * @throws JsonDecodeException    When json_decode fails
+     * @throws RunetIdException       When RUNET-ID API returns an error
+     *
      * @return mixed
      */
     public function getRawResult()
@@ -100,6 +110,11 @@ abstract class AbstractEndpoint
     }
 
     /**
+     * @throws \Http\Client\Exception When an error happens during processing the request
+     * @throws JsonDecodeException    When json_decode fails
+     * @throws RunetIdException       When RUNET-ID API returns an error
+     * @throws ResultFactoryException When ResultFactory fails to create an object
+     *
      * @return null|AbstractResult|array
      */
     public function getResult()
@@ -118,6 +133,8 @@ abstract class AbstractEndpoint
     abstract protected function getClass();
 
     /**
+     * @throws NotFoundException When Discovery fails to find a message factory
+     *
      * @return RequestInterface
      */
     protected function createRequest()

@@ -6,13 +6,13 @@ final class RunetIdException extends \RuntimeException implements ExceptionInter
 {
     private $data;
 
-    public function __construct($data = [])
+    public function __construct($invalidString = [])
     {
-        $this->data = $data;
+        $this->data = $invalidString;
 
         parent::__construct(
-            isset($data['Error']['Message']) ? $data['Error']['Message'] : '',
-            isset($data['Error']['Code']) ? (int) $data['Error']['Code'] : 0
+            isset($invalidString['Error']['Message']) ? $invalidString['Error']['Message'] : '',
+            isset($invalidString['Error']['Code']) ? (int) $invalidString['Error']['Code'] : 0
         );
     }
 
