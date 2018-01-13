@@ -3,6 +3,11 @@
 namespace RunetId\Client;
 
 use Http\Client\HttpClient;
+use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\StreamFactoryDiscovery;
+use Http\Message\RequestFactory;
+use Http\Message\StreamFactory;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use RunetId\Client\Endpoint\AbstractEndpoint;
@@ -43,10 +48,14 @@ use RunetId\Client\Exception\RunetIdException;
 final class RunetIdClient
 {
     private $httpClient;
+    private $requestFactory;
+    private $streamFactory;
 
-    public function __construct(HttpClient $httpClient)
+    public function __construct(HttpClient $httpClient = null, RequestFactory $requestFactory = null, StreamFactory $streamFactory = null)
     {
-        $this->httpClient = $httpClient;
+        $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
+        $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
+        $this->streamFactory = $streamFactory ?: StreamFactoryDiscovery::find();
     }
 
     /**
@@ -65,7 +74,7 @@ final class RunetIdClient
             throw new \BadMethodCallException(sprintf('Method %s::%s() is not defined.', static::class, $name));
         }
 
-        return new $class($this);
+        return new $class($this, $this->requestFactory, $this->streamFactory);
     }
 
     /**

@@ -3,22 +3,20 @@
 namespace RunetId\Client\Test\Endpoint;
 
 use GuzzleHttp\Psr7\Response;
-use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\Endpoint\AbstractEndpoint;
-use RunetId\Client\RunetIdClient;
 use RunetId\Client\Test\Fixtures\Result\TestResult;
+use RunetId\Client\Test\RunetIdClientTestTrait;
 
 final class AbstractEndpointTest extends TestCase
 {
+    use RunetIdClientTestTrait;
+
     public function testQuerySetters()
     {
-        $httpClient = new Client();
-        $httpClient->addResponse(new Response(200, [], 'null'));
+        $this->httpClient->addResponse(new Response(200, [], 'null'));
 
-        $client = new RunetIdClient($httpClient);
-
-        $endpoint = $this->getMockForAbstractClass(AbstractEndpoint::class, [$client]);
+        $endpoint = $this->getMockForAbstractClass(AbstractEndpoint::class, [$this->client]);
         $endpoint->method('getEndpoint')->willReturn('/test');
 
         $endpoint
@@ -38,7 +36,7 @@ final class AbstractEndpointTest extends TestCase
 
         $this->assertNull($endpoint->getRawResult());
 
-        $request = $httpClient->getLastRequest();
+        $request = $this->httpClient->getLastRequest();
         $this->assertSame('/test', $request->getUri()->getPath());
         $this->assertSame('a=1&b=2&c=3&d=4&E=5&Language=en', $request->getUri()->getQuery());
     }
@@ -47,12 +45,9 @@ final class AbstractEndpointTest extends TestCase
     {
         $data = ['Id' => 1];
 
-        $httpClient = new Client();
-        $httpClient->addResponse(new Response(200, [], json_encode($data)));
+        $this->httpClient->addResponse(new Response(200, [], json_encode($data)));
 
-        $client = new RunetIdClient($httpClient);
-
-        $endpoint = $this->getMockForAbstractClass(AbstractEndpoint::class, [$client]);
+        $endpoint = $this->getMockForAbstractClass(AbstractEndpoint::class, [$this->client]);
         $endpoint->method('getEndpoint')->willReturn('/test');
         $endpoint->method('getClass')->willReturn(TestResult::class);
 

@@ -3,24 +3,22 @@
 namespace RunetId\Client\Test\Endpoint;
 
 use GuzzleHttp\Psr7\Response;
-use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\Endpoint\AbstractPaginatedEndpoint;
-use RunetId\Client\RunetIdClient;
+use RunetId\Client\Test\RunetIdClientTestTrait;
 
 final class AbstractPaginatedEndpointTest extends TestCase
 {
+    use RunetIdClientTestTrait;
+
     public function test()
     {
         $offset = 'Items';
         $data = [$offset => [['Id' => 1]]];
 
-        $httpClient = new Client();
-        $httpClient->addResponse(new Response(200, [], json_encode($data)));
+        $this->httpClient->addResponse(new Response(200, [], json_encode($data)));
 
-        $client = new RunetIdClient($httpClient);
-
-        $endpoint = $this->getMockForAbstractClass(AbstractPaginatedEndpoint::class, [$client]);
+        $endpoint = $this->getMockForAbstractClass(AbstractPaginatedEndpoint::class, [$this->client]);
         $endpoint->method('getEndpoint')->willReturn('/test');
         $endpoint->method('getOffset')->willReturn($offset);
 
@@ -29,7 +27,7 @@ final class AbstractPaginatedEndpointTest extends TestCase
 
         $this->assertSame($data, $result);
 
-        $request = $httpClient->getLastRequest();
+        $request = $this->httpClient->getLastRequest();
 
         $this->assertSame('MaxResults=1', $request->getUri()->getQuery());
     }

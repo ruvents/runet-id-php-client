@@ -7,7 +7,12 @@ use Http\Client\Common\PluginClient;
 use Http\Client\HttpClient;
 use Http\Discovery\Exception\NotFoundException;
 use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\StreamFactoryDiscovery;
 use Http\Discovery\UriFactoryDiscovery;
+use Http\Message\RequestFactory;
+use Http\Message\StreamFactory;
+use Http\Message\UriFactory;
 use Psr\Http\Message\UriInterface;
 use RunetId\Client\HttpClient\RunetIdAuthentication;
 
@@ -15,11 +20,17 @@ final class RunetIdClientFactory
 {
     const DEFAULT_URI = 'http://api.runet-id.com';
 
-    /**
-     * @codeCoverageIgnore
-     */
-    private function __construct()
+    private $httpClient;
+    private $uriFactory;
+    private $requestFactory;
+    private $streamFactory;
+
+    public function __construct(HttpClient $httpClient = null, UriFactory $uriFactory = null, RequestFactory $requestFactory = null, StreamFactory $streamFactory = null)
     {
+        $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
+        $this->uriFactory = $uriFactory ?: UriFactoryDiscovery::find();
+        $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
+        $this->streamFactory = $streamFactory ?: StreamFactoryDiscovery::find();
     }
 
     /**
@@ -34,9 +45,9 @@ final class RunetIdClientFactory
      *
      * @return RunetIdClient
      */
-    public static function create($key, $secret, $defaultUri = self::DEFAULT_URI, array $plugins = [], HttpClient $httpClient = null)
+    public function create($key, $secret, $defaultUri = self::DEFAULT_URI, array $plugins = [], HttpClient $httpClient = null)
     {
-        $defaultUri = UriFactoryDiscovery::find()->createUri($defaultUri);
+        $defaultUri = $this->uriFactory->createUri($defaultUri);
         parse_str($defaultUri->getQuery(), $queryDefaults);
 
         $plugins = array_merge([
@@ -46,8 +57,8 @@ final class RunetIdClientFactory
             new Plugin\ErrorPlugin(),
         ], $plugins);
 
-        $httpClient = new PluginClient($httpClient ?: HttpClientDiscovery::find(), $plugins);
+        $httpClient = new PluginClient($httpClient ?: $this->httpClient, $plugins);
 
-        return new RunetIdClient($httpClient);
+        return new RunetIdClient($httpClient, $this->requestFactory, $this->streamFactory);
     }
 }

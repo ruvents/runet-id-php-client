@@ -4,7 +4,6 @@ namespace RunetId\Client\Test;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\Exception\JsonDecodeException;
 use RunetId\Client\Exception\RunetIdException;
@@ -13,16 +12,15 @@ use RunetId\Client\Test\Fixtures\HttpClient\PaginatedHttpClient;
 
 final class RunetIdClientTest extends TestCase
 {
+    use RunetIdClientTestTrait;
+
     public function testDecodeResponse()
     {
         $data = ['a' => 1, 'b' => ['x' => 'y']];
 
-        $httpClient = new Client();
-        $httpClient->addResponse(new Response(200, [], json_encode($data)));
+        $this->httpClient->addResponse(new Response(200, [], json_encode($data)));
 
-        $client = new RunetIdClient($httpClient);
-
-        $actual = $client->request(new Request('GET', '/'));
+        $actual = $this->client->request(new Request('GET', '/'));
         $this->assertSame($data, $actual);
     }
 
@@ -30,13 +28,10 @@ final class RunetIdClientTest extends TestCase
     {
         $invalidString = 'non-json';
 
-        $httpClient = new Client();
-        $httpClient->addResponse(new Response(200, [], $invalidString));
+        $this->httpClient->addResponse(new Response(200, [], $invalidString));
 
         try {
-            (new RunetIdClient($httpClient))
-                ->request(new Request('GET', '/'));
-
+            $this->client->request(new Request('GET', '/'));
             $this->fail('No exception thrown.');
         } catch (JsonDecodeException $exception) {
             $this->assertSame('Syntax error', $exception->getMessage());
@@ -50,13 +45,10 @@ final class RunetIdClientTest extends TestCase
      */
     public function testDetectErrorNoErrorData(array $data, $expectedMessage, $expectedCode)
     {
-        $httpClient = new Client();
-        $httpClient->addResponse(new Response(200, [], json_encode($data)));
+        $this->httpClient->addResponse(new Response(200, [], json_encode($data)));
 
         try {
-            (new RunetIdClient($httpClient))
-                ->request(new Request('GET', '/'));
-
+            $this->client->request(new Request('GET', '/'));
             $this->fail('No exception thrown.');
         } catch (RunetIdException $exception) {
             $this->assertSame($data, $exception->getData());
@@ -106,11 +98,10 @@ final class RunetIdClientTest extends TestCase
      */
     public function testGetEndpointClass($method, $expectedClass)
     {
-        $client = new RunetIdClient(new Client());
-        $getEndpointClass = new \ReflectionMethod($client, 'getEndpointClass');
+        $getEndpointClass = new \ReflectionMethod($this->client, 'getEndpointClass');
         $getEndpointClass->setAccessible(true);
 
-        $this->assertSame($expectedClass, $getEndpointClass->invoke($client, $method));
+        $this->assertSame($expectedClass, $getEndpointClass->invoke($this->client, $method));
     }
 
     public function getEndpointMethods()
@@ -125,9 +116,7 @@ final class RunetIdClientTest extends TestCase
         $class = 'RunetId\Client\Endpoint\Test\GetEndpoint';
         $this->getMockBuilder($class)->getMock();
 
-        $client = new RunetIdClient(new Client());
-
-        $this->assertInstanceOf($class, $client->testGet());
+        $this->assertInstanceOf($class, $this->client->testGet());
     }
 
     /**
@@ -136,7 +125,6 @@ final class RunetIdClientTest extends TestCase
      */
     public function testMagicCallException()
     {
-        $client = new RunetIdClient(new Client());
-        $client->nonExistingMethod();
+        $this->client->nonExistingMethod();
     }
 }

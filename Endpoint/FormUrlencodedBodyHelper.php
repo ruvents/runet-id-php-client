@@ -3,11 +3,18 @@
 namespace RunetId\Client\Endpoint;
 
 use Http\Discovery\StreamFactoryDiscovery;
+use Http\Message\StreamFactory;
 use Psr\Http\Message\RequestInterface;
 
 final class FormUrlencodedBodyHelper
 {
+    private $streamFactory;
     private $data = [];
+
+    public function __construct(StreamFactory $streamFactory = null)
+    {
+        $this->streamFactory = $streamFactory ?: StreamFactoryDiscovery::find();
+    }
 
     /**
      * @return array
@@ -61,7 +68,7 @@ final class FormUrlencodedBodyHelper
      */
     public function apply(RequestInterface $request)
     {
-        $body = StreamFactoryDiscovery::find()->createStream(http_build_query($this->data, null, '&'));
+        $body = $this->streamFactory->createStream(http_build_query($this->data, null, '&'));
 
         return $request
             ->withBody($body)

@@ -3,33 +3,18 @@
 namespace RunetId\Client\Test\Endpoint;
 
 use GuzzleHttp\Psr7\Response;
-use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
-use RunetId\Client\RunetIdClient;
 use RunetId\Client\Test\Fixtures\Result\TestResult;
+use RunetId\Client\Test\RunetIdClientTestTrait;
 
 final class CustomEndpointTest extends TestCase
 {
-    /**
-     * @var Client
-     */
-    private $httpClient;
-
-    /**
-     * @var RunetIdClient
-     */
-    private $client;
-
-    protected function setUp()
-    {
-        $this->httpClient = new Client();
-        $this->httpClient->setDefaultResponse(new Response(200, [], '[]'));
-
-        $this->client = new RunetIdClient($this->httpClient);
-    }
+    use RunetIdClientTestTrait;
 
     public function test()
     {
+        $this->httpClient->addResponse(new Response(200, [], '[]'));
+
         $result = $this->client
             ->custom()
             ->setMethod('PUT')
@@ -50,7 +35,10 @@ final class CustomEndpointTest extends TestCase
      */
     public function testNoEndpointException()
     {
-        $this->client->custom()
+        $this->httpClient->addResponse(new Response(200, [], '[]'));
+
+        $this->client
+            ->custom()
             ->getResult();
     }
 
@@ -60,7 +48,10 @@ final class CustomEndpointTest extends TestCase
      */
     public function testNoClassException()
     {
-        $this->client->custom()
+        $this->httpClient->addResponse(new Response(200, [], '[]'));
+
+        $this->client
+            ->custom()
             ->setEndpoint('/test')
             ->getResult();
     }

@@ -2,6 +2,8 @@
 
 namespace RunetId\Client\Endpoint;
 
+use Http\Message\RequestFactory;
+use Http\Message\StreamFactory;
 use RunetId\Client\RunetIdClient;
 
 /**
@@ -12,10 +14,10 @@ abstract class AbstractPostEndpoint extends AbstractEndpoint
     protected $method = 'POST';
     private $bodyHelper;
 
-    public function __construct(RunetIdClient $client)
+    public function __construct(RunetIdClient $client, RequestFactory $requestFactory = null, StreamFactory $streamFactory = null)
     {
-        parent::__construct($client);
-        $this->bodyHelper = new FormUrlencodedBodyHelper();
+        parent::__construct($client, $requestFactory, $streamFactory);
+        $this->bodyHelper = new FormUrlencodedBodyHelper($this->streamFactory);
     }
 
     /**

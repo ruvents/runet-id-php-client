@@ -3,21 +3,19 @@
 namespace RunetId\Client\Test\Endpoint;
 
 use GuzzleHttp\Psr7\Response;
-use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\Endpoint\AbstractPostEndpoint;
-use RunetId\Client\RunetIdClient;
+use RunetId\Client\Test\RunetIdClientTestTrait;
 
 final class AbstractPostEndpointTest extends TestCase
 {
+    use RunetIdClientTestTrait;
+
     public function testFormSetters()
     {
-        $httpClient = new Client();
-        $httpClient->addResponse(new Response(200, [], 'null'));
+        $this->httpClient->addResponse(new Response(200, [], 'null'));
 
-        $client = new RunetIdClient($httpClient);
-
-        $endpoint = $this->getMockForAbstractClass(AbstractPostEndpoint::class, [$client]);
+        $endpoint = $this->getMockForAbstractClass(AbstractPostEndpoint::class, [$this->client]);
         $endpoint->method('getEndpoint')->willReturn('/test');
 
         $endpoint
@@ -36,7 +34,8 @@ final class AbstractPostEndpointTest extends TestCase
             ->setLanguage('en')
             ->getRawResult();
 
-        $request = $httpClient->getLastRequest();
+        $request = $this->httpClient->getLastRequest();
+
         $this->assertSame('/test', $request->getUri()->getPath());
         $this->assertSame('Language=en', $request->getUri()->getQuery());
         $this->assertSame('a=1&b=2&c=3&d=4&E=5', (string) $request->getBody());

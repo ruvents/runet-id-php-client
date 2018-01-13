@@ -12,7 +12,7 @@
 
 Выполните установку пакетов:
 
-`$ composer require guzzlehttp/psr7 php-http/guzzle6-adapter runet-id/api-client:^3.0@dev`
+`$ composer require runet-id/api-client:^3.0@dev php-http/discovery guzzlehttp/psr7 php-http/guzzle6-adapter`
 
 ### Библиотеки для работы с HTTP-запросами
 
@@ -29,7 +29,8 @@ use Http\Discovery\MessageFactoryDiscovery;
 use RunetId\Client\RunetIdClientFactory;
 use RunetId\Client\Result\SuccessResult;
 
-$client = RunetIdClientFactory::create('key', 'secret');
+$factory = new RunetIdClientFactory();
+$client = $factory->create('key', 'secret');
 
 // запрос с использованием встроенных подсказок по endpoint-ам RUNET-ID
 $user = $client->userGet()
@@ -122,7 +123,8 @@ use RunetId\Client\Exception\RunetIdException;
 use RunetId\Client\RunetIdClientFactory;
 
 try {
-    RunetIdClientFactory::create('key', 'secret')
+    $factory = new RunetIdClientFactory();
+    $factory->create('key', 'secret')
         ->userGet()
         ->setRunetId(1)
         ->getResult();
@@ -154,14 +156,16 @@ try {
 use RunetId\Client\RunetIdClientFactory;
 
 // установка параметров query по умолчанию
-$client = RunetIdClientFactory::create(
+$factory = new RunetIdClientFactory();
+$client = $factory->create(
     'key',
     'secret',
     RunetIdClientFactory::DEFAULT_URI.'?Language=en&EventId=123'
 );
 
 // использование другого базового url
-$client = RunetIdClientFactory::create(
+$factory = new RunetIdClientFactory();
+$client = $factory->create(
     'key',
     'secret',
     'http://localhost:8000/endpoint-prefix/?Language=en'
@@ -183,7 +187,8 @@ $loggerPlugin = new LoggerPlugin(
     new \Monolog\Logger('http')
 );
 
-$client = RunetIdClientFactory::create(
+$factory = new RunetIdClientFactory();
+$client = $factory->create(
     'key',
     'secret',
     RunetIdClientFactory::DEFAULT_URI,

@@ -10,16 +10,31 @@ use RunetId\Client\RunetIdClientFactory;
 
 final class RunetIdClientFactoryTest extends TestCase
 {
+    /**
+     * @var Client
+     */
+    private $httpClient;
+
+    /**
+     * @var RunetIdClientFactory
+     */
+    private $factory;
+
+    protected function setUp()
+    {
+        $this->httpClient = new Client();
+        $this->factory = new RunetIdClientFactory($this->httpClient);
+    }
+
     public function testRequestPlugins()
     {
-        $httpClient = new Client();
-        $httpClient->addResponse(new Response(200, [], 'null'));
+        $this->httpClient->addResponse(new Response(200, [], 'null'));
 
-        $client = RunetIdClientFactory::create('key', 'secret', 'https://host.com/test?a=1&b=2', [], $httpClient);
+        $this->factory
+            ->create('key', 'secret', 'https://host.com/test?a=1&b=2')
+            ->request(new Request('GET', '/method?a=2'));
 
-        $client->request(new Request('GET', '/method?a=2'));
-
-        $request = $httpClient->getLastRequest();
+        $request = $this->httpClient->getLastRequest();
 
         $this->assertSame('https', $request->getUri()->getScheme());
         $this->assertSame('host.com', $request->getUri()->getHost());
@@ -33,11 +48,10 @@ final class RunetIdClientFactoryTest extends TestCase
      */
     public function testErrorPlugin()
     {
-        $httpClient = new Client();
-        $httpClient->addResponse(new Response(500));
+        $this->httpClient->addResponse(new Response(500));
 
-        $client = RunetIdClientFactory::create('key', 'secret', 'http://host.com', [], $httpClient);
-
-        $client->request(new Request('GET', '/'));
+        $this->factory
+            ->create('key', 'secret', 'http://host.com')
+            ->request(new Request('GET', '/'));
     }
 }

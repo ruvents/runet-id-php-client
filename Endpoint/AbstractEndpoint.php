@@ -4,6 +4,9 @@ namespace RunetId\Client\Endpoint;
 
 use Http\Discovery\Exception\NotFoundException;
 use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\StreamFactoryDiscovery;
+use Http\Message\RequestFactory;
+use Http\Message\StreamFactory;
 use Psr\Http\Message\RequestInterface;
 use RunetId\Client\Exception\JsonDecodeException;
 use RunetId\Client\Exception\ResultFactoryException;
@@ -18,12 +21,16 @@ use RunetId\Client\RunetIdClient;
 abstract class AbstractEndpoint
 {
     protected $client;
+    protected $requestFactory;
+    protected $streamFactory;
     protected $method = 'GET';
     private $queryHelper;
 
-    public function __construct(RunetIdClient $client)
+    public function __construct(RunetIdClient $client, RequestFactory $requestFactory = null, StreamFactory $streamFactory = null)
     {
         $this->client = $client;
+        $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
+        $this->streamFactory = $streamFactory ?: StreamFactoryDiscovery::find();
         $this->queryHelper = new QueryHelper();
     }
 
@@ -139,7 +146,7 @@ abstract class AbstractEndpoint
      */
     protected function createRequest()
     {
-        $request = MessageFactoryDiscovery::find()->createRequest($this->method, $this->getEndpoint());
+        $request = $this->requestFactory->createRequest($this->method, $this->getEndpoint());
 
         return $this->queryHelper->apply($request);
     }
