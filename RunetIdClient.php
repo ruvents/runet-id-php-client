@@ -10,6 +10,7 @@ use Http\Message\RequestFactory;
 use Http\Message\StreamFactory;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use RunetId\Client\Endpoint\QueryHelper;
 use RunetId\Client\Exception\JsonDecodeException;
 use RunetId\Client\Exception\RunetIdException;
 
@@ -106,7 +107,7 @@ final class RunetIdClient
      */
     public function requestPaginated(RequestInterface $request, $offset, $limit = -1)
     {
-        $queryHelper = new Endpoint\QueryHelper();
+        $queryHelper = new QueryHelper();
         $limited = $limit >= 0;
         $data = [$offset => []];
 
