@@ -14,11 +14,11 @@
 
 `$ composer require runet-id/api-client:^3.0@dev php-http/discovery guzzlehttp/psr7 php-http/guzzle6-adapter`
 
-### Библиотеки для работы с HTTP-запросами
+Пакет `php-http/discovery` необходим для быстрого старта. Позднее Discovery можно заменить явными инъекциями HTTP-клиента и PSR-7 фабрик. Подробнее в разделе __Удаление библиотеки Discovery__.
 
-Вместо `php-http/guzzle6-adapter` вы можете использовать [любую имплементацию клиента](https://packagist.org/providers/php-http/client-implementation).
+Вместо `guzzlehttp/psr7` вы можете использовать [любую имплементацию PSR-7 сообщений](https://packagist.org/providers/psr/http-message-implementation), например, [zendframework/zend-diactoros](https://packagist.org/packages/zendframework/zend-diactoros).
 
-Вместо `guzzlehttp/psr7` вы можете использовать любую имплементацию PSR-7 сообщений, например, [zendframework/zend-diactoros](https://packagist.org/packages/zendframework/zend-diactoros).
+Вместо `php-http/guzzle6-adapter` вы можете использовать [любую имплементацию HTTP-клиента](https://packagist.org/providers/php-http/client-implementation), например, [cURL client](https://packagist.org/packages/php-http/curl-client) или [Socket client](https://packagist.org/packages/php-http/socket-client).
 
 ## Использование
 
@@ -184,7 +184,7 @@ use RunetId\Client\RunetIdClientFactory;
 
 $loggerPlugin = new LoggerPlugin(
     // здесь может быть любая имплементация Psr\Log\LoggerInterface
-    new \Monolog\Logger('http')
+    new Monolog\Logger('http')
 );
 
 $factory = new RunetIdClientFactory();
@@ -197,7 +197,28 @@ $client = $factory->create(
 );
 ```
 
-5-ым аргументом фабрики можно передать готовый объект `Http\Client\HttpClient` вместо того, чтобы полагаться на `Http\Discovery\HttpClientDiscovery`.
+5-ым аргументом можно передать специально сконфигурированный для создаваемого клиента экземпляр `Http\Client\HttpClient`, который будет декорирован фабрикой для работы с RUNET-ID. По умолчанию используется HTTP-клиент, переданный в конструктор фабрики или клиент, найденный Discovery.
+
+### Удаление библиотеки Discovery
+
+Библиотека [php-http/discovery](http://php-http.readthedocs.io/en/latest/discovery.html) позволяет находить установленные имплементации HTTP-клиента и PSR-7 фабрик и, например, использовать их в качестве инъекций по умолчанию.
+
+Зависимость от `php-http/discovery` мягкая. Чтобы удалить данный пакет из сборки, необходимо явно передать в конструктор фабрики имплементации HTTP-клиента и PSR-7 фабрик.
+
+Например, если в проекте используется Guzzle 6, инициализация фабрики будет выглядеть следующим образом:
+
+```php
+<?php
+
+$httpClient = new Http\Adapter\Guzzle6\Client();
+$uriFactory = new Http\Message\UriFactory\GuzzleUriFactory();
+$requestFactory = new Http\Message\MessageFactory\GuzzleMessageFactory();
+$streamFactory = new Http\Message\StreamFactory\GuzzleStreamFactory();
+
+$runetIdFactory = new RunetId\Client\RunetIdClientFactory($httpClient, $uriFactory, $requestFactory, $streamFactory);
+```
+
+После этого можно удалить пакет Discovery `composer remove php-http/discovery`.
 
 ## Тестирование
 
