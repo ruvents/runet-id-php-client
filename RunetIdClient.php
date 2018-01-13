@@ -10,8 +10,6 @@ use Http\Message\RequestFactory;
 use Http\Message\StreamFactory;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use RunetId\Client\Endpoint\AbstractEndpoint;
-use RunetId\Client\Endpoint\QueryHelper;
 use RunetId\Client\Exception\JsonDecodeException;
 use RunetId\Client\Exception\RunetIdException;
 
@@ -64,7 +62,7 @@ final class RunetIdClient
      *
      * @throws \BadMethodCallException
      *
-     * @return AbstractEndpoint
+     * @return Endpoint\AbstractEndpoint
      */
     public function __call($name, array $arguments)
     {
@@ -108,7 +106,7 @@ final class RunetIdClient
      */
     public function requestPaginated(RequestInterface $request, $offset, $limit = -1)
     {
-        $queryHelper = new QueryHelper();
+        $queryHelper = new Endpoint\QueryHelper();
         $limited = $limit >= 0;
         $data = [$offset => []];
 
