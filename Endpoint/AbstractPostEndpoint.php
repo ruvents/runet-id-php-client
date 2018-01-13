@@ -17,7 +17,7 @@ abstract class AbstractPostEndpoint extends AbstractEndpoint
     public function __construct(RunetIdClient $client, RequestFactory $requestFactory = null, StreamFactory $streamFactory = null)
     {
         parent::__construct($client, $requestFactory, $streamFactory);
-        $this->bodyHelper = new FormUrlencodedBodyHelper($this->streamFactory);
+        $this->bodyHelper = new FormUrlencodedBodyHelper($streamFactory);
     }
 
     /**
