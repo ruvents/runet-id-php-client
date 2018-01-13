@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
+use RunetId\Client\Exception\JsonDecodeException;
 use RunetId\Client\Exception\RunetIdException;
 use RunetId\Client\RunetIdClient;
 use RunetId\Client\Test\Fixtures\HttpClient\PaginatedHttpClient;
@@ -25,19 +26,23 @@ final class RunetIdClientTest extends TestCase
         $this->assertSame($data, $actual);
     }
 
-    /**
-     * @expectedException \RunetId\Client\Exception\JsonDecodeException
-     * @expectedExceptionMessage Syntax error
-     * @expectedExceptionCode    4
-     */
     public function testDecodeResponseException()
     {
+        $invalidString = 'non-json';
+
         $httpClient = new Client();
-        $httpClient->addResponse(new Response(200, [], 'non-json'));
+        $httpClient->addResponse(new Response(200, [], $invalidString));
 
-        $client = new RunetIdClient($httpClient);
+        try {
+            (new RunetIdClient($httpClient))
+                ->request(new Request('GET', '/'));
 
-        $client->request(new Request('GET', '/'));
+            $this->fail('No exception thrown.');
+        } catch (JsonDecodeException $exception) {
+            $this->assertSame('Syntax error', $exception->getMessage());
+            $this->assertSame(JSON_ERROR_SYNTAX, $exception->getCode());
+            $this->assertSame($invalidString, $exception->getInvalidString());
+        }
     }
 
     /**

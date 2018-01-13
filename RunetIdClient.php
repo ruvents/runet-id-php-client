@@ -53,6 +53,8 @@ final class RunetIdClient
      * @param string $name
      * @param array  $arguments
      *
+     * @throws \BadMethodCallException
+     *
      * @return AbstractEndpoint
      */
     public function __call($name, array $arguments)
@@ -69,6 +71,10 @@ final class RunetIdClient
     /**
      * @param RequestInterface $request
      *
+     * @throws \Http\Client\Exception When an error happens during processing the request
+     * @throws JsonDecodeException    When json_decode fails
+     * @throws RunetIdException       When RUNET-ID API returns an error
+     *
      * @return mixed
      */
     public function request(RequestInterface $request)
@@ -84,6 +90,10 @@ final class RunetIdClient
      * @param RequestInterface $request
      * @param string           $offset
      * @param int              $limit
+     *
+     * @throws \Http\Client\Exception When an error happens during processing the request
+     * @throws JsonDecodeException    When json_decode fails
+     * @throws RunetIdException       When RUNET-ID API returns an error
      *
      * @return mixed
      */
@@ -118,14 +128,17 @@ final class RunetIdClient
     /**
      * @param ResponseInterface $response
      *
+     * @throws JsonDecodeException When json_decode fails
+     *
      * @return mixed
      */
     private function decodeResponse(ResponseInterface $response)
     {
-        $data = json_decode((string) $response->getBody(), true);
+        $string = (string) $response->getBody();
+        $data = json_decode($string, true);
 
-        if (JSON_ERROR_NONE !== $code = json_last_error()) {
-            throw new JsonDecodeException(json_last_error_msg(), $code);
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            throw new JsonDecodeException($string);
         }
 
         return $data;
@@ -134,7 +147,7 @@ final class RunetIdClient
     /**
      * @param mixed $data
      *
-     * @throws RunetIdException
+     * @throws RunetIdException When RUNET-ID API returns an error
      *
      * @return void
      */
