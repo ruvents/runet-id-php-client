@@ -116,9 +116,10 @@ $resultArray = $client->request($request);
 ```php
 <?php
 
-use RunetId\Client\RunetIdClientFactory;
 use RunetId\Client\Exception\JsonDecodeException;
+use RunetId\Client\Exception\ResultFactoryException;
 use RunetId\Client\Exception\RunetIdException;
+use RunetId\Client\RunetIdClientFactory;
 
 try {
     RunetIdClientFactory::create('key', 'secret')
@@ -139,8 +140,10 @@ try {
      $errorCode = $exception->getCode();
      // полный массив данных из ответа API
      $data = $exception->getData();
- }
-
+} catch (ResultFactoryException $exception) {
+     // выбрасывается при ошибке создания объекта результата
+     // если такое исключение будет выброшено, напишите issue
+}
 ```
 
 ### Конфигурация
