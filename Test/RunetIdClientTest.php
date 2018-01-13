@@ -4,6 +4,9 @@ namespace RunetId\Client\Test;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use phpDocumentor\Reflection\DocBlock\Tags\Method;
+use phpDocumentor\Reflection\DocBlockFactory;
+use phpDocumentor\Reflection\Types\Object_;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\Exception\JsonDecodeException;
 use RunetId\Client\Exception\RunetIdException;
@@ -111,12 +114,22 @@ final class RunetIdClientTest extends TestCase
         yield ['userGetPost', 'RunetId\Client\Endpoint\User\GetPostEndpoint'];
     }
 
-    public function testMagicCall()
+    public function testMagicEndpointCalls()
     {
-        $class = 'RunetId\Client\Endpoint\Test\GetEndpoint';
-        $this->getMockBuilder($class)->getMock();
+        /** @var Method[] $methods */
+        $methods = DocBlockFactory::createInstance()
+            ->create((new \ReflectionClass($this->client))->getDocComment())
+            ->getTagsByName('method');
 
-        $this->assertInstanceOf($class, $this->client->testGet());
+        foreach ($methods as $method) {
+            $name = $method->getMethodName();
+
+            /** @var Object_ $type */
+            $type = $method->getReturnType();
+            $class = 'RunetId\Client'.$type->getFqsen();
+
+            $this->assertInstanceOf($class, $this->client->$name());
+        }
     }
 
     /**
