@@ -12,7 +12,7 @@ use RunetId\Client\Test\Fixtures\HttpClient\PaginatedHttpClient;
 
 final class RunetIdClientTest extends TestCase
 {
-    use RunetIdClientTestTrait;
+    use ClientTestTrait;
 
     public function testDecodeResponse()
     {

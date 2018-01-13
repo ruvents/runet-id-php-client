@@ -4,12 +4,12 @@ namespace RunetId\Client\Test\Endpoint;
 
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use RunetId\Client\Test\ClientTestTrait;
 use RunetId\Client\Test\Fixtures\Endpoint\SuccessTestEndpoint;
-use RunetId\Client\Test\RunetIdClientTestTrait;
 
 final class SuccessTraitTest extends TestCase
 {
-    use RunetIdClientTestTrait;
+    use ClientTestTrait;
 
     public function test()
     {

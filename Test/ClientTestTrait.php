@@ -5,7 +5,10 @@ namespace RunetId\Client\Test;
 use Http\Mock\Client;
 use RunetId\Client\RunetIdClient;
 
-trait RunetIdClientTestTrait
+/**
+ * @internal
+ */
+trait ClientTestTrait
 {
     /**
      * @var Client

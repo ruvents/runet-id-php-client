@@ -5,11 +5,11 @@ namespace RunetId\Client\Test\Endpoint;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\Endpoint\AbstractPostEndpoint;
-use RunetId\Client\Test\RunetIdClientTestTrait;
+use RunetId\Client\Test\ClientTestTrait;
 
 final class AbstractPostEndpointTest extends TestCase
 {
-    use RunetIdClientTestTrait;
+    use ClientTestTrait;
 
     public function testFormSetters()
     {

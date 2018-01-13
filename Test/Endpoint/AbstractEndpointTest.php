@@ -5,12 +5,12 @@ namespace RunetId\Client\Test\Endpoint;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\Endpoint\AbstractEndpoint;
+use RunetId\Client\Test\ClientTestTrait;
 use RunetId\Client\Test\Fixtures\Result\TestResult;
-use RunetId\Client\Test\RunetIdClientTestTrait;
 
 final class AbstractEndpointTest extends TestCase
 {
-    use RunetIdClientTestTrait;
+    use ClientTestTrait;
 
     public function testQuerySetters()
     {
