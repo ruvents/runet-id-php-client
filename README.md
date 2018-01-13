@@ -18,7 +18,7 @@
 
 Вместо `php-http/guzzle6-adapter` вы можете использовать [любую имплементацию клиента](https://packagist.org/providers/php-http/client-implementation).
 
-Вместо `guzzlehttp/psr7` вы можете использовать любую имплементацию PSR-7 сообщений, например, [zendframework/zend-diactoros](https://packagist.org/packages/zendframework/zend-diactoros) или [slim/slim](https://packagist.org/packages/slim/slim).
+Вместо `guzzlehttp/psr7` вы можете использовать любую имплементацию PSR-7 сообщений, например, [zendframework/zend-diactoros](https://packagist.org/packages/zendframework/zend-diactoros).
 
 ## Использование
 
