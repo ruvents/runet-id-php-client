@@ -2,7 +2,7 @@
 
 namespace RunetId\Client\Exception;
 
-final class RunetIdException extends \RuntimeException implements ExceptionInterface
+final class RunetIdException extends \RuntimeException
 {
     private $data;
 
