@@ -10,7 +10,7 @@
 
 ## Установка
 
-Выполните установку пакетов:
+Выполните установку пакетов.
 
 `$ composer require runet-id/api-client:^3.0@dev php-http/discovery guzzlehttp/psr7 php-http/guzzle6-adapter`
 
@@ -32,23 +32,23 @@ use RunetId\Client\Result\SuccessResult;
 $factory = new RunetIdClientFactory();
 $client = $factory->create('key', 'secret');
 
-// запрос с использованием встроенных подсказок по endpoint-ам RUNET-ID
+// Запрос с использованием встроенных подсказок по endpoint-ам RUNET-ID.
 $user = $client->userGet()
     // метод setLanguage доступен во всех endpoint-ах
     ->setLanguage('en')
     ->setRunetId(1)
     ->getResult();
 
-// метод getResult возвращает размеченный phpDoc-свойствами класс
+// Метод getResult возвращает размеченный phpDoc-свойствами класс.
 $runetId = $user->RunetId;
 $company = $user->Work->Company->Name;
 
-// чтобы получить исходный массив, используйте метод getRawResult
+// Чтобы получить исходный массив, используйте метод getRawResult.
 $arrayUser = $client->userGet()
     ->setRunetId(1)
     ->getRawResult();
 
-// endpoint-ы можно использовать повторно
+// Endpoint-ы можно использовать повторно.
 $roleChanger = $client
     ->eventChangeRole()
     ->setRoleId(1);
@@ -63,22 +63,23 @@ $success2 = $roleChanger
     ->getResult()
     ->Success;
 
-// данные можно передавать в свободной форме
+// Данные можно передавать в свободной форме.
 $company = $client
     ->companyGet()
-    // перезаписывает все параметры
+    // Метод setQueryData() перезаписывает все параметры.
     ->setQueryData([
         'CompanyId' => 1,
     ])
-    // добавляет параметры (используется array_merge())
+    // Метод addQueryData() добавляет параметры, используя array_merge().
     ->addQueryData([
         'Language' => 'en',
     ])
-    // устанавливает значение конкретного параметра
+    // Метод setQueryValue() устанавливает значение конкретного параметра,
+    // перезаписывая предыдущее значение.
     ->setQueryValue('EventId', 123)
     ->getResult();
 
-// для POST запросов также доступны аналогичные методы (add|set)FormData и setFormValue
+// Для POST запросов также доступны аналогичные методы (add|set)FormData() и setFormValue().
 $client
     ->userEdit()
     ->setFormData([
@@ -91,7 +92,9 @@ $client
     ->setFormValue('LastName', 'Фамилия')
     ->getResult();
 
-// чтобы сконструировать запрос от начала до конца, можно воспользоваться классом CustomEndpoint
+// Чтобы сконструировать запрос от начала до конца,
+// можно воспользоваться классом CustomEndpoint.
+
 /** @var SuccessResult $result */
 $result = $client
     ->custom()
@@ -105,8 +108,8 @@ $result = $client
     ->setClass(SuccessResult::class)
     ->getResult();
 
-// отправка свободного Psr\Http\Message\RequestInterface
-// (schema, host и заголовки аутентификации будут подставлены автоматически)
+// Отправка свободного Psr\Http\Message\RequestInterface осуществляется через метод request().
+// Schema, host и заголовки аутентификации будут подставлены автоматически.
 $request = MessageFactoryDiscovery::find()
     ->createRequest('GET', '/user/get?RunetId=1');
 $resultArray = $client->request($request);
@@ -159,12 +162,38 @@ $resultArray = $client->request($request);
     } catch (RunetId\Client\Exception\RunetIdException $exception) {
         $errorMessage = $exception->getMessage();
         $errorCode = $exception->getCode();
-        // полный массив данных из ответа API
+        // Метод getData() возвращает полный массив данных из ответа API.
         $data = $exception->getData();
     }
     ```
 
 1. `RunetId\Client\Exception\ResultFactoryException` будет выброшено при ошибке создания объекта результата. В этом случае просим вас создать issue.
+
+### Подробнее об объектах Result
+
+```php
+<?php
+
+$result = $client
+    ->userGet()
+    ->setRunetId(1)
+    ->getResult();
+
+// Вы можете обращаться к неразмеченным свойствам.
+$result->SomeNewProperty;
+
+// Для простоты при запросе несуществующих в исходном массиве данных
+// объект не будет генерировать исключения. Вместо этого будет возвращен null.
+$result->SomeNonExistingProperty; // null
+$value = $result->SomeNonExistingProperty ?: 'Default';
+
+// Чтобы проверить существование свойства в исходном массиве, используйте exists().
+$result->exists('Status');
+
+// Результат является обходимым.
+foreach ($result as $key => $value) {
+}
+```
 
 ### Конфигурация
 
@@ -173,7 +202,7 @@ $resultArray = $client->request($request);
 
 use RunetId\Client\RunetIdClientFactory;
 
-// установка параметров query по умолчанию
+// Установка параметров query по умолчанию.
 $factory = new RunetIdClientFactory();
 $client = $factory->create(
     'key',
@@ -181,7 +210,7 @@ $client = $factory->create(
     RunetIdClientFactory::DEFAULT_URI.'?Language=en&EventId=123'
 );
 
-// использование другого базового url
+// Использование другого базового url.
 $factory = new RunetIdClientFactory();
 $client = $factory->create(
     'key',
@@ -201,7 +230,7 @@ use Http\Client\Common\Plugin\LoggerPlugin;
 use RunetId\Client\RunetIdClientFactory;
 
 $loggerPlugin = new LoggerPlugin(
-    // здесь может быть любая имплементация Psr\Log\LoggerInterface
+    // Здесь может быть любая имплементация Psr\Log\LoggerInterface.
     new Monolog\Logger('http')
 );
 
@@ -210,7 +239,7 @@ $client = $factory->create(
     'key',
     'secret',
     RunetIdClientFactory::DEFAULT_URI,
-    // массив Http\Client\Common\Plugin[]
+    // Http\Client\Common\Plugin[]
     [$loggerPlugin]
 );
 ```
