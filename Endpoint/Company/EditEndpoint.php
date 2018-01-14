@@ -6,14 +6,19 @@ use RunetId\Client\Endpoint\AbstractPostEndpoint;
 use RunetId\Client\Endpoint\SuccessResultTrait;
 
 /**
- * @method $this setAttributes(array $attributes)
- * @method $this setCode(string $code)
  * @method $this setCompanyId(int $companyId)
- * @method $this setContactAddress(array $contactAddress)
- * @method $this setFullInfo(string $fullInfo)
+ * @method $this setCode(string $code)
+ * @method $this setName(string $name)
  * @method $this setFullName(string $fullName)
  * @method $this setInfo(string $info)
- * @method $this setName(string $name)
+ * @method $this setFullInfo(string $fullInfo)
+ * @method $this setLogo(string $logo)
+ * @method $this setContactAddress(array $contactAddress)
+ * @method $this setContactSite(string $contactSite)
+ * @method $this setContactEmail(string $contactEmail)
+ * @method $this setContactPhone(string $contactPhone)
+ * @method $this setServiceAccounts(array $serviceAccounts)
+ * @method $this setAttributes(array $attributes)
  */
 final class EditEndpoint extends AbstractPostEndpoint
 {
