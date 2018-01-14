@@ -38,6 +38,7 @@ use RunetId\Client\Exception\RunetIdException;
  * @method Endpoint\Section\FavoritesEndpoint          sectionFavorites()
  * @method Endpoint\Section\InfoEndpoint               sectionInfo()
  * @method Endpoint\Section\ListEndpoint               sectionList()
+ * @method Endpoint\Section\ReportsEndpoint            sectionReports()
  * @method Endpoint\Section\UserEndpoint               sectionUser()
  * @method Endpoint\User\AddressEndpoint               userAddress()
  * @method Endpoint\User\AuthEndpoint                  userAuth()
