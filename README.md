@@ -184,11 +184,12 @@ $result->SomeNewProperty;
 
 // Для простоты при запросе несуществующих в исходном массиве данных
 // объект не будет генерировать исключения. Вместо этого будет возвращен null.
-$result->SomeNonExistingProperty; // null
-$value = $result->SomeNonExistingProperty ?: 'Default';
+// Это может быть полезно при обращении к свойствам,
+// которые могут быть не включены в выдачу вследствие недостаточных прав.
+$result->SomeLimitedAccessProperty; // null
 
 // Чтобы проверить существование свойства в исходном массиве, используйте exists().
-$result->exists('Status');
+$hasStatus = $result->exists('Status');
 
 // Результат является обходимым.
 foreach ($result as $key => $value) {
