@@ -37,6 +37,8 @@ final class AbstractEndpointTest extends TestCase
         $this->assertNull($endpoint->getRawResult());
 
         $request = $this->httpClient->getLastRequest();
+
+        $this->assertSame('GET', $request->getMethod());
         $this->assertSame('/test', $request->getUri()->getPath());
         $this->assertSame('a=1&b=2&c=3&d=4&E=5&Language=en', $request->getUri()->getQuery());
     }

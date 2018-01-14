@@ -36,6 +36,7 @@ final class AbstractPostEndpointTest extends TestCase
 
         $request = $this->httpClient->getLastRequest();
 
+        $this->assertSame('POST', $request->getMethod());
         $this->assertSame('/test', $request->getUri()->getPath());
         $this->assertSame('Language=en', $request->getUri()->getQuery());
         $this->assertSame('a=1&b=2&c=3&d=4&E=5', (string) $request->getBody());
