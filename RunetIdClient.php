@@ -127,15 +127,9 @@ final class RunetIdClient
                 $queryHelper->setValue('MaxResults', $maxResults);
             }
 
-            $oldData = $data;
             $request = $queryHelper->apply($request);
-            $data = $this->request($request);
 
-            foreach ($data as $key => &$value) {
-                if (is_array($value) && isset($oldData[$key])) {
-                    $value = array_merge($oldData[$key], $value);
-                }
-            }
+            $data = $this->mergePaginatedData($data, $this->request($request));
         } while (isset($data['NextPageToken']) && (!$limited || $limit > 0));
 
         return $data;
@@ -172,6 +166,23 @@ final class RunetIdClient
         if (isset($data['Error'])) {
             throw new RunetIdException($data);
         }
+    }
+
+    /**
+     * @param array $old
+     * @param array $new
+     *
+     * @return array
+     */
+    private function mergePaginatedData(array $old, array $new)
+    {
+        foreach ($new as $key => &$value) {
+            if (is_array($value) && isset($old[$key])) {
+                $value = array_merge($old[$key], $value);
+            }
+        }
+
+        return $new;
     }
 
     /**
