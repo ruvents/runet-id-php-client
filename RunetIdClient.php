@@ -18,6 +18,8 @@ use RunetId\Client\Exception\RunetIdException;
  * @method Endpoint\Company\EditEndpoint               companyEdit()
  * @method Endpoint\Company\GetEndpoint                companyGet()
  * @method Endpoint\Company\ListEndpoint               companyList()
+ * @method Endpoint\Competence\ResultEndpoint          competenceResult()
+ * @method Endpoint\Competence\TestsEndpoint           competenceTests()
  * @method Endpoint\Event\ChangeRoleEndpoint           eventChangeRole()
  * @method Endpoint\Event\CompaniesEndpoint            eventCompanies()
  * @method Endpoint\Event\HallsEndpoint                eventHalls()
