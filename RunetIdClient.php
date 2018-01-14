@@ -34,6 +34,7 @@ use RunetId\Client\Exception\RunetIdException;
  * @method Endpoint\Pay\ProductsEndpoint               payProducts()
  * @method Endpoint\Pay\UrlEndpoint                    payUrl()
  * @method Endpoint\Section\AddFavoriteEndpoint        sectionAddFavorite()
+ * @method Endpoint\Section\DeleteFavoriteEndpoint     sectionDeleteFavorite()
  * @method Endpoint\Section\FavoritesEndpoint          sectionFavorites()
  * @method Endpoint\Section\InfoEndpoint               sectionInfo()
  * @method Endpoint\Section\ListEndpoint               sectionList()
