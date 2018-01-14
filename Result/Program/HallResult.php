@@ -2,6 +2,8 @@
 
 namespace RunetId\Client\Result\Program;
 
+use RunetId\Client\Result\AbstractResult;
+
 /**
  * @property int         $Id
  * @property null|string $Title
@@ -9,6 +11,6 @@ namespace RunetId\Client\Result\Program;
  * @property null|int    $Order
  * @property null|bool   $Deleted
  */
-final class HallResult
+final class HallResult extends AbstractResult
 {
 }
