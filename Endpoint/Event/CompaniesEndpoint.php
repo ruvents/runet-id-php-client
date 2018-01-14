@@ -15,7 +15,7 @@ final class CompaniesEndpoint extends AbstractEndpoint
      */
     protected function getEndpoint()
     {
-        return '/event/сompanies';
+        return '/event/companies';
     }
 
     /**
