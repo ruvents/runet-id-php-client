@@ -29,6 +29,23 @@ final class CustomEndpointTest extends TestCase
         $this->assertInstanceOf(TestResult::class, $result);
     }
 
+    public function testGetHasNoBody()
+    {
+        $this->httpClient->addResponse(new Response(200, [], '[]'));
+
+        $this->client
+            ->custom()
+            ->setMethod('GET')
+            ->setEndpoint('/test')
+            ->setFormData(['a' => 1])
+            ->getRawResult();
+
+        $request = $this->httpClient->getLastRequest();
+
+        $this->assertSame('', (string) $request->getBody());
+        $this->assertSame('', $request->getHeaderLine('Content-Type'));
+    }
+
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Endpoint was not set. Use setEndpoint().

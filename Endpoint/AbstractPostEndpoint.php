@@ -62,7 +62,13 @@ abstract class AbstractPostEndpoint extends AbstractEndpoint
      */
     protected function createRequest()
     {
-        return $this->bodyHelper->apply(parent::createRequest());
+        $request = parent::createRequest();
+
+        if (in_array(strtoupper($this->method), ['POST', 'PUT', 'PATCH'], true)) {
+            $request = $this->bodyHelper->apply($request);
+        }
+
+        return $request;
     }
 
     /**
