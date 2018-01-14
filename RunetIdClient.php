@@ -33,6 +33,7 @@ use RunetId\Client\Exception\RunetIdException;
  * @method Endpoint\Pay\ListEndpoint                   payList()
  * @method Endpoint\Pay\ProductsEndpoint               payProducts()
  * @method Endpoint\Pay\UrlEndpoint                    payUrl()
+ * @method Endpoint\Section\AddFavoriteEndpoint        addFavorite()
  * @method Endpoint\Section\InfoEndpoint               sectionInfo()
  * @method Endpoint\Section\ListEndpoint               sectionList()
  * @method Endpoint\Section\UserEndpoint               sectionUser()
