@@ -27,27 +27,11 @@ abstract class AbstractResult implements \IteratorAggregate
     /**
      * @param int|string $offset
      *
-     * @throws \OutOfBoundsException
-     *
      * @return mixed
      */
     public function __get($offset)
     {
-        if (!$this->exists($offset)) {
-            $message = sprintf('Offset "%s" does not exist in the result array.', $offset);
-
-            if ([] === $this->data) {
-                $message .= ' The result array is empty.';
-            } elseif (1 === count($this->data)) {
-                $message .= sprintf(' "%s" offset is available.', key($this->data));
-            } else {
-                $message .= sprintf(' "%s" offsets are available.', implode('", "', array_keys($this->data)));
-            }
-
-            throw new \OutOfBoundsException($message);
-        }
-
-        return $this->data[$offset];
+        return isset($this->data[$offset]) ? $this->data[$offset] : null;
     }
 
     /**

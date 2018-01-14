@@ -21,39 +21,13 @@ final class AbstractResultTest extends TestCase
 
         $this->assertFalse($result->exists('Collection'));
         $this->assertFalse(isset($result->Collection));
+        $this->assertNull($result->Collection);
     }
 
     public function testIterator()
     {
         $data = ['Id' => 1, 'Name' => null];
         $this->assertSame($data, iterator_to_array(new TestResult($data)));
-    }
-
-    /**
-     * @expectedException \OutOfBoundsException
-     * @expectedExceptionMessage Offset "Id" does not exist in the result array. The result array is empty.
-     */
-    public function testMagicGetOffsetFromEmptyException()
-    {
-        (new TestResult([]))->Id;
-    }
-
-    /**
-     * @expectedException \OutOfBoundsException
-     * @expectedExceptionMessage Offset "Id" does not exist in the result array. "Collection" offset is available.
-     */
-    public function testMagicGetOffsetFromSingleOffsetException()
-    {
-        (new TestResult(['Collection' => []]))->Id;
-    }
-
-    /**
-     * @expectedException \OutOfBoundsException
-     * @expectedExceptionMessage Offset "Id" does not exist in the result array. "Collection", "Name" offsets are available.
-     */
-    public function testMagicGetOffsetFromMultipleOffsetsException()
-    {
-        (new TestResult(['Collection' => [], 'Name' => 'name']))->Id;
     }
 
     /**
