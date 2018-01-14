@@ -103,7 +103,6 @@ final class RunetIdClient
 
     /**
      * @param RequestInterface $request
-     * @param string           $offset
      * @param int              $limit
      *
      * @throws \Http\Client\Exception When an error happens during processing the request
@@ -112,29 +111,30 @@ final class RunetIdClient
      *
      * @return mixed
      */
-    public function requestPaginated(RequestInterface $request, $offset, $limit = -1)
+    public function requestPaginated(RequestInterface $request, $limit = -1)
     {
         $queryHelper = new QueryHelper();
         $limited = $limit >= 0;
-        $data = [$offset => []];
+        $data = [];
 
         do {
-            $pageToken = isset($data['NextPageToken']) ? $data['NextPageToken'] : null;
-            $maxResults = $limited && $limit < 200 ? $limit : 200;
-
-            $request = $queryHelper
-                ->setValue('PageToken', $pageToken)
-                ->setValue('MaxResults', $maxResults)
-                ->apply($request);
-
-            $newData = $this->request($request);
+            $queryHelper->setValue('PageToken', isset($data['NextPageToken']) ? $data['NextPageToken'] : null);
 
             if ($limited) {
-                $limit -= count($newData[$offset]);
+                $maxResults = $limit < 200 ? $limit : 200;
+                $limit -= $maxResults;
+                $queryHelper->setValue('MaxResults', $maxResults);
             }
 
-            $newData[$offset] = array_merge($data[$offset], $newData[$offset]);
-            $data = $newData;
+            $oldData = $data;
+            $request = $queryHelper->apply($request);
+            $data = $this->request($request);
+
+            foreach ($data as $key => &$value) {
+                if (is_array($value) && isset($oldData[$key])) {
+                    $value = array_merge($oldData[$key], $value);
+                }
+            }
         } while (isset($data['NextPageToken']) && (!$limited || $limit > 0));
 
         return $data;

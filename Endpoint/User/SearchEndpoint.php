@@ -21,14 +21,6 @@ final class SearchEndpoint extends AbstractPaginatedEndpoint
     /**
      * {@inheritdoc}
      */
-    protected function getOffset()
-    {
-        return 'Users';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getClass()
     {
         return UsersResult::class;

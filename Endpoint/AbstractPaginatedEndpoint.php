@@ -14,7 +14,7 @@ abstract class AbstractPaginatedEndpoint extends AbstractEndpoint
      */
     public function getRawResult()
     {
-        return $this->client->requestPaginated($this->createRequest(), $this->getOffset(), $this->limit);
+        return $this->client->requestPaginated($this->createRequest(), $this->limit);
     }
 
     /**
@@ -28,9 +28,4 @@ abstract class AbstractPaginatedEndpoint extends AbstractEndpoint
 
         return $this;
     }
-
-    /**
-     * @return string
-     */
-    abstract protected function getOffset();
 }

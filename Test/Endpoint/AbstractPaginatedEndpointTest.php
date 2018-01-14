@@ -13,14 +13,12 @@ final class AbstractPaginatedEndpointTest extends TestCase
 
     public function test()
     {
-        $offset = 'Items';
-        $data = [$offset => [['Id' => 1]]];
+        $data = ['Items' => [['Id' => 1]]];
 
         $this->httpClient->addResponse(new Response(200, [], json_encode($data)));
 
         $endpoint = $this->getMockForAbstractClass(AbstractPaginatedEndpoint::class, [$this->client]);
         $endpoint->method('getEndpoint')->willReturn('/test');
-        $endpoint->method('getOffset')->willReturn($offset);
 
         $result = $endpoint->setLimit(1)
             ->getRawResult();

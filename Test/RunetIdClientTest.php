@@ -72,14 +72,14 @@ final class RunetIdClientTest extends TestCase
      */
     public function testRequestPaginated($total, $limit, $expectedItemsCount, $expectedRequestsCount)
     {
-        $httpClient = new PaginatedHttpClient('Users', $total);
+        $httpClient = new PaginatedHttpClient($total);
         $client = new RunetIdClient($httpClient);
 
-        $data = $client->requestPaginated(new Request('GET', '/'), 'Users', $limit);
+        $data = $client->requestPaginated(new Request('GET', '/'), $limit);
 
         $this->assertCount($expectedRequestsCount, $httpClient->getRequests());
-        $this->assertCount($expectedItemsCount, $data['Users']);
-        $this->assertSame(0 === $expectedItemsCount ? [] : range(1, $expectedItemsCount), $data['Users']);
+        $this->assertCount($expectedItemsCount, $data['Items']);
+        $this->assertSame($expectedItemsCount ? range(0, $expectedItemsCount - 1) : [], $data['Items']);
     }
 
     public function getRequestPaginatedParams()
