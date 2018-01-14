@@ -114,39 +114,57 @@ $resultArray = $client->request($request);
 
 ### Выбрасываемые исключения
 
-```php
-<?php
+1. `Http\Client\Exception` будет выброшено при ошибке выполнения запроса. [Подробнее о классах исключений HTTPLUG](http://docs.php-http.org/en/latest/httplug/exceptions.html). В частности, 
+    
+    - `Http\Client\Common\Exception\ClientErrorException` будет выброшено при коде ответа 4xx,
+    - `Http\Client\Common\Exception\ServerErrorException` будет выброшено при коде ответа 5xx.
+    
+    ```php
+    <?php
+ 
+    try {
+        $client->userGet()
+            ->setRunetId(1)
+            ->getResult();
+    } catch (Http\Client\Common\Exception\ServerErrorException $exception) {
+        $statusCode = $exception->getResponse()->getStatusCode();
+    }
+    ```
 
-use RunetId\Client\Exception\JsonDecodeException;
-use RunetId\Client\Exception\ResultFactoryException;
-use RunetId\Client\Exception\RunetIdException;
-use RunetId\Client\RunetIdClientFactory;
+1. `RunetId\Client\Exception\JsonDecodeException` будет выброшено при ошибке парсинга JSON.
+    
+    ```php
+    <?php
+ 
+    try {
+        $client->userGet()
+            ->setRunetId(1)
+            ->getResult();
+    } catch (RunetId\Client\Exception\JsonDecodeException $exception) {
+        $jsonErrorMsg = $exception->getMessage();
+        $jsonErrorCode = $exception->getCode();
+        $invalidString = $exception->getInvalidString();
+    }
+    ```
 
-try {
-    $factory = new RunetIdClientFactory();
-    $factory->create('key', 'secret')
-        ->userGet()
-        ->setRunetId(1)
-        ->getResult();
-} catch (\Http\Client\Exception $exception) {
-    // выбрасывается при ошибке выполнения запроса
-    // http://docs.php-http.org/en/latest/httplug/exceptions.html
-} catch (JsonDecodeException $exception) {
-    // выбрасывается при ошибке парсинга JSON
-    $jsonErrorMsg = $exception->getMessage();
-    $jsonErrorCode = $exception->getCode();
-    $invalidString = $exception->getInvalidString();
-} catch (RunetIdException $exception) {
-     // выбрасывается при ошибке API RUNET-ID
-     $errorMessage = $exception->getMessage();
-     $errorCode = $exception->getCode();
-     // полный массив данных из ответа API
-     $data = $exception->getData();
-} catch (ResultFactoryException $exception) {
-     // выбрасывается при ошибке создания объекта результата
-     // если такое исключение будет выброшено, напишите issue
-}
-```
+1. `RunetId\Client\Exception\RunetIdException` будет выброшено при ошибке API RUNET-ID.
+    
+    ```php
+    <?php
+ 
+    try {
+        $client->userGet()
+            ->setRunetId(1)
+            ->getResult();
+    } catch (RunetId\Client\Exception\RunetIdException $exception) {
+        $errorMessage = $exception->getMessage();
+        $errorCode = $exception->getCode();
+        // полный массив данных из ответа API
+        $data = $exception->getData();
+    }
+    ```
+
+1. `RunetId\Client\Exception\ResultFactoryException` будет выброшено при ошибке создания объекта результата. В этом случае просим вас создать issue.
 
 ### Конфигурация
 
