@@ -13,17 +13,14 @@ final class AbstractResultTest extends TestCase
 
         $this->assertTrue($result->exists('Id'));
         $this->assertTrue(isset($result->Id));
-        $this->assertNotEmpty($result->Id);
         $this->assertSame(1, $result->Id);
 
         $this->assertTrue($result->exists('Name'));
         $this->assertFalse(isset($result->Name));
-        $this->assertEmpty($result->Name);
         $this->assertNull($result->Name);
 
         $this->assertFalse($result->exists('Collection'));
         $this->assertFalse(isset($result->Collection));
-        $this->assertEmpty($result->Collection);
     }
 
     public function testIterator()
