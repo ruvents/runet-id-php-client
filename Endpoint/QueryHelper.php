@@ -9,7 +9,7 @@ final class QueryHelper
     private $data = [];
 
     /**
-     * @param string|array $data
+     * @param array|string $data
      */
     public function __construct($data = [])
     {
@@ -26,6 +26,17 @@ final class QueryHelper
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    public function getValue($name, $default = null)
+    {
+        return isset($this->data[$name]) ? $this->data[$name] : $default;
     }
 
     /**

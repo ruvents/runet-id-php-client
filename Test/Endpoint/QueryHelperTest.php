@@ -36,5 +36,8 @@ final class QueryHelperTest extends TestCase
 
         $this->assertSame($helper->getData(), ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4]);
         $this->assertSame('x=1&a=1&b=2&c=3&d=4', $request->getUri()->getQuery());
+        $this->assertSame(1, $helper->getValue('a'));
+        $this->assertNull($helper->getValue('z'));
+        $this->assertSame(10, $helper->getValue('z', 10));
     }
 }
