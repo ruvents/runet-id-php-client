@@ -70,12 +70,12 @@ final class RunetIdClientTest extends TestCase
     /**
      * @dataProvider getRequestPaginatedParams
      */
-    public function testRequestPaginated($total, $limit, $expectedItemsCount, $expectedRequestsCount)
+    public function testRequestPaginated($total, $maxResults, $expectedItemsCount, $expectedRequestsCount)
     {
         $httpClient = new PaginatedHttpClient($total);
         $client = new RunetIdClient($httpClient);
 
-        $data = $client->requestPaginated(new Request('GET', '/'), $limit);
+        $data = $client->request(new Request('GET', '/?MaxResults='.$maxResults));
 
         $this->assertCount($expectedRequestsCount, $httpClient->getRequests());
         $this->assertCount($expectedItemsCount, $data['Items']);
@@ -89,11 +89,11 @@ final class RunetIdClientTest extends TestCase
         yield [10, 3, 3, 1];
         yield [10, 10, 10, 1];
         yield [10, 1000, 10, 1];
-        yield [10, -1, 10, 1];
+        yield [10, null, 10, 1];
         yield [1000, 1000, 1000, 5];
         yield [1000, 1004, 1000, 5];
         yield [1000, 201, 201, 2];
-        yield [1000, -1, 1000, 5];
+        yield [1000, -2, 1000, 5];
     }
 
     /**

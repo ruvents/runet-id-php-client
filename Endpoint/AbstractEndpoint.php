@@ -105,6 +105,16 @@ abstract class AbstractEndpoint
     }
 
     /**
+     * @param int $maxResults
+     *
+     * @return $this
+     */
+    public function setMaxResults($maxResults)
+    {
+        return $this->setQueryValue('MaxResults', $maxResults);
+    }
+
+    /**
      * @throws \Http\Client\Exception When an error happens during processing the request
      * @throws JsonDecodeException    When json_decode fails
      * @throws RunetIdException       When RUNET-ID API returns an error

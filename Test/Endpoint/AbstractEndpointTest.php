@@ -32,7 +32,8 @@ final class AbstractEndpointTest extends TestCase
             ])
             // test magic setter
             ->setE(5)
-            ->setLanguage('en');
+            ->setLanguage('en')
+            ->setMaxResults(100);
 
         $this->assertNull($endpoint->getRawResult());
 
@@ -40,7 +41,7 @@ final class AbstractEndpointTest extends TestCase
 
         $this->assertSame('GET', $request->getMethod());
         $this->assertSame('/test', $request->getUri()->getPath());
-        $this->assertSame('a=1&b=2&c=3&d=4&E=5&Language=en', $request->getUri()->getQuery());
+        $this->assertSame('a=1&b=2&c=3&d=4&E=5&Language=en&MaxResults=100', $request->getUri()->getQuery());
     }
 
     public function testGetResult()

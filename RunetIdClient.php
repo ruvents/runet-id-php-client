@@ -99,38 +99,9 @@ final class RunetIdClient
         $data = $this->decodeResponse($response);
         $this->detectError($data);
 
-        return $data;
-    }
-
-    /**
-     * @param RequestInterface $request
-     * @param int              $limit
-     *
-     * @throws \Http\Client\Exception When an error happens during processing the request
-     * @throws JsonDecodeException    When json_decode fails
-     * @throws RunetIdException       When RUNET-ID API returns an error
-     *
-     * @return mixed
-     */
-    public function requestPaginated(RequestInterface $request, $limit = -1)
-    {
-        $queryHelper = new QueryHelper();
-        $limited = $limit >= 0;
-        $data = [];
-
-        do {
-            $queryHelper->setValue('PageToken', isset($data['NextPageToken']) ? $data['NextPageToken'] : null);
-
-            if ($limited) {
-                $maxResults = $limit < 200 ? $limit : 200;
-                $limit -= $maxResults;
-                $queryHelper->setValue('MaxResults', $maxResults);
-            }
-
-            $request = $queryHelper->apply($request);
-
-            $data = $this->mergePaginatedData($data, $this->request($request));
-        } while (isset($data['NextPageToken']) && (!$limited || $limit > 0));
+        if (isset($data['NextPageToken'])) {
+            return $this->requestPaginated($data, $request);
+        }
 
         return $data;
     }
@@ -166,6 +137,39 @@ final class RunetIdClient
         if (isset($data['Error'])) {
             throw new RunetIdException($data);
         }
+    }
+
+    /**
+     * @param array            $data
+     * @param RequestInterface $request
+     *
+     * @return array
+     */
+    private function requestPaginated(array $data, RequestInterface $request)
+    {
+        parse_str($request->getUri()->getQuery(), $query);
+
+        $limit = isset($query['MaxResults']) && is_numeric($query['MaxResults']) && $query['MaxResults'] >= 0
+            ? $query['MaxResults'] - 200
+            : null;
+
+        $queryHelper = new QueryHelper();
+
+        while (isset($data['NextPageToken']) && (null === $limit || $limit > 0)) {
+            $queryHelper->setValue('PageToken', $data['NextPageToken']);
+
+            if (null !== $limit) {
+                $maxResults = $limit < 200 ? $limit : 200;
+                $limit -= $maxResults;
+                $queryHelper->setValue('MaxResults', $maxResults);
+            }
+
+            $request = $queryHelper->apply($request);
+
+            $data = $this->mergePaginatedData($data, $this->request($request));
+        }
+
+        return $data;
     }
 
     /**

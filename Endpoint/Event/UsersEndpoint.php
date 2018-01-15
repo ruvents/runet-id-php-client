@@ -2,13 +2,13 @@
 
 namespace RunetId\Client\Endpoint\Event;
 
-use RunetId\Client\Endpoint\AbstractPaginatedEndpoint;
+use RunetId\Client\Endpoint\AbstractEndpoint;
 use RunetId\Client\Result\Event\UsersResult;
 
 /**
  * @method UsersResult getResult()
  */
-final class UsersEndpoint extends AbstractPaginatedEndpoint
+final class UsersEndpoint extends AbstractEndpoint
 {
     /**
      * {@inheritdoc}
