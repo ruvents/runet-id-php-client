@@ -8,7 +8,17 @@ use RunetId\Client\Endpoint\QueryHelper;
 
 final class QueryHelperTest extends TestCase
 {
-    public function test()
+    public function testConstructFromArray()
+    {
+        $this->assertSame(['a' => '1'], (new QueryHelper(['a' => '1']))->getData());
+    }
+
+    public function testConstructFromString()
+    {
+        $this->assertSame(['a' => '1'], (new QueryHelper('a=1'))->getData());
+    }
+
+    public function testSetters()
     {
         $helper = (new QueryHelper())
             ->setData([

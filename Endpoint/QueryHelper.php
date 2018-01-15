@@ -9,6 +9,18 @@ final class QueryHelper
     private $data = [];
 
     /**
+     * @param string|array $data
+     */
+    public function __construct($data = [])
+    {
+        if (is_string($data)) {
+            parse_str($data, $data);
+        }
+
+        $this->data = $data;
+    }
+
+    /**
      * @return array
      */
     public function getData()
