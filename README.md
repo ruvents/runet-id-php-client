@@ -93,7 +93,7 @@ $client
     ->getResult();
 
 // Чтобы сконструировать запрос от начала до конца,
-// можно воспользоваться классом CustomEndpoint.
+// можно воспользоваться методом custom().
 
 /** @var SuccessResult $result */
 $result = $client
@@ -113,6 +113,23 @@ $result = $client
 $request = MessageFactoryDiscovery::find()
     ->createRequest('GET', '/user/get?RunetId=1');
 $resultArray = $client->request($request);
+```
+
+### Получение постраничных данных
+
+При обнаружении в ответе ключа `NextPageToken` клиент автоматически итеративно получает все данные в соответствии со значением `MaxResults`.
+
+Если `MaxResults` не был задан, то запрашиваются постранично все имеющиеся данные.
+
+```php
+<?php
+
+// При условии наличия 900 регистраций на мероприятии и серверном ограничении в 200 сущностей:
+
+$endpoint = $client->eventUsers();
+
+count($endpoint->getResult()->Users); // 900 (5 запросов),
+count($endpoint->setMaxResults(340)->getResult()->Users); // 340 (2 запроса).
 ```
 
 ### Выбрасываемые исключения
