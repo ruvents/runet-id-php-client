@@ -95,7 +95,7 @@ abstract class AbstractEndpoint
     }
 
     /**
-     * @param string $language
+     * @param null|string $language
      *
      * @return $this
      */
@@ -105,7 +105,7 @@ abstract class AbstractEndpoint
     }
 
     /**
-     * @param int $maxResults
+     * @param null|int $maxResults
      *
      * @return $this
      */

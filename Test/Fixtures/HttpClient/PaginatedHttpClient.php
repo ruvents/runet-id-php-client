@@ -8,7 +8,9 @@ use Psr\Http\Message\RequestInterface;
 
 final class PaginatedHttpClient implements HttpClient
 {
-    private $total;
+    const MAX_RESULTS_MAX = 200;
+
+    private $items;
     private $requests = [];
 
     /**
@@ -20,7 +22,7 @@ final class PaginatedHttpClient implements HttpClient
             throw new \InvalidArgumentException('Total must be a non-negative integer.');
         }
 
-        $this->total = $total;
+        $this->items = 0 === $total ? [] : range(1, $total);
     }
 
     /**
@@ -34,11 +36,12 @@ final class PaginatedHttpClient implements HttpClient
 
         $pageToken = isset($query['PageToken']) ? (int) $query['PageToken'] : 0;
 
-        $maxResults = isset($query['MaxResults']) && is_numeric($query['MaxResults'])
-            ? ($query['MaxResults'] >= 0 && $query['MaxResults'] < 200 ? (int) $query['MaxResults'] : 200)
-            : 200;
+        $maxResults = min(
+            isset($query['MaxResults']) ? (int) $query['MaxResults'] : self::MAX_RESULTS_MAX,
+            self::MAX_RESULTS_MAX
+        );
 
-        return new Response(200, [], json_encode($this->getData($pageToken, $maxResults)));
+        return new Response(200, [], json_encode($this->getResult($pageToken, $maxResults)));
     }
 
     /**
@@ -55,33 +58,20 @@ final class PaginatedHttpClient implements HttpClient
      *
      * @return array
      */
-    private function getData($pageToken, $maxResults)
+    private function getResult($pageToken, $maxResults)
     {
-        if (0 === $this->total) {
-            return [
-                'Items' => [],
-            ];
+        $items = $maxResults >= 0
+            ? array_slice($this->items, $pageToken, $maxResults)
+            : $this->items;
+
+        $result = [
+            'Items' => $items,
+        ];
+
+        if (count($items) === $maxResults) {
+            $result['NextPageToken'] = $pageToken + $maxResults;
         }
 
-        if (0 === $maxResults) {
-            return [
-                'Items' => [],
-                'NextPageToken' => 0,
-            ];
-        }
-
-        $lastHigh = $this->total - 1;
-        $high = $pageToken + $maxResults - 1;
-
-        if ($high < $lastHigh) {
-            return [
-                'Items' => range($pageToken, $high),
-                'NextPageToken' => $high + 1,
-            ];
-        }
-
-        return [
-                'Items' => range($pageToken, $lastHigh),
-            ];
+        return $result;
     }
 }

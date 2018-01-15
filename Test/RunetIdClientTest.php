@@ -75,11 +75,14 @@ final class RunetIdClientTest extends TestCase
         $httpClient = new PaginatedHttpClient($total);
         $client = new RunetIdClient($httpClient);
 
-        $data = $client->request(new Request('GET', '/?MaxResults='.$maxResults));
+        $query = http_build_query(['MaxResults' => $maxResults], null, '&');
+        $data = $client->request(new Request('GET', '/?'.$query));
+
+        $expectedItems = $expectedItemsCount <= 0 ? [] : range(1, $expectedItemsCount);
 
         $this->assertCount($expectedRequestsCount, $httpClient->getRequests());
         $this->assertCount($expectedItemsCount, $data['Items']);
-        $this->assertSame($expectedItemsCount ? range(0, $expectedItemsCount - 1) : [], $data['Items']);
+        $this->assertSame($expectedItems, $data['Items']);
     }
 
     public function getRequestPaginatedParams()
@@ -91,9 +94,20 @@ final class RunetIdClientTest extends TestCase
         yield [10, 1000, 10, 1];
         yield [10, null, 10, 1];
         yield [1000, 1000, 1000, 5];
-        yield [1000, 1004, 1000, 5];
-        yield [1000, 201, 201, 2];
-        yield [1000, -2, 1000, 5];
+        yield [1000, 1004, 1000, 6];
+        yield [1000, 211, 211, 2];
+        yield [1000, null, 1000, 6];
+        yield [1000, -1, 1000, 1];
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Failed to detect paginated data key.
+     */
+    public function testPaginatedItemsKeyException()
+    {
+        $this->httpClient->addResponse(new Response(200, [], '{"NextPageToken": "abc"}'));
+        $this->client->request(new Request('GET', '/'));
     }
 
     /**

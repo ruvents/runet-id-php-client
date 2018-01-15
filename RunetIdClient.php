@@ -95,13 +95,25 @@ final class RunetIdClient
      */
     public function request(RequestInterface $request)
     {
-        $response = $this->httpClient->sendRequest($request);
-        $data = $this->decodeResponse($response);
-        $this->detectError($data);
+        $data = $this->doRequest($request);
 
         if (isset($data['NextPageToken'])) {
             return $this->requestPaginated($data, $request);
         }
+
+        return $data;
+    }
+
+    /**
+     * @param RequestInterface $request
+     *
+     * @return mixed
+     */
+    private function doRequest(RequestInterface $request)
+    {
+        $response = $this->httpClient->sendRequest($request);
+        $data = $this->decodeResponse($response);
+        $this->detectError($data);
 
         return $data;
     }
@@ -147,46 +159,51 @@ final class RunetIdClient
      */
     private function requestPaginated(array $data, RequestInterface $request)
     {
-        parse_str($request->getUri()->getQuery(), $query);
+        $key = $this->getPaginatedItemsKey($data);
+        $items = $data[$key];
+        $queryHelper = new QueryHelper($request->getUri()->getQuery());
+        $maxResults = $queryHelper->getValue('MaxResults');
 
-        $limit = isset($query['MaxResults']) && is_numeric($query['MaxResults']) && $query['MaxResults'] >= 0
-            ? $query['MaxResults'] - 200
-            : null;
+        if (is_numeric($maxResults) && $maxResults >= 0) {
+            $maxResults -= count($items);
+        } else {
+            $maxResults = null;
+        }
 
-        $queryHelper = new QueryHelper();
+        while (isset($data['NextPageToken']) && (null === $maxResults || $maxResults > 0)) {
+            $request = $queryHelper
+                ->setValue('PageToken', $data['NextPageToken'])
+                ->setValue('MaxResults', $maxResults)
+                ->apply($request);
 
-        while (isset($data['NextPageToken']) && (null === $limit || $limit > 0)) {
-            $queryHelper->setValue('PageToken', $data['NextPageToken']);
+            $data = $this->doRequest($request);
+            $newItems = $data[$key];
+            $items = $data[$key] = array_merge($items, $newItems);
 
-            if (null !== $limit) {
-                $maxResults = $limit < 200 ? $limit : 200;
-                $limit -= $maxResults;
-                $queryHelper->setValue('MaxResults', $maxResults);
+            if (null !== $maxResults) {
+                $maxResults -= count($newItems);
             }
-
-            $request = $queryHelper->apply($request);
-
-            $data = $this->mergePaginatedData($data, $this->request($request));
         }
 
         return $data;
     }
 
     /**
-     * @param array $old
-     * @param array $new
+     * @param array $data
      *
-     * @return array
+     * @throws \LogicException
+     *
+     * @return int|string
      */
-    private function mergePaginatedData(array $old, array $new)
+    private function getPaginatedItemsKey(array $data)
     {
-        foreach ($new as $key => &$value) {
-            if (is_array($value) && isset($old[$key])) {
-                $value = array_merge($old[$key], $value);
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                return $key;
             }
         }
 
-        return $new;
+        throw new \LogicException('Failed to detect paginated data key.');
     }
 
     /**

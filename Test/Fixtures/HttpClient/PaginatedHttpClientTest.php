@@ -28,6 +28,7 @@ final class PaginatedHttpClientTest extends TestCase
         if (null === $expectedNextPageToken) {
             $this->assertFalse(isset($data['NextPageToken']));
         } else {
+            $this->assertTrue(isset($data['NextPageToken']));
             $this->assertSame($expectedNextPageToken, $data['NextPageToken']);
         }
     }
@@ -36,15 +37,16 @@ final class PaginatedHttpClientTest extends TestCase
     {
         yield [0, 5, null, [], null];
         yield [10, 0, null, [], 0];
-        yield [10, 5, null, range(0, 4), 5];
-        yield [10, 5, 5, range(5, 9), null];
-        yield [10, 9, null, range(0, 8), 9];
-        yield [10, null, null, range(0, 9), null];
-        yield [10, 400, null, range(0, 9), null];
-        yield [10, 12, null, range(0, 9), null];
-        yield [300, null, null, range(0, 199), 200];
-        yield [300, 220, null, range(0, 199), 200];
-        yield [300, 100, null, range(0, 99), 100];
+        yield [10, 5, null, range(1, 5), 5];
+        yield [10, 5, 5, range(6, 10), 10];
+        yield [10, 9, null, range(1, 9), 9];
+        yield [10, null, null, range(1, 10), null];
+        yield [10, 400, null, range(1, 10), null];
+        yield [10, 12, null, range(1, 10), null];
+        yield [300, null, null, range(1, 200), 200];
+        yield [300, 220, null, range(1, 200), 200];
+        yield [300, 100, null, range(1, 100), 100];
+        yield [300, -1, null, range(1, 300), null];
     }
 
     public function testGetRequests()
