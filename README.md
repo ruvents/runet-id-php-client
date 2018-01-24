@@ -12,7 +12,7 @@
 
 Выполните установку пакетов.
 
-`$ composer require runet-id/api-client:^3.0@dev php-http/discovery guzzlehttp/psr7 php-http/guzzle6-adapter`
+`$ composer require runet-id/api-client:^3.0@beta php-http/discovery guzzlehttp/psr7 php-http/guzzle6-adapter`
 
 Пакет `php-http/discovery` необходим для быстрого старта. Позднее Discovery можно заменить явными инъекциями HTTP-клиента и PSR-7 фабрик. Подробнее в разделе __Удаление библиотеки Discovery__.
 
