@@ -29,6 +29,7 @@ use RunetId\Client\Exception\RunetIdException;
  * @method Endpoint\Pay\CouponEndpoint                 payCoupon()
  * @method Endpoint\Pay\DeleteEndpoint                 payDelete()
  * @method Endpoint\Pay\EditEndpoint                   payEdit()
+ * @method Endpoint\Pay\FilterListEndpoint             payFilterList()
  * @method Endpoint\Pay\ItemsEndpoint                  payItems()
  * @method Endpoint\Pay\ListEndpoint                   payList()
  * @method Endpoint\Pay\ProductsEndpoint               payProducts()
