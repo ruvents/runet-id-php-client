@@ -51,6 +51,14 @@ final class ResultFactoryTest extends TestCase
         }
     }
 
+    public function testGenerator()
+    {
+        $result = ResultFactory::create($this->generateItems(), TestResult::class.'[]');
+
+        $this->assertInstanceOf(\Generator::class, $result);
+        $this->assertContainsOnlyInstancesOf(TestResult::class, $result);
+    }
+
     public function testMap()
     {
         $collectionData = [[], []];
@@ -90,10 +98,26 @@ final class ResultFactoryTest extends TestCase
 
     /**
      * @expectedException \RunetId\Client\Exception\ResultFactoryException
-     * @expectedExceptionMessage Data must be null or an array, string given.
+     * @expectedExceptionMessage Expected "null" or "array", "string" given.
      */
     public function testInvalidDataType()
     {
         ResultFactory::create('', TestCase::class);
+    }
+
+    /**
+     * @expectedException \RunetId\Client\Exception\ResultFactoryException
+     * @expectedExceptionMessage Expected "array" or "Generator", "string" given.
+     */
+    public function testInvalidCollectionType()
+    {
+        ResultFactory::create('', TestCase::class.'[]');
+    }
+
+    private function generateItems()
+    {
+        foreach (range(1, 10) as $id) {
+            yield ['Id' => $id];
+        }
     }
 }

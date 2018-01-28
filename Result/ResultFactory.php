@@ -14,25 +14,39 @@ final class ResultFactory
     }
 
     /**
-     * @param null|array $data
-     * @param string     $class
+     * @param null|array|\Generator $data
+     * @param string                $class
      *
      * @throws ResultFactoryException
      *
-     * @return null|AbstractResult|array
+     * @return null|AbstractResult|array|\Generator
      */
     public static function create($data, $class)
     {
+        if ('[]' === substr($class, -2)) {
+            return self::createCollection($data, substr($class, 0, -2));
+        }
+
         if (null === $data) {
             return null;
         }
 
         if (!is_array($data)) {
-            throw new ResultFactoryException(sprintf('Data must be null or an array, %s given.', gettype($data)));
+            throw ResultFactoryException::createForUnexpectedTypes(['null', 'array'], $data);
         }
 
-        if ('[]' === substr($class, -2)) {
-            $class = substr($class, 0, -2);
+        return self::createObject($data, $class);
+    }
+
+    /**
+     * @param array|\Generator $data
+     * @param string           $class
+     *
+     * @return array|\Generator
+     */
+    private static function createCollection($data, $class)
+    {
+        if (is_array($data)) {
             $result = [];
 
             foreach ($data as $key => $value) {
@@ -42,7 +56,24 @@ final class ResultFactory
             return $result;
         }
 
-        return self::createObject($data, $class);
+        if ($data instanceof \Generator) {
+            return self::generateResult($data, $class);
+        }
+
+        throw ResultFactoryException::createForUnexpectedTypes(['array', \Generator::class], $data);
+    }
+
+    /**
+     * @param \Generator $data
+     * @param string     $class
+     *
+     * @return \Generator
+     */
+    private static function generateResult(\Generator $data, $class)
+    {
+        foreach ($data as $key => $value) {
+            yield $key => self::create($value, $class);
+        }
     }
 
     /**
