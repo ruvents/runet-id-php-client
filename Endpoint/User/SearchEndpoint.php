@@ -2,7 +2,8 @@
 
 namespace RunetId\Client\Endpoint\User;
 
-use RunetId\Client\Endpoint\AbstractPaginatedEndpoint;
+use RunetId\Client\Endpoint\AbstractEndpoint;
+use RunetId\Client\Endpoint\PaginatedEndpointTrait;
 use RunetId\Client\Result\Event\UsersResult;
 
 /**
@@ -11,8 +12,10 @@ use RunetId\Client\Result\Event\UsersResult;
  * @method $this       setVisible(bool $visible)
  * @method UsersResult getResult()
  */
-final class SearchEndpoint extends AbstractPaginatedEndpoint
+final class SearchEndpoint extends AbstractEndpoint
 {
+    use PaginatedEndpointTrait;
+
     /**
      * {@inheritdoc}
      */

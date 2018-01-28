@@ -2,7 +2,16 @@
 
 namespace RunetId\Client\Endpoint;
 
-abstract class AbstractPaginatedEndpoint extends AbstractEndpoint
+use Psr\Http\Message\RequestInterface;
+use RunetId\Client\RunetIdClient;
+
+/**
+ * @property RunetIdClient $client
+ *
+ * @method $this            setQueryValue(string $name, $value)
+ * @method RequestInterface createRequest()
+ */
+trait PaginatedEndpointTrait
 {
     /**
      * @param null|int $maxResults
