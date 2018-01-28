@@ -6,9 +6,6 @@ use Http\Message\RequestFactory;
 use Http\Message\StreamFactory;
 use RunetId\Client\RunetIdClient;
 
-/**
- * @internal
- */
 abstract class AbstractPostEndpoint extends AbstractEndpoint
 {
     protected $method = 'POST';

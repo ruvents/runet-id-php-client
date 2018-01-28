@@ -2,9 +2,6 @@
 
 namespace RunetId\Client\Result;
 
-/**
- * @internal
- */
 abstract class AbstractResult implements \IteratorAggregate
 {
     private $data;
