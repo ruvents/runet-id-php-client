@@ -4,9 +4,15 @@ namespace RunetId\Client\Endpoint;
 
 final class CustomEndpoint extends AbstractPostEndpoint
 {
+    use PaginatedEndpointTrait {
+        getRawResult as getRawPaginatedResult;
+    }
+
     protected $method = 'GET';
     private $endpoint;
     private $class;
+    private $paginated = false;
+    private $itemsKey;
 
     /**
      * @param string $method
@@ -45,6 +51,42 @@ final class CustomEndpoint extends AbstractPostEndpoint
     }
 
     /**
+     * @param bool $paginated
+     *
+     * @return $this
+     */
+    public function setPaginated($paginated = true)
+    {
+        $this->paginated = $paginated;
+
+        return $this;
+    }
+
+    /**
+     * @param string $itemsKey
+     *
+     * @return $this
+     */
+    public function setItemsKey($itemsKey)
+    {
+        $this->itemsKey = $itemsKey;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRawResult()
+    {
+        if ($this->paginated) {
+            return $this->getRawPaginatedResult();
+        }
+
+        return parent::getRawResult();
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @throws \RuntimeException When endpoint was not set
@@ -70,5 +112,17 @@ final class CustomEndpoint extends AbstractPostEndpoint
         }
 
         return $this->class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getItemsKey()
+    {
+        if (null === $this->itemsKey) {
+            throw new \RuntimeException('Paginated items key was not set. Use setItemsKey().');
+        }
+
+        return $this->itemsKey;
     }
 }

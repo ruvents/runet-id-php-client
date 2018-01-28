@@ -29,6 +29,24 @@ final class CustomEndpointTest extends TestCase
         $this->assertInstanceOf(TestResult::class, $result);
     }
 
+    public function testPaginated()
+    {
+        $this->httpClient->addResponse(new Response(200, [], '{"Items": []}'));
+
+        $result = $this->client
+            ->custom()
+            ->setEndpoint('/test')
+            ->setPaginated()
+            ->setItemsKey('Items')
+            ->setMaxResults(10)
+            ->getRawResult();
+
+        $request = $this->httpClient->getLastRequest();
+
+        $this->assertSame('/test?MaxResults=10', (string) $request->getUri());
+        $this->assertInstanceOf(\Generator::class, $result['Items']);
+    }
+
     public function testGetHasNoBody()
     {
         $this->httpClient->addResponse(new Response(200, [], '[]'));
@@ -52,11 +70,9 @@ final class CustomEndpointTest extends TestCase
      */
     public function testNoEndpointException()
     {
-        $this->httpClient->addResponse(new Response(200, [], '[]'));
-
         $this->client
             ->custom()
-            ->getResult();
+            ->getRawResult();
     }
 
     /**
@@ -71,5 +87,18 @@ final class CustomEndpointTest extends TestCase
             ->custom()
             ->setEndpoint('/test')
             ->getResult();
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Paginated items key was not set. Use setItemsKey().
+     */
+    public function testPaginatedNoItemsKeyException()
+    {
+        $this->client
+            ->custom()
+            ->setPaginated()
+            ->setEndpoint('/test')
+            ->getRawResult();
     }
 }
