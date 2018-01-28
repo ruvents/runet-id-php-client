@@ -117,9 +117,7 @@ $resultArray = $client->request($request);
 
 ### Получение постраничных данных
 
-При обнаружении в ответе ключа `NextPageToken` клиент автоматически итеративно получает все данные в соответствии со значением `MaxResults`.
-
-Если `MaxResults` не задан, постранично запрашиваются все имеющиеся данные.
+Поставляемые с библиотекой endpoint-ы автоматически получают постраничные данные.
 
 ```php
 <?php
@@ -128,9 +126,15 @@ $resultArray = $client->request($request);
 
 $endpoint = $client->eventUsers();
 
-count($endpoint->getResult()->Users); // 900 (5 запросов),
-count($endpoint->setMaxResults(340)->getResult()->Users); // 340 (2 запроса).
+iterator_count($endpoint->getResult()->Users); // 900 (5 запросов),
+iterator_count($endpoint->setMaxResults(340)->getResult()->Users); // 340 (2 запроса).
 ```
+
+Для запроса постраничных данных используеся метод `RunetIdClient::requestPaginated(RequestInterface $request, string $itemsKey)`.
+
+Аргумент `$itemsKey` принимает ключ, по которому можно найти массив постраничных данных. Например, для метода `/event/users` `$itemsKey = 'Users''`.
+
+В результирующем массиве по ключу `$itemsKey` будет содержаться генератор, обеспечивающий lazy-loading.
 
 ### Выбрасываемые исключения
 
@@ -184,7 +188,9 @@ count($endpoint->setMaxResults(340)->getResult()->Users); // 340 (2 запрос
     }
     ```
 
-1. `RunetId\Client\Exception\ResultFactoryException` будет выброшено при ошибке создания объекта результата. В этом случае просим вас создать issue.
+1. `RunetId\Client\Exception\ResultFactoryException` будет выброшено при ошибке создания объекта результата.
+
+1. `RunetId\Client\Exception\UnexpectedPaginatedDataException` будет выброшено при неверном формате ответа в методе `RunetIdClient::requestPaginated()`.
 
 ### Подробнее об объектах Result
 
