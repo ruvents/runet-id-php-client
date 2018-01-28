@@ -13,6 +13,7 @@ use Psr\Http\Message\ResponseInterface;
 use RunetId\Client\Endpoint\QueryHelper;
 use RunetId\Client\Exception\JsonDecodeException;
 use RunetId\Client\Exception\RunetIdException;
+use RunetId\Client\Exception\UnexpectedPaginatedDataException;
 
 /**
  * @method Endpoint\Company\EditEndpoint               companyEdit()
@@ -96,27 +97,79 @@ final class RunetIdClient
      */
     public function request(RequestInterface $request)
     {
-        $data = $this->doRequest($request);
-
-        if (isset($data['NextPageToken'])) {
-            return $this->requestPaginated($data, $request);
-        }
+        $response = $this->httpClient->sendRequest($request);
+        $data = $this->decodeResponse($response);
+        $this->detectError($data);
 
         return $data;
     }
 
     /**
      * @param RequestInterface $request
+     * @param string           $itemsKey
      *
-     * @return mixed
+     * @throws \Http\Client\Exception           When an error happens during processing the request
+     * @throws JsonDecodeException              When json_decode fails
+     * @throws RunetIdException                 When RUNET-ID API returns an error
+     * @throws UnexpectedPaginatedDataException When paginated data is invalid
+     *
+     * @return array
      */
-    private function doRequest(RequestInterface $request)
+    public function requestPaginated(RequestInterface $request, $itemsKey)
     {
-        $response = $this->httpClient->sendRequest($request);
-        $data = $this->decodeResponse($response);
-        $this->detectError($data);
+        $data = $this->request($request);
+
+        if (!is_array($data)) {
+            throw new UnexpectedPaginatedDataException('Paginated data is expected to be an array.');
+        }
+
+        if (!isset($data[$itemsKey])) {
+            throw new UnexpectedPaginatedDataException(sprintf('The result array does not contain key "%s".', $itemsKey));
+        }
+
+        $data[$itemsKey] = $this->generateItems($request, $itemsKey, $data);
 
         return $data;
+    }
+
+    /**
+     * @param RequestInterface $request
+     * @param string           $itemsKey
+     * @param array            $data
+     *
+     * @return \Generator
+     */
+    private function generateItems(RequestInterface $request, $itemsKey, array $data)
+    {
+        foreach ($data[$itemsKey] as $item) {
+            yield $item;
+        }
+
+        $queryHelper = new QueryHelper($request->getUri()->getQuery());
+        $maxResults = $queryHelper->getValue('MaxResults');
+
+        if (is_numeric($maxResults) && $maxResults >= 0) {
+            $maxResults -= count($data[$itemsKey]);
+        } else {
+            $maxResults = null;
+        }
+
+        while (isset($data['NextPageToken']) && (null === $maxResults || $maxResults > 0)) {
+            $request = $queryHelper
+                ->setValue('PageToken', $data['NextPageToken'])
+                ->setValue('MaxResults', $maxResults)
+                ->apply($request);
+
+            $data = $this->request($request);
+
+            foreach ($data[$itemsKey] as $item) {
+                yield $item;
+            }
+
+            if (null !== $maxResults) {
+                $maxResults -= count($data[$itemsKey]);
+            }
+        }
     }
 
     /**
@@ -150,61 +203,6 @@ final class RunetIdClient
         if (isset($data['Error'])) {
             throw new RunetIdException($data);
         }
-    }
-
-    /**
-     * @param array            $data
-     * @param RequestInterface $request
-     *
-     * @return array
-     */
-    private function requestPaginated(array $data, RequestInterface $request)
-    {
-        $key = $this->getPaginatedItemsKey($data);
-        $items = $data[$key];
-        $queryHelper = new QueryHelper($request->getUri()->getQuery());
-        $maxResults = $queryHelper->getValue('MaxResults');
-
-        if (is_numeric($maxResults) && $maxResults >= 0) {
-            $maxResults -= count($items);
-        } else {
-            $maxResults = null;
-        }
-
-        while (isset($data['NextPageToken']) && (null === $maxResults || $maxResults > 0)) {
-            $request = $queryHelper
-                ->setValue('PageToken', $data['NextPageToken'])
-                ->setValue('MaxResults', $maxResults)
-                ->apply($request);
-
-            $data = $this->doRequest($request);
-            $newItems = $data[$key];
-            $items = $data[$key] = array_merge($items, $newItems);
-
-            if (null !== $maxResults) {
-                $maxResults -= count($newItems);
-            }
-        }
-
-        return $data;
-    }
-
-    /**
-     * @param array $data
-     *
-     * @throws \LogicException
-     *
-     * @return int|string
-     */
-    private function getPaginatedItemsKey(array $data)
-    {
-        foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                return $key;
-            }
-        }
-
-        throw new \LogicException('Failed to detect paginated data key.');
     }
 
     /**

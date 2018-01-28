@@ -2,13 +2,13 @@
 
 namespace RunetId\Client\Endpoint\Event;
 
-use RunetId\Client\Endpoint\AbstractEndpoint;
+use RunetId\Client\Endpoint\AbstractPaginatedEndpoint;
 use RunetId\Client\Result\Event\UsersResult;
 
 /**
  * @method UsersResult getResult()
  */
-final class UsersEndpoint extends AbstractEndpoint
+final class UsersEndpoint extends AbstractPaginatedEndpoint
 {
     /**
      * {@inheritdoc}
@@ -24,5 +24,13 @@ final class UsersEndpoint extends AbstractEndpoint
     protected function getClass()
     {
         return UsersResult::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getItemsKey()
+    {
+        return 'Users';
     }
 }

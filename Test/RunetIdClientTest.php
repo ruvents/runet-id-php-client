@@ -76,13 +76,16 @@ final class RunetIdClientTest extends TestCase
         $client = new RunetIdClient($httpClient);
 
         $query = http_build_query(['MaxResults' => $maxResults], null, '&');
-        $data = $client->request(new Request('GET', '/?'.$query));
+        $data = $client->requestPaginated(new Request('GET', '/?'.$query), 'Items');
 
         $expectedItems = $expectedItemsCount <= 0 ? [] : range(1, $expectedItemsCount);
 
+        $this->assertInstanceOf(\Generator::class, $data['Items']);
+        $items = iterator_to_array($data['Items']);
+
         $this->assertCount($expectedRequestsCount, $httpClient->getRequests());
-        $this->assertCount($expectedItemsCount, $data['Items']);
-        $this->assertSame($expectedItems, $data['Items']);
+        $this->assertCount($expectedItemsCount, $items);
+        $this->assertSame($expectedItems, $items);
     }
 
     public function getRequestPaginatedParams()
@@ -98,16 +101,6 @@ final class RunetIdClientTest extends TestCase
         yield [1000, 211, 211, 2];
         yield [1000, null, 1000, 6];
         yield [1000, -1, 1000, 1];
-    }
-
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Failed to detect paginated data key.
-     */
-    public function testPaginatedItemsKeyException()
-    {
-        $this->httpClient->addResponse(new Response(200, [], '{"NextPageToken": "abc"}'));
-        $this->client->request(new Request('GET', '/'));
     }
 
     /**
@@ -153,5 +146,25 @@ final class RunetIdClientTest extends TestCase
     public function testMagicCallException()
     {
         $this->client->nonExistingMethod();
+    }
+
+    /**
+     * @expectedException \RunetId\Client\Exception\UnexpectedPaginatedDataException
+     * @expectedExceptionMessage Paginated data is expected to be an array.
+     */
+    public function testRequestPaginatedNotArrayException()
+    {
+        $this->httpClient->addResponse(new Response(200, [], 'null'));
+        $this->client->requestPaginated(new Request('GET','/'), 'Items');
+    }
+
+    /**
+     * @expectedException \RunetId\Client\Exception\UnexpectedPaginatedDataException
+     * @expectedExceptionMessage The result array does not contain key "Items".
+     */
+    public function testRequestPaginatedNoKeyException()
+    {
+        $this->httpClient->addResponse(new Response(200, [], '[]'));
+        $this->client->requestPaginated(new Request('GET','/'), 'Items');
     }
 }
