@@ -155,7 +155,7 @@ final class RunetIdClientTest extends TestCase
     public function testRequestPaginatedNotArrayException()
     {
         $this->httpClient->addResponse(new Response(200, [], 'null'));
-        $this->client->requestPaginated(new Request('GET','/'), 'Items');
+        $this->client->requestPaginated(new Request('GET', '/'), 'Items');
     }
 
     /**
@@ -165,6 +165,6 @@ final class RunetIdClientTest extends TestCase
     public function testRequestPaginatedNoKeyException()
     {
         $this->httpClient->addResponse(new Response(200, [], '[]'));
-        $this->client->requestPaginated(new Request('GET','/'), 'Items');
+        $this->client->requestPaginated(new Request('GET', '/'), 'Items');
     }
 }
