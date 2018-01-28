@@ -24,6 +24,7 @@ use RunetId\Client\Exception\UnexpectedPaginatedDataException;
  * @method Endpoint\Event\CompaniesEndpoint            eventCompanies()
  * @method Endpoint\Event\HallsEndpoint                eventHalls()
  * @method Endpoint\Event\RegisterEndpoint             eventRegister()
+ * @method Endpoint\Event\InfoEndpoint                 eventInfo()
  * @method Endpoint\Event\RolesEndpoint                eventRoles()
  * @method Endpoint\Event\UsersEndpoint                eventUsers()
  * @method Endpoint\Pay\AddEndpoint                    payAdd()
