@@ -8,14 +8,14 @@ final class ResultFactoryException extends \InvalidArgumentException
      * @param string[] $expectedTypes
      * @param mixed    $value
      *
-     * @return self
+     * @return string
      */
-    public static function createForUnexpectedTypes(array $expectedTypes, $value)
+    public static function typesMessage(array $expectedTypes, $value)
     {
-        return new self(sprintf(
+        return sprintf(
             'Expected "%s", "%s" given.',
             implode('" or "', $expectedTypes),
             is_object($value) ? get_class($value) : gettype($value)
-        ));
+        );
     }
 }
