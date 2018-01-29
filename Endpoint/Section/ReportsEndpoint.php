@@ -6,7 +6,7 @@ use RunetId\Client\Endpoint\AbstractEndpoint;
 use RunetId\Client\Result\Program\ReportResult;
 
 /**
- * @method $this          setSectionId(string $sectionId)
+ * @method $this          setSectionId(int $sectionId)
  * @method $this          setFromUpdateTime(string $fromUpdateTime)
  * @method ReportResult[] getResult()
  */
