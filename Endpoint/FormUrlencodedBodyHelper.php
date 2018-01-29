@@ -68,7 +68,7 @@ final class FormUrlencodedBodyHelper
      */
     public function apply(RequestInterface $request)
     {
-        $body = $this->streamFactory->createStream(http_build_query($this->data, null, '&'));
+        $body = $this->streamFactory->createStream(http_build_query($this->data, '', '&'));
 
         return $request
             ->withBody($body)

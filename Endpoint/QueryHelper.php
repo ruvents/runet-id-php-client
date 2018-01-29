@@ -85,7 +85,7 @@ final class QueryHelper
     {
         $uri = $request->getUri();
         parse_str($uri->getQuery(), $oldQueryData);
-        $query = http_build_query(array_replace($oldQueryData, $this->data), null, '&');
+        $query = http_build_query(array_replace($oldQueryData, $this->data), '', '&');
 
         return $request->withUri($uri->withQuery($query));
     }

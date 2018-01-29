@@ -75,7 +75,7 @@ final class RunetIdClientTest extends TestCase
         $httpClient = new PaginatedHttpClient($total);
         $client = new RunetIdClient($httpClient);
 
-        $query = http_build_query(['MaxResults' => $maxResults], null, '&');
+        $query = http_build_query(['MaxResults' => $maxResults], '', '&');
         $data = $client->requestPaginated(new Request('GET', '/?'.$query), 'Items');
 
         $expectedItems = $expectedItemsCount <= 0 ? [] : range(1, $expectedItemsCount);

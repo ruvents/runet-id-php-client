@@ -19,7 +19,7 @@ final class PaginatedHttpClientTest extends TestCase
             'PageToken' => $pageToken,
         ];
 
-        $request = new Request('GET', '/?'.http_build_query($query, null, '&'));
+        $request = new Request('GET', '/?'.http_build_query($query, '', '&'));
         $response = $client->sendRequest($request);
         $data = json_decode((string) $response->getBody(), true);
 
