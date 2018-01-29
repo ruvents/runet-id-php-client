@@ -20,7 +20,7 @@ use RunetId\Client\Result\AbstractResult;
  * @property bool                     $VisibleOnMain
  * @property null|string              $Place
  * @property null|PlaceGeoPointResult $PlaceGeoPoint
- * @property null|AddressResult       $Address
+ * @property null|string              $Address
  * @property null|string              $FbPlaceId
  * @property null|ImageResult         $Image
  * @property null|string              $Photo
@@ -35,7 +35,6 @@ final class InfoResult extends AbstractResult
     {
         return [
             'PlaceGeoPoint' => PlaceGeoPointResult::class,
-            'Address' => AddressResult::class,
             'Image' => ImageResult::class,
         ];
     }
