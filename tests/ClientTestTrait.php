@@ -1,9 +1,8 @@
 <?php
 
-namespace RunetId\Client\Test;
+namespace RunetId\Client;
 
 use Http\Mock\Client;
-use RunetId\Client\RunetIdClient;
 
 /**
  * @internal

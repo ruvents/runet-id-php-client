@@ -1,6 +1,6 @@
 <?php
 
-namespace RunetId\Client\Test\Fixtures\Endpoint;
+namespace RunetId\Client\Fixtures\Endpoint;
 
 use RunetId\Client\Endpoint\AbstractEndpoint;
 use RunetId\Client\Endpoint\SuccessResultTrait;

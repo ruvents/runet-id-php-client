@@ -1,6 +1,6 @@
 <?php
 
-namespace RunetId\Client\Test\Fixtures\HttpClient;
+namespace RunetId\Client\Fixtures\HttpClient;
 
 use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\TestCase;

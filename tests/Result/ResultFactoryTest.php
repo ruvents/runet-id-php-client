@@ -1,10 +1,9 @@
 <?php
 
-namespace RunetId\Client\Test\Result;
+namespace RunetId\Client\Result;
 
 use PHPUnit\Framework\TestCase;
-use RunetId\Client\Result\ResultFactory;
-use RunetId\Client\Test\Fixtures\Result\TestResult;
+use RunetId\Client\Fixtures\Result\TestResult;
 
 final class ResultFactoryTest extends TestCase
 {

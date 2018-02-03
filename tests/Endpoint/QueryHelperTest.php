@@ -1,10 +1,9 @@
 <?php
 
-namespace RunetId\Client\Test\Endpoint;
+namespace RunetId\Client\Endpoint;
 
 use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\TestCase;
-use RunetId\Client\Endpoint\QueryHelper;
 
 final class QueryHelperTest extends TestCase
 {

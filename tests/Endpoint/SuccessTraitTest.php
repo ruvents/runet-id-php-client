@@ -1,11 +1,11 @@
 <?php
 
-namespace RunetId\Client\Test\Endpoint;
+namespace RunetId\Client\Endpoint;
 
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use RunetId\Client\Test\ClientTestTrait;
-use RunetId\Client\Test\Fixtures\Endpoint\SuccessTestEndpoint;
+use RunetId\Client\ClientTestTrait;
+use RunetId\Client\Fixtures\Endpoint\SuccessTestEndpoint;
 
 final class SuccessTraitTest extends TestCase
 {

@@ -24,11 +24,13 @@
     },
     "autoload": {
         "psr-4": {
-            "RunetId\\Client\\": ""
-        },
-        "exclude-from-classmap": [
-            "/Test/"
-        ]
+            "RunetId\\Client\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RunetId\\Client\\": "tests/"
+        }
     },
     "config": {
         "sort-packages": true

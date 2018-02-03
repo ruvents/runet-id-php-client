@@ -1,6 +1,6 @@
 <?php
 
-namespace RunetId\Client\Test;
+namespace RunetId\Client;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -10,8 +10,7 @@ use phpDocumentor\Reflection\Types\Object_;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\Exception\JsonDecodeException;
 use RunetId\Client\Exception\RunetIdException;
-use RunetId\Client\RunetIdClient;
-use RunetId\Client\Test\Fixtures\HttpClient\PaginatedHttpClient;
+use RunetId\Client\Fixtures\HttpClient\PaginatedHttpClient;
 
 final class RunetIdClientTest extends TestCase
 {

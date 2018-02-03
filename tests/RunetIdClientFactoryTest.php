@@ -1,12 +1,11 @@
 <?php
 
-namespace RunetId\Client\Test;
+namespace RunetId\Client;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
-use RunetId\Client\RunetIdClientFactory;
 
 final class RunetIdClientFactoryTest extends TestCase
 {

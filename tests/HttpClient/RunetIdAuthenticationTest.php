@@ -1,11 +1,10 @@
 <?php
 
-namespace RunetId\Client\Test\HttpClient;
+namespace RunetId\Client\HttpClient;
 
 use GuzzleHttp\Psr7\Request;
 use phpmock\MockBuilder;
 use PHPUnit\Framework\TestCase;
-use RunetId\Client\HttpClient\RunetIdAuthentication;
 
 final class RunetIdAuthenticationTest extends TestCase
 {

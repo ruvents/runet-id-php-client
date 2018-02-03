@@ -1,13 +1,12 @@
 <?php
 
-namespace RunetId\Client\Test;
+namespace RunetId\Client;
 
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Http\Message\StreamFactory\GuzzleStreamFactory;
 use Http\Message\UriFactory\GuzzleUriFactory;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
-use RunetId\Client\RunetIdClientFactory;
 
 final class DependencyInjectionTest extends TestCase
 {

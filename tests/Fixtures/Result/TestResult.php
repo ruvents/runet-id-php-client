@@ -1,6 +1,6 @@
 <?php
 
-namespace RunetId\Client\Test\Fixtures\Result;
+namespace RunetId\Client\Fixtures\Result;
 
 use RunetId\Client\Result\AbstractResult;
 

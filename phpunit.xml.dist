@@ -14,18 +14,16 @@
 
     <testsuites>
         <testsuite name="default">
-            <directory>./Test</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>./</directory>
+            <directory>./src</directory>
             <exclude>
-                <directory>./Endpoint/*</directory>
-                <directory>./Result/*</directory>
-                <directory>./Test</directory>
-                <directory>./vendor</directory>
+                <directory>./src/Endpoint/*</directory>
+                <directory>./src/Result/*</directory>
             </exclude>
         </whitelist>
     </filter>

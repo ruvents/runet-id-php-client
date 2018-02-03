@@ -22,6 +22,11 @@ return PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
     ->setFinder(
         PhpCsFixer\Finder::create()
-            ->in(__DIR__)
-            ->exclude('vendor')
+            ->in([
+                __DIR__.'/src',
+                __DIR__.'/tests',
+            ])
+            ->append([
+                __DIR__.'/.php_cs.dist',
+            ])
     );
