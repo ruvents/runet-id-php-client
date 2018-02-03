@@ -25,7 +25,10 @@
     "autoload": {
         "psr-4": {
             "RunetId\\Client\\": "src/"
-        }
+        },
+        "files": [
+            "constants.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
