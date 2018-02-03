@@ -16,19 +16,6 @@ final class RunetIdClientTest extends TestCase
 {
     use ClientTestTrait;
 
-    public function testGetOAuthUrl()
-    {
-        $this->assertSame(
-            'https://runet-id.com/oauth/main/dialog?apikey=key&url=url',
-            RunetIdClient::getOAuthUrl('key', 'url')
-        );
-
-        $this->assertSame(
-            'localhost/oauth/main/dialog?apikey=key&url=url',
-            RunetIdClient::getOAuthUrl('key', 'url', 'localhost/')
-        );
-    }
-
     public function testDecodeResponse()
     {
         $data = ['a' => 1, 'b' => ['x' => 'y']];

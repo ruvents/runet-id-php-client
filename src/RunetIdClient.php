@@ -88,23 +88,6 @@ final class RunetIdClient
     }
 
     /**
-     * @param string $key
-     * @param string $redirectUrl
-     * @param string $host
-     *
-     * @return string
-     */
-    public static function getOAuthUrl($key, $redirectUrl, $host = 'https://runet-id.com')
-    {
-        $query = [
-            'apikey' => $key,
-            'url' => $redirectUrl,
-        ];
-
-        return rtrim($host, '/').'/oauth/main/dialog?'.http_build_query($query, '', '&');
-    }
-
-    /**
      * @param RequestInterface $request
      *
      * @throws \Http\Client\Exception When an error happens during processing the request
