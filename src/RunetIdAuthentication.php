@@ -1,6 +1,6 @@
 <?php
 
-namespace RunetId\Client\HttpClient;
+namespace RunetId\Client;
 
 use Http\Message\Authentication;
 use Psr\Http\Message\RequestInterface;

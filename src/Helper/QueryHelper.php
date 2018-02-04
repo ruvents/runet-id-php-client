@@ -1,6 +1,6 @@
 <?php
 
-namespace RunetId\Client\Endpoint;
+namespace RunetId\Client\Helper;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;

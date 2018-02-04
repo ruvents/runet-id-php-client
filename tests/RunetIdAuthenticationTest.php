@@ -1,6 +1,6 @@
 <?php
 
-namespace RunetId\Client\HttpClient;
+namespace RunetId\Client;
 
 use GuzzleHttp\Psr7\Request;
 use phpmock\MockBuilder;

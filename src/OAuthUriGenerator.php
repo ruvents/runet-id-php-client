@@ -1,9 +1,9 @@
 <?php
 
-namespace RunetId\Client\OAuth;
+namespace RunetId\Client;
 
 use Psr\Http\Message\UriInterface;
-use RunetId\Client\Endpoint\QueryHelper;
+use RunetId\Client\Helper\QueryHelper;
 
 final class OAuthUriGenerator
 {
@@ -17,8 +17,7 @@ final class OAuthUriGenerator
     public function __construct(UriInterface $uri, $key)
     {
         $this->uri = $uri;
-        $this->queryHelper = (new QueryHelper($uri->getQuery()))
-            ->setValue('apikey', $key);
+        $this->queryHelper = new QueryHelper(['apikey' => $key]);
     }
 
     /**

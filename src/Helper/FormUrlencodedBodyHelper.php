@@ -1,6 +1,6 @@
 <?php
 
-namespace RunetId\Client\Endpoint;
+namespace RunetId\Client\Helper;
 
 use Http\Discovery\StreamFactoryDiscovery;
 use Http\Message\StreamFactory;

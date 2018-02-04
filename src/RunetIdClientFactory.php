@@ -13,9 +13,7 @@ use Http\Message\RequestFactory;
 use Http\Message\StreamFactory;
 use Http\Message\UriFactory;
 use Psr\Http\Message\UriInterface;
-use RunetId\Client\Endpoint\QueryHelper;
-use RunetId\Client\HttpClient\RunetIdAuthentication;
-use RunetId\Client\OAuth\OAuthUriGenerator;
+use RunetId\Client\Helper\QueryHelper;
 
 final class RunetIdClientFactory
 {

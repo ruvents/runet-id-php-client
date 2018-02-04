@@ -11,6 +11,7 @@ use Psr\Http\Message\RequestInterface;
 use RunetId\Client\Exception\JsonDecodeException;
 use RunetId\Client\Exception\ResultFactoryException;
 use RunetId\Client\Exception\RunetIdException;
+use RunetId\Client\Helper\QueryHelper;
 use RunetId\Client\Result\AbstractResult;
 use RunetId\Client\Result\ResultFactory;
 use RunetId\Client\RunetIdClient;

@@ -4,6 +4,7 @@ namespace RunetId\Client\Endpoint;
 
 use Http\Message\RequestFactory;
 use Http\Message\StreamFactory;
+use RunetId\Client\Helper\FormUrlencodedBodyHelper;
 use RunetId\Client\RunetIdClient;
 
 abstract class AbstractPostEndpoint extends AbstractEndpoint

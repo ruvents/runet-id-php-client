@@ -10,11 +10,10 @@ use Http\Message\RequestFactory;
 use Http\Message\StreamFactory;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use RunetId\Client\Endpoint\QueryHelper;
 use RunetId\Client\Exception\JsonDecodeException;
 use RunetId\Client\Exception\RunetIdException;
 use RunetId\Client\Exception\UnexpectedPaginatedDataException;
-use RunetId\Client\OAuth\OAuthUriGenerator;
+use RunetId\Client\Helper\QueryHelper;
 
 /**
  * @method Endpoint\Company\EditEndpoint               companyEdit()

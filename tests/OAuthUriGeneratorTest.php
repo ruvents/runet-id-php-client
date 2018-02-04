@@ -1,6 +1,6 @@
 <?php
 
-namespace RunetId\Client\OAuth;
+namespace RunetId\Client;
 
 use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\TestCase;
