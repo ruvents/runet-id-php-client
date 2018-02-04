@@ -14,10 +14,32 @@ final class QueryHelper
     public function __construct($data = [])
     {
         if (is_string($data)) {
-            parse_str($data, $data);
+            $data = self::parse($data);
         }
 
         $this->data = $data;
+    }
+
+    /**
+     * @param string $query
+     *
+     * @return array
+     */
+    public static function parse($query)
+    {
+        parse_str($query, $data);
+
+        return $data;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return string
+     */
+    public static function build(array $data)
+    {
+        return http_build_query($data, '', '&');
     }
 
     /**
@@ -84,8 +106,8 @@ final class QueryHelper
     public function apply(RequestInterface $request)
     {
         $uri = $request->getUri();
-        parse_str($uri->getQuery(), $oldQueryData);
-        $query = http_build_query(array_replace($oldQueryData, $this->data), '', '&');
+        $oldQueryData = self::parse($uri->getQuery());
+        $query = self::build(array_replace($oldQueryData, $this->data));
 
         return $request->withUri($uri->withQuery($query));
     }

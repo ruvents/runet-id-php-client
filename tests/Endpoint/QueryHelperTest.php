@@ -7,6 +7,16 @@ use PHPUnit\Framework\TestCase;
 
 final class QueryHelperTest extends TestCase
 {
+    public function testParse()
+    {
+        $this->assertSame(['a' => '1', 'b' => '2'], QueryHelper::parse('a=1&b=2'));
+    }
+
+    public function testBuild()
+    {
+        $this->assertSame('a=1&b=2', QueryHelper::build(['a' => 1, 'b' => 2]));
+    }
+
     public function testConstructFromArray()
     {
         $this->assertSame(['a' => '1'], (new QueryHelper(['a' => '1']))->getData());

@@ -2,6 +2,8 @@
 
 namespace RunetId\Client;
 
+use RunetId\Client\Endpoint\QueryHelper;
+
 final class RunetIdOAuth
 {
     const DEFAULT_HOST = 'https://runet-id.com';
@@ -20,6 +22,6 @@ final class RunetIdOAuth
             'url' => $redirectUrl,
         ];
 
-        return rtrim($host, '/').'/oauth/main/dialog?'.http_build_query($query, '', '&');
+        return rtrim($host, '/').'/oauth/main/dialog?'.QueryHelper::build($query);
     }
 }
