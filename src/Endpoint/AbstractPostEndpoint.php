@@ -14,7 +14,7 @@ abstract class AbstractPostEndpoint extends AbstractEndpoint
     public function __construct(RunetIdClient $client, RequestFactory $requestFactory = null, StreamFactory $streamFactory = null)
     {
         parent::__construct($client, $requestFactory, $streamFactory);
-        $this->bodyHelper = new FormUrlencodedBodyHelper($streamFactory);
+        $this->bodyHelper = new FormUrlencodedBodyHelper([], $streamFactory);
     }
 
     /**
@@ -62,7 +62,7 @@ abstract class AbstractPostEndpoint extends AbstractEndpoint
         $request = parent::createRequest();
 
         if (in_array(strtoupper($this->method), ['POST', 'PUT', 'PATCH'], true)) {
-            $request = $this->bodyHelper->apply($request);
+            $request = $this->bodyHelper->applyToRequest($request);
         }
 
         return $request;

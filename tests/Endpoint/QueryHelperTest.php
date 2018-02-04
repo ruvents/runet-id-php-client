@@ -41,8 +41,9 @@ final class QueryHelperTest extends TestCase
                 'd' => 4,
             ]);
 
-        $request = $helper->apply(new Request('GET', '/?x=1'));
+        $request = $helper->applyToRequest(new Request('GET', '/?x=1'));
 
+        $this->assertSame('a=1&b=2&c=3&d=4', (string)$helper);
         $this->assertSame($helper->getData(), ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4]);
         $this->assertSame('x=1&a=1&b=2&c=3&d=4', $request->getUri()->getQuery());
         $this->assertSame(1, $helper->getValue('a'));

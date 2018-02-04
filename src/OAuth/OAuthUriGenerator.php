@@ -8,7 +8,7 @@ use RunetId\Client\Endpoint\QueryHelper;
 final class OAuthUriGenerator
 {
     private $uri;
-    private $key;
+    private $queryHelper;
 
     /**
      * @param UriInterface $uri
@@ -17,7 +17,8 @@ final class OAuthUriGenerator
     public function __construct(UriInterface $uri, $key)
     {
         $this->uri = $uri;
-        $this->key = $key;
+        $this->queryHelper = (new QueryHelper($uri->getQuery()))
+            ->setValue('apikey', $key);
     }
 
     /**
@@ -27,10 +28,8 @@ final class OAuthUriGenerator
      */
     public function generate($redirectUrl)
     {
-        return (string) $this->uri
-            ->withQuery(QueryHelper::build([
-                'apikey' => $this->key,
-                'url' => $redirectUrl,
-            ]));
+        return (string) $this->queryHelper
+            ->setValue('url', $redirectUrl)
+            ->applyToUri($this->uri);
     }
 }

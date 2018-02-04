@@ -176,7 +176,7 @@ final class RunetIdClient
             $request = $queryHelper
                 ->setValue('PageToken', $data['NextPageToken'])
                 ->setValue('MaxResults', $maxResults)
-                ->apply($request);
+                ->applyToRequest($request);
 
             $data = $this->request($request);
 

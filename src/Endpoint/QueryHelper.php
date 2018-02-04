@@ -3,6 +3,7 @@
 namespace RunetId\Client\Endpoint;
 
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\UriInterface;
 
 final class QueryHelper
 {
@@ -18,6 +19,14 @@ final class QueryHelper
         }
 
         $this->data = $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return self::build($this->data);
     }
 
     /**
@@ -99,16 +108,24 @@ final class QueryHelper
     }
 
     /**
+     * @param UriInterface $uri
+     *
+     * @return UriInterface
+     */
+    public function applyToUri(UriInterface $uri)
+    {
+        $query = array_replace(self::parse($uri->getQuery()), $this->data);
+
+        return $uri->withQuery(self::build($query));
+    }
+
+    /**
      * @param RequestInterface $request
      *
      * @return RequestInterface
      */
-    public function apply(RequestInterface $request)
+    public function applyToRequest(RequestInterface $request)
     {
-        $uri = $request->getUri();
-        $oldQueryData = self::parse($uri->getQuery());
-        $query = self::build(array_replace($oldQueryData, $this->data));
-
-        return $request->withUri($uri->withQuery($query));
+        return $request->withUri($this->applyToUri($request->getUri()));
     }
 }

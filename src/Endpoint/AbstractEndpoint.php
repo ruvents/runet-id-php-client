@@ -145,7 +145,7 @@ abstract class AbstractEndpoint
     {
         $request = $this->requestFactory->createRequest($this->method, $this->getEndpoint());
 
-        return $this->queryHelper->apply($request);
+        return $this->queryHelper->applyToRequest($request);
     }
 
     /**

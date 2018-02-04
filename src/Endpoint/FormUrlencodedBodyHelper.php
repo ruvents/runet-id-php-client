@@ -8,11 +8,12 @@ use Psr\Http\Message\RequestInterface;
 
 final class FormUrlencodedBodyHelper
 {
+    private $queryHelper;
     private $streamFactory;
-    private $data = [];
 
-    public function __construct(StreamFactory $streamFactory = null)
+    public function __construct(array $data = [], StreamFactory $streamFactory = null)
     {
+        $this->queryHelper = new QueryHelper($data);
         $this->streamFactory = $streamFactory ?: StreamFactoryDiscovery::find();
     }
 
@@ -21,7 +22,7 @@ final class FormUrlencodedBodyHelper
      */
     public function getData()
     {
-        return $this->data;
+        return $this->queryHelper->getData();
     }
 
     /**
@@ -31,7 +32,7 @@ final class FormUrlencodedBodyHelper
      */
     public function setData(array $data)
     {
-        $this->data = $data;
+        $this->queryHelper->setData($data);
 
         return $this;
     }
@@ -43,7 +44,7 @@ final class FormUrlencodedBodyHelper
      */
     public function addData(array $data)
     {
-        $this->data = array_merge($this->data, $data);
+        $this->queryHelper->addData($data);
 
         return $this;
     }
@@ -56,7 +57,7 @@ final class FormUrlencodedBodyHelper
      */
     public function setValue($name, $value)
     {
-        $this->data[$name] = $value;
+        $this->queryHelper->setValue($name, $value);
 
         return $this;
     }
@@ -66,9 +67,9 @@ final class FormUrlencodedBodyHelper
      *
      * @return RequestInterface
      */
-    public function apply(RequestInterface $request)
+    public function applyToRequest(RequestInterface $request)
     {
-        $body = $this->streamFactory->createStream(QueryHelper::build($this->data));
+        $body = $this->streamFactory->createStream((string) $this->queryHelper);
 
         return $request
             ->withBody($body)

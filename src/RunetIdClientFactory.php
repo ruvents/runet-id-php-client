@@ -59,7 +59,7 @@ final class RunetIdClientFactory
 
         $plugins = array_merge([
             new Plugin\BaseUriPlugin($apiUri),
-            new Plugin\QueryDefaultsPlugin(QueryHelper::parse($apiUri->getQuery())),
+            new Plugin\QueryDefaultsPlugin((new QueryHelper($apiUri->getQuery()))->getData()),
             new Plugin\AuthenticationPlugin(new RunetIdAuthentication($key, $secret)),
             new Plugin\ErrorPlugin(),
         ], $plugins);

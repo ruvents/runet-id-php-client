@@ -21,7 +21,7 @@ final class FormUrlencodedBodyHelperTest extends TestCase
                 'd' => 4,
             ]);
 
-        $request = $helper->apply(new Request('GET', '/'));
+        $request = $helper->applyToRequest(new Request('GET', '/'));
 
         $this->assertSame($helper->getData(), ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4]);
         $this->assertSame('a=1&b=2&c=3&d=4', (string) $request->getBody());
