@@ -216,6 +216,7 @@ $hasStatus = $result->exists('Status');
 
 // Результат является обходимым.
 foreach ($result as $key => $value) {
+    printf("%s: %s\n", $key, $value);
 }
 ```
 
