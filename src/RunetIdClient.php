@@ -14,6 +14,7 @@ use RunetId\Client\Endpoint\QueryHelper;
 use RunetId\Client\Exception\JsonDecodeException;
 use RunetId\Client\Exception\RunetIdException;
 use RunetId\Client\Exception\UnexpectedPaginatedDataException;
+use RunetId\Client\OAuth\OAuthUriGenerator;
 
 /**
  * @method Endpoint\Company\EditEndpoint               companyEdit()
@@ -57,12 +58,18 @@ use RunetId\Client\Exception\UnexpectedPaginatedDataException;
  */
 final class RunetIdClient
 {
+    private $oauthUriFactory;
     private $httpClient;
     private $requestFactory;
     private $streamFactory;
 
-    public function __construct(HttpClient $httpClient = null, RequestFactory $requestFactory = null, StreamFactory $streamFactory = null)
-    {
+    public function __construct(
+        OAuthUriGenerator $oauthUriFactory,
+        HttpClient $httpClient = null,
+        RequestFactory $requestFactory = null,
+        StreamFactory $streamFactory = null
+    ) {
+        $this->oauthUriFactory = $oauthUriFactory;
         $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
         $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
         $this->streamFactory = $streamFactory ?: StreamFactoryDiscovery::find();
@@ -85,6 +92,16 @@ final class RunetIdClient
         }
 
         return new $class($this, $this->requestFactory, $this->streamFactory);
+    }
+
+    /**
+     * @param string $redirectUri
+     *
+     * @return string
+     */
+    public function generateOAuthUri($redirectUri)
+    {
+        return $this->oauthUriFactory->generate($redirectUri);
     }
 
     /**

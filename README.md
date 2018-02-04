@@ -231,7 +231,7 @@ $factory = new RunetIdClientFactory();
 $client = $factory->create(
     'key',
     'secret',
-    RunetIdClientFactory::DEFAULT_URI.'?Language=en&EventId=123'
+    RunetIdClientFactory::API_URI.'?Language=en&EventId=123'
 );
 
 // Использование другого базового url.
@@ -262,7 +262,8 @@ $factory = new RunetIdClientFactory();
 $client = $factory->create(
     'key',
     'secret',
-    RunetIdClientFactory::DEFAULT_URI,
+    null,
+    null,
     // Http\Client\Common\Plugin[]
     [$loggerPlugin]
 );

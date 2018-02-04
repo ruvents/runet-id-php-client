@@ -22,6 +22,7 @@ trait ClientTestTrait
     protected function setUp()
     {
         $this->httpClient = new Client();
-        $this->client = new RunetIdClient($this->httpClient);
+        $factory = new RunetIdClientFactory($this->httpClient);
+        $this->client = $factory->create('key', 'secret');
     }
 }

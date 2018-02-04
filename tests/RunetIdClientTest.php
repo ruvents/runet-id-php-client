@@ -16,6 +16,14 @@ final class RunetIdClientTest extends TestCase
 {
     use ClientTestTrait;
 
+    public function testGenerateOAuthUri()
+    {
+        $this->assertSame(
+            RunetIdClientFactory::OAUTH_URI.'?apikey=key&url=url',
+            $this->client->generateOAuthUri('url')
+        );
+    }
+
     public function testDecodeResponse()
     {
         $data = ['a' => 1, 'b' => ['x' => 'y']];
@@ -72,7 +80,8 @@ final class RunetIdClientTest extends TestCase
     public function testRequestPaginated($total, $maxResults, $expectedItemsCount, $expectedRequestsCount)
     {
         $httpClient = new PaginatedHttpClient($total);
-        $client = new RunetIdClient($httpClient);
+        $factory = new RunetIdClientFactory($httpClient);
+        $client = $factory->create('key', 'secret');
 
         $query = http_build_query(['MaxResults' => $maxResults], '', '&');
         $data = $client->requestPaginated(new Request('GET', '/?'.$query), 'Items');

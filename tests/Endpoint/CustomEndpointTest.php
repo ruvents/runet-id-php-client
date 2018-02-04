@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use RunetId\Client\ClientTestTrait;
 use RunetId\Client\Fixtures\Result\TestResult;
+use RunetId\Client\RunetIdClientFactory;
 
 final class CustomEndpointTest extends TestCase
 {
@@ -43,7 +44,7 @@ final class CustomEndpointTest extends TestCase
 
         $request = $this->httpClient->getLastRequest();
 
-        $this->assertSame('/test?MaxResults=10', (string) $request->getUri());
+        $this->assertSame(RunetIdClientFactory::API_URI.'/test?MaxResults=10', (string) $request->getUri());
         $this->assertInstanceOf(\Generator::class, $result['Items']);
     }
 
