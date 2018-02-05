@@ -21,9 +21,15 @@ final class PaginatedHttpClientTest extends TestCase
 
         $request = new Request('GET', '/?'.http_build_query($query, '', '&'));
         $response = $client->sendRequest($request);
+
+        $this->assertSame(
+            $response->getHeaderLine('Payload-Key'),
+            PaginatedHttpClient::PAYLOAD_KEY
+        );
+
         $data = json_decode((string) $response->getBody(), true);
 
-        $this->assertSame($expectedItems, $data['Items']);
+        $this->assertSame($expectedItems, $data[PaginatedHttpClient::PAYLOAD_KEY]);
 
         if (null === $expectedNextPageToken) {
             $this->assertFalse(isset($data['NextPageToken']));

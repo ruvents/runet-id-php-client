@@ -8,6 +8,7 @@ use Psr\Http\Message\RequestInterface;
 
 final class PaginatedHttpClient implements HttpClient
 {
+    const PAYLOAD_KEY = 'Items';
     const MAX_RESULTS_MAX = 200;
 
     private $items;
@@ -41,7 +42,11 @@ final class PaginatedHttpClient implements HttpClient
             self::MAX_RESULTS_MAX
         );
 
-        return new Response(200, [], json_encode($this->getResult($pageToken, $maxResults)));
+        $result = $this->getResult($pageToken, $maxResults);
+
+        return new Response(200, [
+            'Payload-Key' => self::PAYLOAD_KEY,
+        ], json_encode($result));
     }
 
     /**
@@ -65,7 +70,7 @@ final class PaginatedHttpClient implements HttpClient
             : $this->items;
 
         $result = [
-            'Items' => $items,
+            self::PAYLOAD_KEY => $items,
         ];
 
         if (count($items) === $maxResults) {
