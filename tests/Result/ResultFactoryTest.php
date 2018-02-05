@@ -78,8 +78,8 @@ final class ResultFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \RunetId\Client\Exception\ResultFactoryException
-     * @expectedExceptionMessage Class "NS\NonExistingClass" does not exist.
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Class NS\NonExistingClass does not exist.
      */
     public function testNonExistingClass()
     {
@@ -87,8 +87,8 @@ final class ResultFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \RunetId\Client\Exception\ResultFactoryException
-     * @expectedExceptionMessage Class "PHPUnit\Framework\TestCase" must extend "RunetId\Client\Result\AbstractResult".
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Result class PHPUnit\Framework\TestCase must extend RunetId\Client\Result\AbstractResult.
      */
     public function testInvalidClass()
     {
@@ -96,8 +96,8 @@ final class ResultFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \RunetId\Client\Exception\ResultFactoryException
-     * @expectedExceptionMessage Expected "null" or "array", "string" given.
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Expected null or array, string given.
      */
     public function testInvalidDataType()
     {
@@ -105,8 +105,8 @@ final class ResultFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \RunetId\Client\Exception\ResultFactoryException
-     * @expectedExceptionMessage Expected "array" or "Generator", "string" given.
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Expected array or generator, string given.
      */
     public function testInvalidCollectionType()
     {

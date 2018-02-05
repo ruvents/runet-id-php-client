@@ -2,8 +2,6 @@
 
 namespace RunetId\Client\Result;
 
-use RunetId\Client\Exception\ResultFactoryException as Exception;
-
 final class ResultFactory
 {
     /**
@@ -17,7 +15,7 @@ final class ResultFactory
      * @param null|array|\Generator $data
      * @param string                $class
      *
-     * @throws Exception
+     * @throws \UnexpectedValueException
      *
      * @return null|AbstractResult|array|\Generator
      */
@@ -32,7 +30,9 @@ final class ResultFactory
         }
 
         if (!is_array($data)) {
-            throw new Exception(Exception::typesMessage(['null', 'array'], $data));
+            throw new \UnexpectedValueException(
+                sprintf('Expected null or array, %s given.', gettype($data))
+            );
         }
 
         return self::createObject($data, $class);
@@ -41,6 +41,8 @@ final class ResultFactory
     /**
      * @param array|\Generator $data
      * @param string           $class
+     *
+     * @throws \UnexpectedValueException
      *
      * @return array|\Generator
      */
@@ -60,7 +62,9 @@ final class ResultFactory
             return self::generateResult($data, $class);
         }
 
-        throw new Exception(Exception::typesMessage(['array', \Generator::class], $data));
+        throw new \UnexpectedValueException(
+            sprintf('Expected array or generator, %s given.', gettype($data))
+        );
     }
 
     /**
@@ -80,18 +84,20 @@ final class ResultFactory
      * @param array  $data
      * @param string $class
      *
-     * @throws Exception
+     * @throws \UnexpectedValueException
      *
      * @return AbstractResult
      */
     private static function createObject($data, $class)
     {
         if (!class_exists($class)) {
-            throw new Exception(sprintf('Class "%s" does not exist.', $class));
+            throw new \UnexpectedValueException(sprintf('Class %s does not exist.', $class));
         }
 
         if (!is_subclass_of($class, AbstractResult::class)) {
-            throw new Exception(sprintf('Class "%s" must extend "%s".', $class, AbstractResult::class));
+            throw new \UnexpectedValueException(
+                sprintf('Result class %s must extend %s.', $class, AbstractResult::class)
+            );
         }
 
         foreach ($class::getMap() as $property => $propertyClass) {
