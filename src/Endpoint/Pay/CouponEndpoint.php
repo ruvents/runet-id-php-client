@@ -7,7 +7,7 @@ use RunetId\Client\Result\Pay\CouponResult;
 
 /**
  * @method $this        setCouponCode(string $couponCode)
- * @method $this        setOwnerRunetId(array $ownerRunetId)
+ * @method $this        setOwnerRunetId(int $ownerRunetId)
  * @method $this        setPayerRunetId(int $payerRunetId)
  * @method $this        setProductId(int $productId)
  * @method CouponResult getResult()
