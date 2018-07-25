@@ -6,7 +6,7 @@ use RunetId\Client\Endpoint\AbstractEndpoint;
 use RunetId\Client\Result\Pay\ItemsResult;
 
 /**
- * @method $this       setOwnerRunetId(array $ownerRunetId)
+ * @method $this       setOwnerRunetId(int $ownerRunetId)
  * @method ItemsResult getResult()
  */
 final class ItemsEndpoint extends AbstractEndpoint

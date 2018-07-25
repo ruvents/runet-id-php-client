@@ -7,7 +7,7 @@ use RunetId\Client\Endpoint\SuccessResultTrait;
 
 /**
  * @method $this setAttributes(array $attributes)
- * @method $this setOwnerRunetId(array $ownerRunetId)
+ * @method $this setOwnerRunetId(int $ownerRunetId)
  * @method $this setPayerRunetId(int $payerRunetId)
  * @method $this setProductId(int $productId)
  */
