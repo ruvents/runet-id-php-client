@@ -8,6 +8,7 @@ use RunetId\Client\Result\AbstractResult;
  * @property int         $Id
  * @property string      $Manager
  * @property null|string $Title
+ * @property null|string $TitleEn
  * @property null|int    $Price
  * @property null|string $PriceStartTime
  * @property null|string $PriceEndTime
