@@ -29,9 +29,9 @@ final class ResultFactory
             return null;
         }
 
-        if (!is_array($data)) {
+        if (!\is_array($data)) {
             throw new \UnexpectedValueException(
-                sprintf('Expected null or array, %s given.', gettype($data))
+                sprintf('Expected null or array, %s given.', \gettype($data))
             );
         }
 
@@ -48,7 +48,7 @@ final class ResultFactory
      */
     private static function createCollection($data, $class)
     {
-        if (is_array($data)) {
+        if (\is_array($data)) {
             $result = [];
 
             foreach ($data as $key => $value) {
@@ -63,7 +63,7 @@ final class ResultFactory
         }
 
         throw new \UnexpectedValueException(
-            sprintf('Expected array or generator, %s given.', gettype($data))
+            sprintf('Expected array or generator, %s given.', \gettype($data))
         );
     }
 

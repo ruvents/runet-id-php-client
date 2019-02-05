@@ -14,7 +14,7 @@ final class QueryHelper
      */
     public function __construct($data = [])
     {
-        if (is_string($data)) {
+        if (\is_string($data)) {
             $data = self::parse($data);
         }
 

@@ -136,7 +136,7 @@ final class RunetIdClient
     {
         $data = $this->request($request);
 
-        if (!is_array($data)) {
+        if (!\is_array($data)) {
             throw new UnexpectedPaginatedDataException('Paginated data is expected to be an array.');
         }
 
@@ -166,7 +166,7 @@ final class RunetIdClient
         $maxResults = $queryHelper->getValue('MaxResults');
 
         if (is_numeric($maxResults) && $maxResults >= 0) {
-            $maxResults -= count($data[$itemsKey]);
+            $maxResults -= \count($data[$itemsKey]);
         } else {
             $maxResults = null;
         }
@@ -184,7 +184,7 @@ final class RunetIdClient
             }
 
             if (null !== $maxResults) {
-                $maxResults -= count($data[$itemsKey]);
+                $maxResults -= \count($data[$itemsKey]);
             }
         }
     }

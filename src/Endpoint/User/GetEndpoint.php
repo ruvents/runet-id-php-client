@@ -19,7 +19,7 @@ final class GetEndpoint extends AbstractEndpoint
      */
     public function setBuilders($builders)
     {
-        if (is_array($builders)) {
+        if (\is_array($builders)) {
             $builders = implode(',', $builders);
         }
 

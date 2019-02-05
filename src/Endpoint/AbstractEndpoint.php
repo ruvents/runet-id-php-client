@@ -46,7 +46,7 @@ abstract class AbstractEndpoint
             throw new \BadMethodCallException(sprintf('Only setter methods are supported, "%s" called.', $name));
         }
 
-        if (count($args) < 1) {
+        if (\count($args) < 1) {
             throw new \BadMethodCallException(sprintf('Method %s::%s() requires one argument.', static::class, $name));
         }
 

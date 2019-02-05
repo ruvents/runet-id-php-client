@@ -66,14 +66,14 @@ final class PaginatedHttpClient implements HttpClient
     private function getResult($pageToken, $maxResults)
     {
         $items = $maxResults >= 0
-            ? array_slice($this->items, $pageToken, $maxResults)
+            ? \array_slice($this->items, $pageToken, $maxResults)
             : $this->items;
 
         $result = [
             self::PAYLOAD_KEY => $items,
         ];
 
-        if (count($items) === $maxResults) {
+        if (\count($items) === $maxResults) {
             $result['NextPageToken'] = $pageToken + $maxResults;
         }
 

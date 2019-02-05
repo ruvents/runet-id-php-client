@@ -62,7 +62,7 @@ abstract class AbstractPostEndpoint extends AbstractEndpoint
     {
         $request = parent::createRequest();
 
-        if (in_array(strtoupper($this->method), ['POST', 'PUT', 'PATCH'], true)) {
+        if (\in_array(strtoupper($this->method), ['POST', 'PUT', 'PATCH'], true)) {
             $request = $this->bodyHelper->applyToRequest($request);
         }
 
