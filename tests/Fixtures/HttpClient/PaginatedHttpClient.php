@@ -5,6 +5,7 @@ namespace RunetId\Client\Fixtures\HttpClient;
 use GuzzleHttp\Psr7\Response;
 use Http\Client\HttpClient;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 final class PaginatedHttpClient implements HttpClient
 {
@@ -29,7 +30,7 @@ final class PaginatedHttpClient implements HttpClient
     /**
      * {@inheritdoc}
      */
-    public function sendRequest(RequestInterface $request)
+    public function sendRequest(RequestInterface $request): ResponseInterface
     {
         $this->requests[] = $request;
 
