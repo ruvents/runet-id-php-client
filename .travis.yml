@@ -46,7 +46,6 @@ install:
     - vendor/bin/simple-phpunit install
 
 script:
-    - composer validate --strict --no-check-lock
     - vendor/bin/simple-phpunit $PHPUNIT_FLAGS
     - if [[ $PHP_CS = true ]]; then vendor/bin/php-cs-fixer fix -v --dry-run --stop-on-violation --using-cache=no; fi
 
