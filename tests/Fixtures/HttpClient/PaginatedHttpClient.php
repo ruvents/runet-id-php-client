@@ -3,11 +3,14 @@
 namespace RunetId\Client\Fixtures\HttpClient;
 
 use GuzzleHttp\Psr7\Response;
+use Http\Client\Common\VersionBridgeClient;
 use Http\Client\HttpClient;
 use Psr\Http\Message\RequestInterface;
 
 final class PaginatedHttpClient implements HttpClient
 {
+    use VersionBridgeClient;
+
     const PAYLOAD_KEY = 'Items';
     const MAX_RESULTS_MAX = 200;
 
@@ -29,7 +32,7 @@ final class PaginatedHttpClient implements HttpClient
     /**
      * {@inheritdoc}
      */
-    public function sendRequest(RequestInterface $request)
+    public function doSendRequest(RequestInterface $request)
     {
         $this->requests[] = $request;
 
