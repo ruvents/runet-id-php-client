@@ -199,6 +199,7 @@ final class RunetIdClient
     private function decodeResponse(ResponseInterface $response)
     {
         $string = (string) $response->getBody();
+        $string = mb_substr($string, mb_strpos($string, '{'));
         $data = json_decode($string, true);
 
         if (JSON_ERROR_NONE !== json_last_error()) {
